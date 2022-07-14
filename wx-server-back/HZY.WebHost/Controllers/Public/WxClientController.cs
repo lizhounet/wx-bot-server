@@ -139,4 +139,5 @@ public class WxClientController : ControllerBase
     {
         return await this._wxTimedTaskService.GetTaskSendContentAsync(applicationToken, taskId);
     }
+  
 }

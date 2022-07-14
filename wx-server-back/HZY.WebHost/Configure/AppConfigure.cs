@@ -70,7 +70,7 @@ public class AppConfigure
         #endregion
 
         #region 使用 Api 耗时计算中间件
-        app.UseMiddleware<TakeUpTimeMiddleware>();
+        //app.UseMiddleware<TakeUpTimeMiddleware>();
         #endregion
 
         #region 消息队列启动

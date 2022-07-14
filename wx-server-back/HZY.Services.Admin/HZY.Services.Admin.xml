@@ -948,6 +948,19 @@
             <param name="search"></param>
             <returns></returns>
         </member>
+        <member name="M:HZY.Services.Admin.WxBot.Http.GeFeiXunBotService.GetLoginQrCodeAsync">
+            <summary>
+            获取登录二维码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Services.Admin.WxBot.Http.GeFeiXunBotService.CheckLoginAsync(System.String)">
+            <summary>
+            检测是否扫码成功
+            </summary>
+            <param name="salt">获取登录二维码时的返回值</param>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Services.Admin.WxBot.Http.TianXingService">
             <summary>
             天行接口服务

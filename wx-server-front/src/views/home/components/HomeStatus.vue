@@ -1,25 +1,44 @@
 <template>
-  <a-card class="home-status" :bordered="false" hoverable :headStyle="headStyle">
+  <a-card
+    class="home-status"
+    :bordered="false"
+    hoverable
+    :headStyle="headStyle"
+  >
     <template #title>
       微秘书状态
-      <a-tag :color="state.wxUserInfo.wxId ? '#87d068' : '#6a615d'">{{ state.wxUserInfo.wxId ? '在线' : '离线' }}</a-tag>
+      <a-tag :color="state.wxUserInfo.wxId ? '#87d068' : '#6a615d'">{{
+        state.wxUserInfo.wxId ? "在线" : "离线"
+      }}</a-tag>
     </template>
     <div class="content">
-      <a-image :width="150" :preview="false" :src="state.wxUserInfo.avatarUrl" />
+      <vue-qr
+        :logoSrc="qrCodeLoginUrl"
+        text="https://blog.csdn.net/weixin_42601136"
+        :size="200"
+      ></vue-qr>
+      <!-- <a-image
+        :width="150"
+        :preview="false"
+        :src="state.wxUserInfo.avatarUrl"
+      />
       <div class="content-info">
         <div class="name">{{ state.wxUserInfo.wxName }}</div>
         <div class="vx-code">微信Code：{{ state.wxUserInfo.wxCode }}</div>
-      </div>
+      </div> -->
     </div>
   </a-card>
 </template>
-<script>
-export default { name: "HomeStatus" };
-</script>
+<script >
+export default {
+  name: "HomeStatus",
+};
+</script >
 <script setup>
-import { headStyle } from "@/views/home/config";
-import { onMounted, reactive, toRefs } from "vue";
+import vueQr from "vue-qr";
+import { onMounted, reactive } from "vue";
 import homeService from "@/service/home/homeService";
+import qrCodeLoginUrl from "@/assets/logo.png";
 
 //微信用户信息
 const state = reactive({
@@ -29,6 +48,8 @@ const state = reactive({
     wxCode: "未登录",
     wxName: "未登录",
   },
+  qrCodeLoginUrl: qrCodeLoginUrl,
+  loginQrCodeInfo: {},
 });
 
 onMounted(() => {
@@ -42,8 +63,6 @@ const methods = {
     }
   },
 };
-
-let { avatarUrl, wxId, wxCode, wxName } = toRefs(state.wxUserInfo)
 </script>
 
 <style lang="less">

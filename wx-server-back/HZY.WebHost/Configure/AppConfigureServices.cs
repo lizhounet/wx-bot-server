@@ -223,6 +223,7 @@ public class AppConfigureServices
 
         //注入AddHttpClient
         services.AddHttpClient<TianXingService>();
+        services.AddHttpClient<GeFeiXunBotService>();
 
     }
 }
