@@ -21,13 +21,7 @@
         :margin="10"
         colorDark="#585E67"
         colorLight="#fff"
-      ></vue-qr>
-      <!-- <vue-qr
-        logoSrc="@/assets/logo.png"
-        text="https://blog.csdn.net/weixin_42601136"
-        :size="200"
-        
-      ></vue-qr> -->
+       />
       <!-- <a-image
         :width="150"
         :preview="false"
