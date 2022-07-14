@@ -13,10 +13,21 @@
     </template>
     <div class="content">
       <vue-qr
-        :logoSrc="qrCodeLoginUrl"
+        :text="state.downloadData.url"
+        :logoSrc="state.downloadData.icon"
+        :size="145"
+        :logoScale="0.2"
+        :logoMargin="3"
+        :margin="10"
+        colorDark="#585E67"
+        colorLight="#fff"
+      ></vue-qr>
+      <!-- <vue-qr
+        logoSrc="@/assets/logo.png"
         text="https://blog.csdn.net/weixin_42601136"
         :size="200"
-      ></vue-qr>
+        
+      ></vue-qr> -->
       <!-- <a-image
         :width="150"
         :preview="false"
@@ -29,17 +40,16 @@
     </div>
   </a-card>
 </template>
-<script >
+<script>
 export default {
   name: "HomeStatus",
 };
-</script >
+</script>
 <script setup>
-import vueQr from "vue-qr";
+import VueQr from "vue-qr/src/packages/vue-qr.vue";
 import { onMounted, reactive } from "vue";
 import homeService from "@/service/home/homeService";
-import qrCodeLoginUrl from "@/assets/logo.png";
-
+import logo from '@/assets/logo.png'
 //微信用户信息
 const state = reactive({
   wxUserInfo: {
@@ -48,8 +58,10 @@ const state = reactive({
     wxCode: "未登录",
     wxName: "未登录",
   },
-  qrCodeLoginUrl: qrCodeLoginUrl,
-  loginQrCodeInfo: {},
+  downloadData: {
+    url: "",
+    icon: logo,
+  },
 });
 
 onMounted(() => {
