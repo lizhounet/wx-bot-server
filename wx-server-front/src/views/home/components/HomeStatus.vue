@@ -13,8 +13,8 @@
     </template>
     <div class="content">
       <vue-qr
-        :text="state.downloadData.url"
-        :logoSrc="state.downloadData.icon"
+        :text="state.QrData.url"
+        :logoSrc="state.QrData.icon"
         :size="145"
         :logoScale="0.2"
         :logoMargin="3"
@@ -52,7 +52,7 @@ const state = reactive({
     wxCode: "未登录",
     wxName: "未登录",
   },
-  downloadData: {
+  QrData: {
     url: "",
     icon: logo,
   },

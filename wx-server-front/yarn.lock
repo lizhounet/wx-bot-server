@@ -2409,7 +2409,7 @@
 
 "vue-qr@^4.0.9":
   "integrity" "sha512-pAISV94T0MNEYA3NGjykUpsXRE2QfaNxlu9ZhEL6CERgqNc21hJYuP3hRVzAWfBQlgO18DPmZTbrFerJC3+Ikw=="
-  "resolved" "https://registry.npmjs.org/vue-qr/-/vue-qr-4.0.9.tgz"
+  "resolved" "https://registry.npmmirror.com/vue-qr/-/vue-qr-4.0.9.tgz"
   "version" "4.0.9"
   dependencies:
     "glob" "^8.0.1"
