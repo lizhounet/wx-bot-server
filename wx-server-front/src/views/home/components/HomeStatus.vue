@@ -13,15 +13,15 @@
     </template>
     <div class="content">
       <vue-qr
-        :text="state.downloadData.url"
-        :logoSrc="state.downloadData.icon"
+        :text="qrState.url"
+        :logoSrc="qrState.icon"
         :size="145"
         :logoScale="0.2"
         :logoMargin="3"
         :margin="10"
         colorDark="#585E67"
         colorLight="#fff"
-       />
+      />
       <!-- <a-image
         :width="150"
         :preview="false"
@@ -43,7 +43,7 @@ export default {
 import VueQr from "vue-qr/src/packages/vue-qr.vue";
 import { onMounted, reactive } from "vue";
 import homeService from "@/service/home/homeService";
-import logo from '@/assets/logo.png'
+import logo from "@/assets/logo.png";
 //微信用户信息
 const state = reactive({
   wxUserInfo: {
@@ -52,10 +52,11 @@ const state = reactive({
     wxCode: "未登录",
     wxName: "未登录",
   },
-  downloadData: {
-    url: "",
-    icon: logo,
-  },
+});
+
+const qrState = reactive({
+  url: "",
+  icon: logo,
 });
 
 onMounted(() => {
