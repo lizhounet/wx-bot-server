@@ -8,7 +8,6 @@
       <a-image :width="150" :preview="false" :src="state.wxUserInfo.avatarUrl" />
       <div class="content-info">
         <div class="name">{{ state.wxUserInfo.wxName }}</div>
-        <div class="vx-code">微信Code：{{ state.wxUserInfo.wxCode }}</div>
       </div>
     </div>
   </a-card>
