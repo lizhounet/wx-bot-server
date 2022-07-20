@@ -17,7 +17,7 @@ namespace HZY.Infrastructure.SerilogUtil
     public static class LogUtil
     {
         static string LogFilePath(string LogEvent) =>
-            $@"{AppDomain.CurrentDomain.BaseDirectory}/applogs/{LogEvent}-{DateTime.Now:yyyyyMMdd}/.log";
+            $@"{AppDomain.CurrentDomain.BaseDirectory}/applogs/{LogEvent}/{LogEvent}-{DateTime.Now:yyyyMMdd}.log";
 
         /// <summary>
         /// 启动
@@ -43,31 +43,31 @@ namespace HZY.Infrastructure.SerilogUtil
                 {
                     lg.Filter
                     .ByIncludingOnly(p => p.Level == LogEventLevel.Debug)
-                    .WriteTo.File(LogFilePath(nameof(LogEventLevel.Debug)), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+                    .WriteTo.File(LogFilePath("debug"), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                 })
                 .WriteTo.Logger(lg =>
                 {
                     lg.Filter
                     .ByIncludingOnly(p => p.Level == LogEventLevel.Information)
-                    .WriteTo.File(LogFilePath(nameof(LogEventLevel.Information)), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+                    .WriteTo.File(LogFilePath("info"), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                 })
                 .WriteTo.Logger(lg =>
                 {
                     lg.Filter
                     .ByIncludingOnly(p => p.Level == LogEventLevel.Warning)
-                    .WriteTo.File(LogFilePath(nameof(LogEventLevel.Warning)), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+                    .WriteTo.File(LogFilePath("warning"), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                 })
                 .WriteTo.Logger(lg =>
                 {
                     lg.Filter
                     .ByIncludingOnly(p => p.Level == LogEventLevel.Error)
-                    .WriteTo.File(LogFilePath(nameof(LogEventLevel.Error)), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+                    .WriteTo.File(LogFilePath("error"), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                 })
                 .WriteTo.Logger(lg =>
                 {
                     lg.Filter
                     .ByIncludingOnly(p => p.Level == LogEventLevel.Fatal)
-                    .WriteTo.File(LogFilePath(nameof(LogEventLevel.Fatal)), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+                    .WriteTo.File(LogFilePath("fatal"), rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
                 })
                 .CreateLogger();
         }
