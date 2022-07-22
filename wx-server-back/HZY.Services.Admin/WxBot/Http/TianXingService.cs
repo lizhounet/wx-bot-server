@@ -101,7 +101,7 @@ namespace HZY.Services.Admin.WxBot.Http
                 var jObject = await GetAsync("/tianqi/index", parmars);
                 if (jObject == null) return defaultWeather;
                 var data = jObject["newslist"][0];
-                return $"{data["tips"]}\n" +
+                return $"🌈tips:{data["tips"]}\n" +
                     $"今天：{data["weather"]}\n" +
                     $"温度：{data["lowest"]}/{data["highest"]}\n" +
                     $"风向：{data["wind"]}";
