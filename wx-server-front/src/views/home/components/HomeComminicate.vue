@@ -1,12 +1,12 @@
 <template>
   <a-card
     class="home-comminicate"
-    title="微信交流群"
+    title="交流群"
     :bordered="false"
     hoverable
     :headStyle="headStyle"
   >
-    <p>微信交流群</p>
+    <p>qq群：106425085</p>
   </a-card>
 </template>
 <script>
