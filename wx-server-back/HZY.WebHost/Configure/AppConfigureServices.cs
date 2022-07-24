@@ -176,8 +176,9 @@ public class AppConfigureServices
         #endregion
 
         #region Swagger 注册Swagger生成器，定义一个和多个Swagger 文档
-
-        services.AddSwaggerGen(options =>
+        if (builder.Environment.IsDevelopment())
+        {
+            services.AddSwaggerGen(options =>
         {
             foreach (var item in _versionList)
             {
@@ -215,6 +216,7 @@ public class AppConfigureServices
 
             #endregion
         });
+        }
 
         #endregion
 

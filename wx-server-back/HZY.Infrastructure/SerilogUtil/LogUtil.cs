@@ -17,7 +17,7 @@ namespace HZY.Infrastructure.SerilogUtil
     public static class LogUtil
     {
         static string LogFilePath(string LogEvent) =>
-            $@"{AppDomain.CurrentDomain.BaseDirectory}/applogs/{LogEvent}/{LogEvent}-{DateTime.Now:yyyyMMdd}.log";
+            $@"{AppDomain.CurrentDomain.BaseDirectory}/applogs/{LogEvent}/{LogEvent}-.log";
 
         /// <summary>
         /// 启动

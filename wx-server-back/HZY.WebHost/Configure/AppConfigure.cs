@@ -51,16 +51,17 @@ public class AppConfigure
         #endregion
 
         #region Swagger
-
-        //启用中间件服务生成Swagger作为JSON终结点
-        app.UseSwagger();
-        //启用中间件服务对swagger-ui，指定Swagger JSON终结点
-        app.UseSwaggerUI(option =>
+        if (env.IsDevelopment())
         {
-            foreach (var item in AppConfigureServices.GetVersionList()) option.SwaggerEndpoint($"{item}/swagger.json", item);
-            option.RoutePrefix = "swagger";
-        });
-
+            //启用中间件服务生成Swagger作为JSON终结点
+            app.UseSwagger();
+            //启用中间件服务对swagger-ui，指定Swagger JSON终结点
+            app.UseSwaggerUI(option =>
+            {
+                foreach (var item in AppConfigureServices.GetVersionList()) option.SwaggerEndpoint($"{item}/swagger.json", item);
+                option.RoutePrefix = "swagger";
+            });
+        }
         #endregion
 
         #region 使用跨域 警告: 通过终结点路由，CORS 中间件必须配置为在对UseRouting和UseEndpoints的调用之间执行。 配置不正确将导致中间件停止正常运行。
