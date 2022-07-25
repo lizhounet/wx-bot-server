@@ -49,24 +49,6 @@
             <param name="authUserDto">Dto</param>
             <returns></returns>
         </member>
-        <member name="T:HZY.WebHost.Controllers.Public.GeFeiXunBotController">
-            <summary>
-            个非寻机器人
-            </summary>
-        </member>
-        <member name="M:HZY.WebHost.Controllers.Public.GeFeiXunBotController.GetLoginQrCodeAsync">
-            <summary>
-            获取登录二维码
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:HZY.WebHost.Controllers.Public.GeFeiXunBotController.GetLoginQrCodeAsync(System.String)">
-            <summary>
-            检测是否扫码成功
-            </summary>
-            <param name="salt">获取登录二维码时的返回值</param>
-            <returns></returns>
-        </member>
         <member name="T:HZY.WebHost.Controllers.Public.PublicController">
             <summary>
             公共接口控制器

@@ -4,8 +4,6 @@ using Serilog;
 
 try
 {
-  
-
     #region 创建主机
 
     var builder = WebApplication.CreateBuilder(args);

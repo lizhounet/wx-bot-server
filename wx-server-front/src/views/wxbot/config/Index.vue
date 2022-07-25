@@ -35,7 +35,7 @@
           default-value="1"
         >
           <a-radio :value="1">天行机器人</a-radio>
-          <a-radio :value="2">腾讯闲聊机器人</a-radio>
+          <a-radio :value="2">小i机器人</a-radio>
         </a-radio-group>
       </a-form-item>
       <v-show v-show="state.vm.form.replyBotType == 1">
@@ -53,7 +53,7 @@
           </a-row>
         </a-form-item>
       </v-show>
-      <v-show v-show="state.vm.form.replyBotType == 2">
+      <!-- <v-show v-show="state.vm.form.replyBotType == 2">
         <a-form-item label="腾讯TencentSecretId">
           <a-row :gutter="[15, 15]">
             <a-col :span="22">
@@ -73,7 +73,7 @@
             placeholder="请输入 腾讯TencentSecretKey"
           />
         </a-form-item>
-      </v-show>
+      </v-show> -->
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" @click="methods.saveForm()">保存</a-button>
       </a-form-item>

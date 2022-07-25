@@ -32,23 +32,24 @@ public class WxClientController : ControllerBase
     private readonly WxBotConfigService _wxBotConfigService;
     private readonly WxSayEveryDayService _wxSayEveryDayService;
     private readonly WxKeywordReplyService _wxKeywordReplyService;
-    private readonly TianXingService _tianXingService;
     private readonly WxTimedTaskService _wxTimedTaskService;
+
+    private readonly BotReplyService _botReplyService;
     public WxClientController(WxContactService wxContactService,
         WxBotConfigService wxBotConfigService,
         IMemoryCache memoryCache,
         WxSayEveryDayService wxSayEveryDayService,
         WxKeywordReplyService wxKeywordReplyService,
-        TianXingService tianXingService,
-        WxTimedTaskService wxTimedTaskService)
+        WxTimedTaskService wxTimedTaskService,
+        BotReplyService botReplyService)
     {
         _wxContactService = wxContactService;
         _wxBotConfigService = wxBotConfigService;
         _cache = memoryCache;
         _wxSayEveryDayService = wxSayEveryDayService;
         _wxKeywordReplyService = wxKeywordReplyService;
-        _tianXingService = tianXingService;
         _wxTimedTaskService = wxTimedTaskService;
+        _botReplyService = botReplyService;
     }
 
     /// <summary>
@@ -122,11 +123,7 @@ public class WxClientController : ControllerBase
     /// <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
     /// <returns></returns>
     [HttpGet("bot-reply/{applicationToken}")]
-    public async Task<string> GetBotReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword, [FromQuery] string uniqueid)
-    {
-        WxBotConfig wxBotConfig = await _wxBotConfigService.GetWxBotConfigAsync(applicationToken);
-        return await this._tianXingService.GetBotReplyAsync(wxBotConfig.TianXingApiKey, keyword, uniqueid);
-    }
+    public async Task<string> GetBotReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword, [FromQuery] string uniqueid) => await this._botReplyService.BotReplyAsync(applicationToken, keyword, uniqueid);
 
     /// <summary>
     /// 获取定时任务发送内容
@@ -139,5 +136,5 @@ public class WxClientController : ControllerBase
     {
         return await this._wxTimedTaskService.GetTaskSendContentAsync(applicationToken, taskId);
     }
-  
+
 }

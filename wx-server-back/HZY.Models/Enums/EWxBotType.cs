@@ -15,8 +15,7 @@ namespace HZY.Models.Enums
     {
         [Description("天行机器人")]
         TIANXING = 1,
-        [Description("腾讯闲聊机器人")]
-        TENGXUN = 2
-      
+        [Description("小i机器人")]
+        XIAOI = 2,
     }
 }
