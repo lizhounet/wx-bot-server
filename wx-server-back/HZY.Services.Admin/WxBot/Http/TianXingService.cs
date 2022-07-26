@@ -64,7 +64,7 @@ namespace HZY.Services.Admin.WxBot.Http
             {
                 _logger.LogError(ex, "获取机器人回复失败");
             }
-            return defaultLoveWords;
+            return defaultBotReply;
         }
 
         /// <summary>

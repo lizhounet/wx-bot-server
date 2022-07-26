@@ -49,7 +49,7 @@ public class WxClientController : ControllerBase
         _wxSayEveryDayService = wxSayEveryDayService;
         _wxKeywordReplyService = wxKeywordReplyService;
         _wxTimedTaskService = wxTimedTaskService;
-        contentSendService = _contentSendService;
+        _contentSendService = contentSendService;
     }
 
     /// <summary>
