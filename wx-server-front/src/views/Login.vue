@@ -25,6 +25,9 @@
               <a-button type="primary" @click.enter="methods.check" :loading="loading" size="large" block>登录</a-button>
             </a-form-item>
           </a-form>
+          <div class="register">
+            <a-button type="link" @click="methods.goRegister" size="small">去注册</a-button>
+          </div>
         </div>
       </a-card>
     </div>
@@ -39,10 +42,12 @@ import router from "@/router/index";
 import tools from "@/scripts/tools";
 import loginService from "@/service/system/loginService";
 
+
 const state = reactive({
   userName: "",
   userPassword: "",
 });
+
 const inputPassword = ref(null);
 const loading = ref(false);
 
@@ -73,6 +78,10 @@ const methods = {
     tools.delAuthorization();
     appStore.resetInfo();
   },
+
+  goRegister() {
+    router.push({ path: '/register' })
+  }
 };
 
 onMounted(() => {
@@ -127,6 +136,11 @@ onMounted(() => {
     .ant-card {
       border: 0;
     }
+
+    .register {
+      text-align: right;
+    }
+
   }
 
   @media (max-width: 720px) {

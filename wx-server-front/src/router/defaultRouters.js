@@ -8,6 +8,12 @@ export default [
         component: () => import('@/views/Login.vue')
     },
     {
+        //登录
+        path: '/register',
+        name: "Register",
+        component: () => import('@/views/Register.vue')
+    },
+    {
         //找不到地址
         path: '/:pathMatch(.*)',
         name: 'NotFoundComponentCom',

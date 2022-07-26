@@ -8,6 +8,7 @@ import tools from '@/scripts/tools';
 import { useAppStore } from "@/store"
 
 const routerHistory = createWebHashHistory();
+const whiteList = ['/login', '/register']  // 路由白名单
 
 let router = createRouter({
     history: routerHistory,
@@ -19,10 +20,9 @@ let router = createRouter({
 router.beforeEach((to, from, next) => {
     // console.log('路由拦截器=>', from, to);
     tools.loadingStart();
-    let loginPath = "/login";
     let noPowerMessage = "界面显示权限不足！请配置菜单显示权限.";
 
-    if (to.fullPath === loginPath) {
+    if (whiteList.includes(to.fullPath)) {
         return next();
     }
 
