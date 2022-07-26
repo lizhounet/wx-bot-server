@@ -8,23 +8,24 @@ using HzyScanDiService;
 namespace HZY.Services.Admin
 {
     /// <summary>
-    /// 机器人聊天回复 服务 
+    /// 内容发送 服务 
     /// </summary>
-    public class BotReplyService : IScopedSelfDependency
+    public class ContentSendService : IScopedSelfDependency
     {
         private readonly TianXingService _tianXingService;
         private readonly XiaoiBotService _xiaoiBotService;
         IAdminRepository<WxBotConfig> _wxBotConfigRepository;
-        public BotReplyService(IAdminRepository<WxKeywordReply> defaultRepository,
-            TianXingService tianXingService,
+        private readonly HttpService _httpService;
+        public ContentSendService(TianXingService tianXingService,
               IAdminRepository<WxBotConfig> wxBotConfigRepository,
-              XiaoiBotService xiaoiBotService)
+              XiaoiBotService xiaoiBotService,
+              HttpService httpService)
         {
             _tianXingService = tianXingService;
             _wxBotConfigRepository = wxBotConfigRepository;
             _xiaoiBotService = xiaoiBotService;
+            _httpService = httpService;
         }
-
 
         /// <summary>
         /// 机器人回复
@@ -41,6 +42,26 @@ namespace HZY.Services.Admin
                 EWxBotType.TIANXING => await _tianXingService.GetBotReplyAsync(wxBotConfig.TianXingApiKey, keyword, uniqueid),
                 EWxBotType.XIAOI => await _xiaoiBotService.GetBotReplyAsync(keyword, uniqueid),
                 _ => "我什么都不知道",
+            };
+        }
+        /// <summary>
+        /// 获取发送内容
+        /// </summary>
+        /// <param name="tianXingApiKey">天行key</param>
+        /// <param name="sendObj">发送内容参数</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<string> GetSendContentAsync(string tianXingApiKey, (ETimedTaskSendType, string, string) sendObj)
+        {
+            return sendObj.Item1 switch
+            {
+                ETimedTaskSendType.WBNR => sendObj.Item2,
+                ETimedTaskSendType.XWZX => await _tianXingService.GetNewsAsync(tianXingApiKey),
+                ETimedTaskSendType.GSDQ => await _tianXingService.GetStoryAsync(tianXingApiKey),
+                ETimedTaskSendType.TWQH => await _tianXingService.GetLoveWordsAsync(tianXingApiKey),
+                ETimedTaskSendType.XHDQ => await _tianXingService.GetJokesAsync(tianXingApiKey),
+                ETimedTaskSendType.HTTP => await _httpService.GetAsync(sendObj.Item3),
+                _ => throw new NotImplementedException(),
             };
         }
     }

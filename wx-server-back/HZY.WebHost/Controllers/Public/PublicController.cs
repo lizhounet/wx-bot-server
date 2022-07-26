@@ -45,17 +45,9 @@ public class PublicController : ControllerBase
     /// 测试回调
     /// </summary>
     /// <returns></returns>
-    [HttpPost("/")]
+    [HttpGet("/test")]
     public async Task<string> Test()
     {
-        var sr = new StreamReader(Request.Body);
-        var bodyString = await sr.ReadToEndAsync();
-        JObject jObject = JObject.Parse(bodyString);
-        if (jObject["fromtype"].ToString() == "friends_msg")
-        {
-            var log = $"收到消息:{bodyString}";
-            _logger.LogInformation(log);
-        }
         return "ok";
     }
 

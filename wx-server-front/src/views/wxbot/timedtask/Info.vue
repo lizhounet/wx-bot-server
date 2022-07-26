@@ -46,15 +46,24 @@
                 <a-select-option :value="3">故事大全</a-select-option>
                 <a-select-option :value="4">土味情话</a-select-option>
                 <a-select-option :value="5">笑话大全</a-select-option>
+                <a-select-option :value="6">HTTP请求</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-show="state.vm.form.sendType == 1">
             <a-form-item label="发送内容(发送类型为文本时生效)">
               <a-textarea
                 v-model:value="state.vm.form.sendContent"
                 placeholder="请输入 发送内容(发送类型为文本时生效)"
                 :rows="8"
+              />
+            </a-form-item>
+          </a-col>
+           <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"  v-show="state.vm.form.sendType == 6">
+            <a-form-item label="http请求url(只支持GET请求)" name="httpSendUrl">
+              <a-input
+                v-model:value="state.vm.form.httpSendUrl"
+                placeholder="请输入 http请求url"
               />
             </a-form-item>
           </a-col>

@@ -224,6 +224,7 @@ public class AppConfigureServices
         services.AddMemoryMQ();
 
         //注入AddHttpClient
+        services.AddHttpClient<HttpService>();
         services.AddHttpClient<TianXingService>();
         services.AddHttpClient<XiaoiBotService>();
     }

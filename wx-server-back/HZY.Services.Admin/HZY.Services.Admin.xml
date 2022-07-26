@@ -962,6 +962,11 @@
              <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
             <returns></returns>
         </member>
+        <member name="T:HZY.Services.Admin.WxBot.Http.HttpService">
+            <summary>
+            http服务
+            </summary>
+        </member>
         <member name="T:HZY.Services.Admin.WxBot.Http.TianXingService">
             <summary>
             天行接口服务

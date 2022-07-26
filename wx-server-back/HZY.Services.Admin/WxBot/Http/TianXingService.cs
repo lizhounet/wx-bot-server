@@ -42,24 +42,6 @@ namespace HZY.Services.Admin.WxBot.Http
             _client = client;
         }
         /// <summary>
-        /// 根据发送类型获取发送内容
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="sendObj"></param>
-        /// <returns></returns>
-        public async Task<string> GetSendContentAsync(string key, (ETimedTaskSendType, string) sendObj)
-        {
-            return sendObj.Item1 switch
-            {
-                ETimedTaskSendType.WBNR => sendObj.Item2,
-                ETimedTaskSendType.XWZX => await GetNewsAsync(key),
-                ETimedTaskSendType.GSDQ => await GetStoryAsync(key),
-                ETimedTaskSendType.TWQH => await GetLoveWordsAsync(key),
-                ETimedTaskSendType.XHDQ => await GetJokesAsync(key),
-                _ => "你太厉害了，说的话把我难倒了，我要去学习了，不然没法回答你的问题",
-            };
-        }
-        /// <summary>
         /// 获取机器人回复
         /// </summary>
         /// <param name="key">天行key</param>

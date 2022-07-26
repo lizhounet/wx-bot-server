@@ -9,7 +9,7 @@ const appConsts = {
     /**
      * 域名
      */
-    domainName: process.env.NODE_ENV == "production" ? "" :"https://wxbot.zhouli.info",
+    domainName: process.env.NODE_ENV == "production" ? "" :"http://localhost:8880",
     /**
      * Guid Empty String
      */

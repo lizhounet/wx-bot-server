@@ -28,6 +28,11 @@ namespace HZY.Models.Entities
         /// </summary>
         public String SendContent { get; set; }
 
+        /// <summary>
+        ///  http请求url => 备注: http请求url
+        /// </summary>
+        public String HttpSendUrl { get; set; }
+
 
         /// <summary>
         ///  生效类型 => 备注: 生效类型

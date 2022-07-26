@@ -40,6 +40,11 @@ namespace HZY.Models.Entities
         /// </summary>
         public String SendContent { get; set; }
 
+        /// <summary>
+        ///  http请求url => 备注: http请求url
+        /// </summary>
+        public String HttpSendUrl { get; set; }
+
 
         /// <summary>
         ///  发送时间(cron表达式) => 备注: 发送时间(cron表达式)

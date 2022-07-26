@@ -1,24 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
-
-using HzyEFCoreRepositories.Extensions;
-
 using HZY.Domain.Services.Accounts;
-using HZY.Domain.Services.Upload;
 using HZY.EFCore.PagingViews;
 using HZY.Infrastructure;
-using HZY.Models.DTO;
 using HZY.Models.Entities;
-using HZY.Models.Entities.Framework;
 using HZY.Services.Admin.Core;
-using HZY.Services.Admin.Framework;
 using HZY.EFCore.Repositories.Admin.Core;
-using HZY.Models.Enums;
-using HZY.Services.Admin.WxBot.Http;
 using HZY.Infrastructure.ApiResultManage;
 using Quartz;
 using HZY.Models.BO;
@@ -30,21 +15,18 @@ namespace HZY.Services.Admin
     /// </summary>
     public class WxTimedTaskService : AdminBaseService<IAdminRepository<WxTimedTask>>
     {
-        private readonly WxContactService _wxContactService;
+        private readonly ContentSendService _contentSendService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
-        private readonly TianXingService _tianXingService;
         private readonly AccountInfo _accountInfo;
         public WxTimedTaskService(IAdminRepository<WxTimedTask> defaultRepository,
-            WxContactService wxContactService,
             IAdminRepository<WxBotConfig> wxBotConfigRepository,
-           TianXingService tianXingService,
-           IAccountDomainService accountService)
+           IAccountDomainService accountService,
+           ContentSendService contentSendService)
             : base(defaultRepository)
         {
-            this._wxContactService = wxContactService;
             _wxBotConfigRepository = wxBotConfigRepository;
-            _tianXingService = tianXingService;
             _accountInfo = accountService.GetAccountInfo();
+            _contentSendService = contentSendService;
         }
 
         /// <summary>
@@ -139,7 +121,7 @@ namespace HZY.Services.Admin
         {
             WxTimedTask wxTimedTask = await this._defaultRepository.FindByIdAsync(taskId);
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
-            string content = await _tianXingService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (wxTimedTask.SendType, wxTimedTask.SendContent));
+            string content = await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (wxTimedTask.SendType, wxTimedTask.SendContent, wxTimedTask.HttpSendUrl));
             return $"{content}\n\n————————{wxTimedTask.ClosingRemarks}";
         }
 

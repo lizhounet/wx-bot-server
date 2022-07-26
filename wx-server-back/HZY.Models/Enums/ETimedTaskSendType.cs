@@ -22,7 +22,9 @@ namespace HZY.Models.Enums
         [Description("土味情话")]
         TWQH = 4,
         [Description("笑话大全")]
-        XHDQ = 5
+        XHDQ = 5,
+        [Description("HTTP请求")]
+        HTTP = 6,
     }
     public static class ETimedTaskSendTypeEX
     {

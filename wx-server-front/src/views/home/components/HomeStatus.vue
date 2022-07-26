@@ -1,7 +1,7 @@
 <template>
   <a-card class="home-status" :bordered="false" hoverable :headStyle="headStyle">
     <template #title>
-      微秘书状态
+      小助手状态
       <a-tag :color="state.wxUserInfo.wxId ? '#87d068' : '#6a615d'">{{ state.wxUserInfo.wxId ? '在线' : '离线' }}</a-tag>
     </template>
     <div class="content">

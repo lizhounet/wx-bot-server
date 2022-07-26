@@ -28,18 +28,21 @@ namespace HZY.Services.Admin
     /// </summary>
     public class WxKeywordReplyService : AdminBaseService<IAdminRepository<WxKeywordReply>>
     {
+        private readonly ContentSendService _contentSendService;
         private readonly TianXingService _tianXingService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly AccountInfo _accountInfo;
         public WxKeywordReplyService(IAdminRepository<WxKeywordReply> defaultRepository,
             TianXingService tianXingService,
               IAdminRepository<WxBotConfig> wxBotConfigRepository,
-              IAccountDomainService accountService)
+              IAccountDomainService accountService,
+              ContentSendService contentSendService)
             : base(defaultRepository)
         {
             _tianXingService = tianXingService;
             _wxBotConfigRepository = wxBotConfigRepository;
-            _accountInfo= accountService.GetAccountInfo();
+            _accountInfo = accountService.GetAccountInfo();
+            _contentSendService = contentSendService;
         }
 
         /// <summary>
@@ -140,12 +143,12 @@ namespace HZY.Services.Admin
                 && w.KeyWord.Split(",").Contains(keyword));
                 if (jqReply != null)
                 {
-                    return await _tianXingService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (jqReply.SendType, jqReply.SendContent));
+                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (jqReply.SendType, jqReply.SendContent, jqReply.HttpSendUrl));
                 }
                 else
                 {
                     WxKeywordReply mhReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
-                    return await _tianXingService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (mhReply.SendType, mhReply.SendContent));
+                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (mhReply.SendType, mhReply.SendContent, mhReply.HttpSendUrl));
                 }
             }
             return null;

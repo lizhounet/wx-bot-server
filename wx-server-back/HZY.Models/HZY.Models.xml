@@ -1340,6 +1340,11 @@
              发送内容(发送类型为文本时生效) => 备注: 发送内容(发送类型为文本时生效)
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxKeywordReply.HttpSendUrl">
+            <summary>
+             http请求url => 备注: http请求url
+            </summary>
+        </member>
         <member name="P:HZY.Models.Entities.WxKeywordReply.TakeEffectType">
             <summary>
              生效类型 => 备注: 生效类型
@@ -1423,6 +1428,11 @@
         <member name="P:HZY.Models.Entities.WxTimedTask.SendContent">
             <summary>
              发送内容(发送类型为文本时生效) => 备注: 发送内容(发送类型为文本时生效)
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxTimedTask.HttpSendUrl">
+            <summary>
+             http请求url => 备注: http请求url
             </summary>
         </member>
         <member name="P:HZY.Models.Entities.WxTimedTask.SendTime">
