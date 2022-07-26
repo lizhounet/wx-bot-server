@@ -34,14 +34,14 @@ public class WxClientController : ControllerBase
     private readonly WxKeywordReplyService _wxKeywordReplyService;
     private readonly WxTimedTaskService _wxTimedTaskService;
 
-    private readonly BotReplyService _botReplyService;
+    private readonly ContentSendService _contentSendService;
     public WxClientController(WxContactService wxContactService,
         WxBotConfigService wxBotConfigService,
         IMemoryCache memoryCache,
         WxSayEveryDayService wxSayEveryDayService,
         WxKeywordReplyService wxKeywordReplyService,
         WxTimedTaskService wxTimedTaskService,
-        BotReplyService botReplyService)
+        ContentSendService contentSendService)
     {
         _wxContactService = wxContactService;
         _wxBotConfigService = wxBotConfigService;
@@ -49,7 +49,7 @@ public class WxClientController : ControllerBase
         _wxSayEveryDayService = wxSayEveryDayService;
         _wxKeywordReplyService = wxKeywordReplyService;
         _wxTimedTaskService = wxTimedTaskService;
-        _botReplyService = botReplyService;
+        contentSendService = _contentSendService;
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ public class WxClientController : ControllerBase
     /// <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
     /// <returns></returns>
     [HttpGet("bot-reply/{applicationToken}")]
-    public async Task<string> GetBotReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword, [FromQuery] string uniqueid) => await this._botReplyService.BotReplyAsync(applicationToken, keyword, uniqueid);
+    public async Task<string> GetBotReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword, [FromQuery] string uniqueid) => await this._contentSendService.BotReplyAsync(applicationToken, keyword, uniqueid);
 
     /// <summary>
     /// 获取定时任务发送内容
