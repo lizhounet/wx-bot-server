@@ -1,7 +1,7 @@
 <template>
     <div id="register">
         <div class="herder">
-            <img class="logo" src="../assets/logo.png" alt="">
+            <img class="logo" @click="goLogin" src="../assets/logo.png" alt="">
             <div class="titie">微信机器人管理平台</div>
         </div>
         <div class="content">
@@ -17,6 +17,7 @@
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
                     <a-button type="primary" @click="onSubmit">注册</a-button>
+                    <a-button type="link" @click="goLogin">返回</a-button>
                 </a-form-item>
             </a-form>
         </div>
@@ -24,6 +25,7 @@
 </template>
 <script setup>
 import { reactive, toRaw } from 'vue';
+import router from "@/router/index";
 
 const formState = reactive({
     name: '',
@@ -33,6 +35,10 @@ const formState = reactive({
 const onSubmit = () => {
     console.log('submit!', toRaw(formState));
 };
+const goLogin = () => {
+    router.push({ path: '/login' })
+};
+
 </script>
 
 
@@ -50,6 +56,7 @@ const onSubmit = () => {
         .logo {
             width: 100px;
             height: 100px;
+            cursor: pointer
         }
 
         .titie {
