@@ -11,7 +11,7 @@ export default [
         //登录
         path: '/register',
         name: "Register",
-        component: () => import('@/views/Register2.vue')
+        component: () => import('@/views/Register.vue')
     },
     {
         //找不到地址
