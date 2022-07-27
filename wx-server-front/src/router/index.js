@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!tools.getAuthorization()) {
-        return next(loginPath);
+        return next(whiteList[0]);
     }
 
     var appStore = useAppStore();

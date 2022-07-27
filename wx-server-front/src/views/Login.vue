@@ -3,19 +3,19 @@
     <div class="login-modal"></div>
     <div class="login-container">
       <a-card>
-        <div class="login-title">{{ title }}</div>
+        <div class="login-title">{{ title }}登录</div>
         <div class="p-24">
           <a-form layout="vertical">
             <a-form-item>
-              <a-input v-model:value="state.userName" placeholder="请输入" size="large" allow-clear>
+              <a-input v-model:value="state.userName" placeholder="请输入账号" size="large" allow-clear>
                 <template #prefix>
                   <AppIcon name="UserOutlined" style="color: #1890ff; font-size: 14px" />
                 </template>
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-input-password type="password" v-model:value="state.userPassword" size="large" ref="inputPassword"
-                @keyup.enter="state.check">
+              <a-input-password type="password" v-model:value="state.userPassword" placeholder="请输入密码" size="large" ref="inputPassword"
+                @keyup.enter="methods.check">
                 <template #prefix>
                   <AppIcon name="LockOutlined" style="color: #1890ff; font-size: 14px" />
                 </template>
@@ -37,7 +37,6 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import { useLayoutStore, useAppStore } from "@/store";
-import AppIcon from "@/components/AppIcon.vue";
 import router from "@/router/index";
 import tools from "@/scripts/tools";
 import loginService from "@/service/system/loginService";
@@ -86,7 +85,6 @@ const methods = {
 
 onMounted(() => {
   methods.reset();
-  inputPassword.value.focus();
 });
 </script>
 <style lang="less" scoped>
@@ -98,10 +96,10 @@ onMounted(() => {
   right: 0;
   left: 0;
   //可以解开一下注解 放置一个背景图片
-  background: url("../assets/images/login3.jpg") no-repeat;
+  // background: url("../assets/images/login3.jpg") no-repeat;
   // background: url("../assets/undraw_Tree_swing_re_pqee.png") no-repeat;
-  background-size: cover;
-  // background: #f0f2f5 url("../assets/background.svg") no-repeat 50%;
+   background-size: cover;
+   background: #f0f2f5 url("../assets/background.svg") no-repeat 50%;
 
   .login-modal {
     position: absolute;
