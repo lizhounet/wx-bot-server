@@ -1,15 +1,17 @@
-﻿using HZY.EFCore.Repositories.Admin.Core;
+﻿using HZY.EFCore.Aop;
+using HZY.EFCore.Repositories.Admin.Core;
 using HZY.Infrastructure;
 using HZY.Infrastructure.ApiResultManage;
+using HZY.Infrastructure.Email;
 using HZY.Infrastructure.Token;
 using HZY.Models.BO;
 using HZY.Models.Consts;
+using HZY.Models.DTO.Framework;
 using HZY.Models.Entities;
 using HZY.Models.Entities.Framework;
+using Masuit.Tools;
+using Masuit.Tools.Strings;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HZY.Domain.Services.Accounts.Impl;
 
@@ -19,6 +21,7 @@ namespace HZY.Domain.Services.Accounts.Impl;
 public class AccountDomainServiceImpl : IAccountDomainService
 {
     private readonly string AccountInfoCacheName = "AccountInfo";
+    private readonly string emailVerifyCodeCacheName = "EmailVerifyCode:{0}";
     private readonly AccountInfo _accountInfo;
     private readonly AppConfiguration _appConfiguration;
     private readonly TokenService _tokenService;
@@ -29,7 +32,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
     private readonly IAdminRepository<SysRole> _sysRoleRepository;
     private readonly IAdminRepository<SysPost> _sysPostRepository;
     private readonly IAdminRepository<SysUserPost> _sysUserPostRepository;
-    private readonly IAdminRepository<WxBotConfig> _WxBotConfigRepository;
+    private readonly EmailService _emailService;
 
     public AccountDomainServiceImpl(IAdminRepository<SysUser> sysUserRepository,
         IAdminRepository<SysOrganization> sysOrganizationRepository,
@@ -40,7 +43,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
         IAdminRepository<SysRole> sysRoleRepository,
         IAdminRepository<SysPost> sysPostRepository,
         IAdminRepository<SysUserPost> sysUserPostRepository,
-        IAdminRepository<WxBotConfig> WxBotConfigRepository)
+        EmailService emailService)
     {
         _sysUserRepository = sysUserRepository;
         _appConfiguration = appConfiguration;
@@ -51,7 +54,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
         _sysRoleRepository = sysRoleRepository;
         _sysPostRepository = sysPostRepository;
         _sysUserPostRepository = sysUserPostRepository;
-        _WxBotConfigRepository = WxBotConfigRepository;
+        _emailService = emailService;
         this._accountInfo = this.FindAccountInfoByToken();
     }
 
@@ -142,6 +145,69 @@ public class AccountDomainServiceImpl : IAccountDomainService
         return _tokenService.CreateTokenByAccountId(sysUser.Id);
     }
 
+    [Transactional]
+    public virtual async Task<UserRegisterDto> RegisterAsync(UserRegisterDto userRegisterDto)
+    {
+        if (this._sysUserRepository.Any(r => r.Email.Equals(userRegisterDto.Email)))
+        {
+            MessageBox.Show("邮箱已经被注册!");
+        }
+        //验证验证码
+        string code = _memoryCache.Get<string>(string.Format(emailVerifyCodeCacheName, userRegisterDto.Email));
+        if (string.IsNullOrEmpty(code))
+        {
+            MessageBox.Show("验证码已失效,请重新发送!");
+        }
+        if (!userRegisterDto.VerifyCode.Equals(code))
+        {
+            MessageBox.Show("验证码不正确!");
+        }
+        //保存账号
+        SysUser user = new()
+        {
+            DeleteLock = false,
+            Name = userRegisterDto.Name,
+            Email = userRegisterDto.Email,
+            LoginName = userRegisterDto.Email,
+            Password = Tools.Md5Encrypt(userRegisterDto.Password),
+            OrganizationId = 1
+        };
+        SysUser sysUser = await _sysUserRepository.InsertAsync(user);
+        //处理默认角色岗位
+        SysRole sysRole = await _sysRoleRepository.FindAsync(w => w.Name == "微信平台管理员");
+        SysUserRole sysUserRole = new()
+        {
+            Id = Guid.NewGuid(),
+            RoleId = sysRole.Id,
+            UserId = sysUser.Id
+        };
+        await this._sysUserRoleRepository.InsertAsync(sysUserRole);
+        //处理岗位
+        SysPost sysPost = await _sysPostRepository.FindAsync(w => w.Name == "普通员工");
+        SysUserPost sysUserPost = new()
+        {
+            Id = Guid.NewGuid(),
+            PostId = sysPost.Id,
+            UserId = sysUser.Id
+        };
+        await this._sysUserPostRepository.InsertAsync(sysUserPost);
+        return userRegisterDto;
+
+
+    }
+    public void SendEmailVerifyCodeAsync(SendEmailVerifyCodeDto emailVerifyCodeDto)
+    {
+        string email = emailVerifyCodeDto.Email;
+        if (!email.MatchEmail(true).isMatch) { MessageBox.Show("邮箱格式不正确!"); }
+
+        //生成验证码
+        string code = new NumberFormater(62).ToString(new Random().Next(100000, int.MaxValue));
+        string subject = "【个微小助手】请查收您的邮箱验证码";
+        string body = $"您的邮箱为：{email}，验证码为：{code} \n验证码的有效期为5分钟，请在有效期内输入！";
+        _emailService.SendEmail(email, subject, body);
+        _memoryCache.Set(string.Format(emailVerifyCodeCacheName, email), code, DateTime.Now.AddMinutes(5));
+    }
+
     /// <summary>
     /// 修改密码
     /// </summary>
@@ -212,6 +278,10 @@ public class AccountDomainServiceImpl : IAccountDomainService
     #region 私有方法
 
     private string GetCacheKeyById(string id) => AccountInfoCacheName + id;
+
+
+
+
 
     #endregion
 }

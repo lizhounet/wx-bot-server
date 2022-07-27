@@ -151,6 +151,11 @@
             </summary>
             <value></value>
         </member>
+        <member name="T:HZY.Models.DTO.Framework.SendEmailVerifyCodeDto">
+            <summary>
+            发送邮箱验证码 dto
+            </summary>
+        </member>
         <member name="P:HZY.Models.DTO.Framework.SysMenuTreeDto.ParentName">
             <summary>
             父级菜单名称
@@ -179,6 +184,11 @@
         <member name="T:HZY.Models.DTO.Framework.SysUserFormDto">
             <summary>
             系统账户表单
+            </summary>
+        </member>
+        <member name="T:HZY.Models.DTO.Framework.UserRegisterDto">
+            <summary>
+            用户注册dto
             </summary>
         </member>
         <member name="T:HZY.Models.Entities.AllPeopleGoGoGo.GamePlayer">

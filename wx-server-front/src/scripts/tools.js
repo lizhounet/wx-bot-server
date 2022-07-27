@@ -285,6 +285,9 @@ let tools = {
     //设置菜单收展状态
     setMenuCollapsed(collapsed) {
         localStorage.setItem(appConsts.appPrefix + "-MenuCollapsed", collapsed ? "1" : "0");
+    },
+    getTimeStamp (){
+        return (new Date()).valueOf();
     }
 };
 

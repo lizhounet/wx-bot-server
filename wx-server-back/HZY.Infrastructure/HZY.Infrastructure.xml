@@ -298,6 +298,11 @@
             连接字符串 通过属性注入
             </summary>
         </member>
+        <member name="P:HZY.Infrastructure.AppConfiguration.EmailServerConfig">
+            <summary>
+            邮件服务配置 通过属性注入
+            </summary>
+        </member>
         <member name="M:HZY.Infrastructure.AppConfiguration.#ctor">
             <summary>
             程序配置信息映射类
@@ -396,6 +401,11 @@
         <member name="P:HZY.Infrastructure.AppConfigurationOptions.IsRunQuartzTask">
             <summary>
             是否运行 Quartz Task
+            </summary>
+        </member>
+        <member name="T:HZY.Infrastructure.EmailServerConfig">
+            <summary>
+            邮件服务配置信息
             </summary>
         </member>
         <member name="M:HZY.Infrastructure.Controllers.AdminBaseController`1.#ctor(`0)">
@@ -565,6 +575,31 @@
             <summary>
             默认数据库类型
             </summary>
+        </member>
+        <member name="T:HZY.Infrastructure.Email.EmailService">
+            <summary>
+            邮件服务
+            </summary>
+        </member>
+        <member name="M:HZY.Infrastructure.Email.EmailService.SendEmail(System.String,System.String,System.String)">
+            <summary>
+            发送邮件
+            </summary>
+            <param name="recipient">收件人，多个用,隔开</param>
+            <param name="subject">邮件标题</param>
+            <param name="body">邮件内容</param>
+        </member>
+        <member name="T:HZY.Infrastructure.Email.EmailUtils">
+            <summary>
+            邮件工具类
+            </summary>
+        </member>
+        <member name="M:HZY.Infrastructure.Email.EmailUtils.AddEmailService(Microsoft.Extensions.DependencyInjection.IServiceCollection,HZY.Infrastructure.EmailServerConfig)">
+            <summary>
+            注册 邮箱服务
+            </summary>
+            <param name="services"></param>
+            <param name="emailServerConfig">邮件服务配置信息</param>
         </member>
         <member name="T:HZY.Infrastructure.Filters.ApiCheckModelAttribute">
             <summary>

@@ -24,6 +24,20 @@
             <param name="code"></param>
             <returns></returns>
         </member>
+        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.RegisterAsync(HZY.Models.DTO.Framework.UserRegisterDto)">
+            <summary>
+            注册用户
+            </summary>
+            <param name="userRegisterDto">注册dto</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.SendEmailVerifyCodeAsync(HZY.Models.DTO.Framework.SendEmailVerifyCodeDto)">
+            <summary>
+            发送邮箱验证码
+            </summary>
+            <param name="emailVerifyCodeDto"> 发送邮箱验证码 dto</param>
+            <returns></returns>
+        </member>
         <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.ChangePasswordAsync(System.String,System.String)">
             <summary>
             修改密码

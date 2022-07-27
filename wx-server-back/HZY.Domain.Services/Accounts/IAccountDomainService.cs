@@ -1,4 +1,5 @@
 ﻿using HZY.Models.BO;
+using HZY.Models.DTO.Framework;
 using HZY.Models.Entities.Framework;
 using HzyScanDiService;
 using System.Threading.Tasks;
@@ -24,6 +25,19 @@ public interface IAccountDomainService : IScopedDependency
     /// <param name="code"></param>
     /// <returns></returns>
     Task<string> CheckAccountAsync(string name, string password, string code);
+
+    /// <summary>
+    /// 注册用户
+    /// </summary>
+    /// <param name="userRegisterDto">注册dto</param>
+    /// <returns></returns>
+    Task<UserRegisterDto> RegisterAsync(UserRegisterDto userRegisterDto);
+    /// <summary>
+    /// 发送邮箱验证码
+    /// </summary>
+    /// <param name="emailVerifyCodeDto"> 发送邮箱验证码 dto</param>
+    /// <returns></returns>
+    void SendEmailVerifyCodeAsync(SendEmailVerifyCodeDto emailVerifyCodeDto);
 
     /// <summary>
     /// 修改密码

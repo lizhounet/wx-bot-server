@@ -6,29 +6,31 @@
         <div class="register-title">{{ title }}注册</div>
         <div class="p-24">
           <a-form layout="vertical">
-            <a-form-item>
+            <a-form-item label="昵称">
               <a-input v-model:value="state.name" placeholder="请输入昵称" />
             </a-form-item>
-            <a-form-item>
+            <a-form-item label="邮箱">
+              <a-input v-model:value="state.email" placeholder="请输入邮箱" />
+            </a-form-item>
+            <a-form-item label="验证码">
               <a-input-group>
                 <a-input
-                  v-model:value="state.email"
-                  placeholder="请输入邮箱"
+                  v-model:value="state.verifyCode"
+                  placeholder="发送验证码"
                   style="width: calc(100% - 103px); text-align: left"
                 />
-                <a-button @click="methods.getCode" type="link">发送验证码</a-button>
+                <a-button
+                  @click="methods.getCode"
+                  type="link"
+                  :disabled="verifyCodeInfo.codeBtnDisabled"
+                  >{{ verifyCodeInfo.codeBtnWord }}</a-button
+                >
               </a-input-group>
               <!-- <a-input v-model:value="state.email" placeholder="请输入邮箱" /> -->
             </a-form-item>
-            <a-form-item>
+            <a-form-item label="密码">
               <a-input
-                v-model:value="state.v_code"
-                placeholder="请输入验证码"
-              />
-            </a-form-item>
-            <a-form-item>
-              <a-input
-                v-model:value="state.userPassword"
+                v-model:value="state.password"
                 placeholder="请输入密码"
               />
             </a-form-item>
@@ -63,9 +65,14 @@ import registerService from "@/service/system/registerService";
 
 const state = reactive({
   name: "",
-  userPassword: "",
-  v_code: "",
+  password: "",
+  verifyCode: "",
   email: "",
+});
+const verifyCodeInfo = reactive({
+  codeCountdown: 60,
+  codeBtnWord: "获取验证码",
+  codeBtnDisabled: false,
 });
 
 const loading = ref(false);
@@ -77,13 +84,14 @@ const title = layoutStore.state.title;
 const methods = {
   register() {
     if (!state.name) return tools.message("昵称不能为空!", "警告");
-    if (!state.userPassword) return tools.message("密码不能为空!", "警告");
-    if (!state.email) return tools.message("密码不能为空!", "警告");
+    if (!state.password) return tools.message("密码不能为空!", "警告");
+    if (!state.verifyCode) return tools.message("验证码不能为空!", "警告");
+    if (!state.email) return tools.message("邮箱不能为空!", "警告");
     if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(state.email))
       return tools.message("邮箱格式不正确!", "警告");
     loading.value = true;
     registerService
-      .register(state.userName, state.userPassword)
+      .register(state)
       .then((res) => {
         if (res.code !== 1) return (loading.value = false);
         tools.alert("注册成功,前往登录！", "成功", () => {
@@ -95,9 +103,32 @@ const methods = {
       });
   },
   getCode() {
-    if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(state.email)){
+    if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(state.email)) {
       return tools.message("邮箱格式不正确!", "警告");
     }
+    verifyCodeInfo.codeBtnDisabled = true;
+    //获取验证码
+    registerService
+      .getverifyCode({
+        email: state.email,
+        ts: tools.getTimeStamp(),
+      })
+      .then((res) => {
+        if (res.code !== 1) return;
+        tools.message("验证码发送成功,请注意查收!", "成功");
+        //倒计时验证码
+        let timer = setInterval(() => {
+          if (verifyCodeInfo.codeCountdown > 1) {
+            verifyCodeInfo.codeCountdown--;
+            verifyCodeInfo.codeBtnWord = `${verifyCodeInfo.codeCountdown}s 后获取`;
+          } else {
+            clearInterval(timer);
+            verifyCodeInfo.codeBtnDisabled = false;
+            verifyCodeInfo.codeBtnWord = "获取验证码";
+            verifyCodeInfo.codeCountdown = 60;
+          }
+        }, 1000);
+      });
   },
   goLogin() {
     router.push({ path: "/login" });

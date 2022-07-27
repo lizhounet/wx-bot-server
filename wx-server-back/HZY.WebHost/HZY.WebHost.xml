@@ -49,6 +49,20 @@
             <param name="authUserDto">Dto</param>
             <returns></returns>
         </member>
+        <member name="M:HZY.WebHost.Controllers.Public.AccountController.RegisterAsync(HZY.Models.DTO.Framework.UserRegisterDto)">
+            <summary>
+            注册用户
+            </summary>
+            <param name="userRegisterDto">Dto</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.Public.AccountController.SendEmailVerifyCodeAsync(HZY.Models.DTO.Framework.SendEmailVerifyCodeDto)">
+            <summary>
+            发送邮箱验证码
+            </summary>
+            <param name="emailVerifyCodeDto">发送邮箱验证码 dto</param>
+            <returns></returns>
+        </member>
         <member name="T:HZY.WebHost.Controllers.Public.PublicController">
             <summary>
             公共接口控制器
@@ -59,12 +73,6 @@
             根据编码获取 字典集合
             </summary>
             <param name="code"></param>
-            <returns></returns>
-        </member>
-        <member name="M:HZY.WebHost.Controllers.Public.PublicController.Test">
-            <summary>
-            测试回调
-            </summary>
             <returns></returns>
         </member>
         <member name="T:HZY.WebHost.Controllers.Public.UploadController">

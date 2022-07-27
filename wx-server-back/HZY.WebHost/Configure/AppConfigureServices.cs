@@ -24,6 +24,7 @@ using HZY.Infrastructure.TextJson;
 using Swashbuckle.AspNetCore.Filters;
 using Newtonsoft.Json.Serialization;
 using HZY.Services.Admin.WxBot.Http;
+using HZY.Infrastructure.Email;
 
 namespace HZY.WebHost.Configure;
 
@@ -227,5 +228,7 @@ public class AppConfigureServices
         services.AddHttpClient<HttpService>();
         services.AddHttpClient<TianXingService>();
         services.AddHttpClient<XiaoiBotService>();
+        //注入邮箱服务
+        services.AddEmailService(appConfiguration.EmailServerConfig);
     }
 }

@@ -40,15 +40,4 @@ public class PublicController : ControllerBase
     {
         return this._sysDictionaryService.GetDictionaryByCodeAsync(code);
     }
-
-    /// <summary>
-    /// 测试回调
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("/test")]
-    public async Task<string> Test()
-    {
-        return "ok";
-    }
-
 }

@@ -5,6 +5,7 @@ using HZY.Infrastructure.Filters;
 using HZY.Models.DTO;
 using HZY.Models.DTO.Framework;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace HZY.WebHost.Controllers.Public
@@ -37,6 +38,29 @@ namespace HZY.WebHost.Controllers.Public
             var token = await this._accountService
                 .CheckAccountAsync(authUserDto.UserName, authUserDto.UserPassword, authUserDto.LoginCode);
             return new { token = token, tokenType };
+        }
+
+        /// <summary>
+        /// 注册用户
+        /// </summary>
+        /// <param name="userRegisterDto">Dto</param>
+        /// <returns></returns>
+        [HttpPost("register")]
+        [ApiCheckModel]
+        public async Task<UserRegisterDto> RegisterAsync([FromBody] UserRegisterDto userRegisterDto) => await this._accountService
+                .RegisterAsync(userRegisterDto);
+
+        /// <summary>
+        /// 发送邮箱验证码
+        /// </summary>
+        /// <param name="emailVerifyCodeDto">发送邮箱验证码 dto</param>
+        /// <returns></returns>
+        [HttpPost("register-verifyCode")]
+        [RequestLimitFilter(Duration = 60, LimitCount = 1, Message = "请60s后再发送")]
+        public bool SendEmailVerifyCodeAsync([FromBody] SendEmailVerifyCodeDto emailVerifyCodeDto) {
+            this._accountService
+                    .SendEmailVerifyCodeAsync(emailVerifyCodeDto);
+            return true;
         }
     }
 }

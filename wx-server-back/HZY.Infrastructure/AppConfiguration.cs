@@ -25,6 +25,11 @@ public class AppConfiguration : ISingletonSelfDependency
     /// </summary>
     [AppSettings(nameof(ConnectionStrings))]
     public virtual ConnectionStringsOptions ConnectionStrings { get; }
+    /// <summary>
+    /// 邮件服务配置 通过属性注入
+    /// </summary>
+    [AppSettings(nameof(EmailServerConfig))]
+    public virtual EmailServerConfig EmailServerConfig { get; }
 
     /// <summary>
     /// 程序配置信息映射类
@@ -43,7 +48,7 @@ public class AppConfiguration : ISingletonSelfDependency
         this._configuration = configuration;
         Configs = _configuration.GetSection(nameof(AppConfigurationOptions)).Get<AppConfigurationOptions>();
         ConnectionStrings = _configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStringsOptions>();
-
+        EmailServerConfig= _configuration.GetSection(nameof(EmailServerConfig)).Get<EmailServerConfig>();
     }
 
 }
@@ -128,4 +133,16 @@ public class AppConfigurationOptions
     /// 是否运行 Quartz Task
     /// </summary>
     public bool IsRunQuartzTask { get; set; }
+}
+
+/// <summary>
+/// 邮件服务配置信息
+/// </summary>
+public class EmailServerConfig { 
+    public string SmtpServer { get; set; }
+    public int SmtpPort { get; set; }
+    public bool EnableSsl { get; set; }
+    public string UserName { get; set; }
+    public string PassWord { get; set; }
+
 }
