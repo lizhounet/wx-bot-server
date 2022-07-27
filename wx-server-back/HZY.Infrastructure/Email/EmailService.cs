@@ -45,7 +45,7 @@ namespace HZY.Infrastructure.Email
                 EnableSsl = enableSsl,//由于使用了授权码必须设置该属性为true
                 DeliveryMethod = SmtpDeliveryMethod.Network,//指定电子邮件发送方式
                 Host = smtpServer, //指定SMTP服务器
-                Port = smtpPort,
+                //Port = smtpPort,
                 UseDefaultCredentials = false, //不和请求一块发送
                 Credentials = new System.Net.NetworkCredential(username, password)//用户名和密码
             };
