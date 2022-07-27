@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MimeKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -40,31 +41,20 @@ namespace HZY.Infrastructure.Email
         /// <param name="body">邮件内容</param>
         public void SendEmail(string recipient, string subject, string body)
         {
-            var smtpClient = new SmtpClient
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("发送人姓名", username));
+            message.To.Add(new MailboxAddress("收件人姓名", recipient));
+            message.Subject = subject; //邮件标题
+            var builder = new BodyBuilder
             {
-                EnableSsl = enableSsl,//由于使用了授权码必须设置该属性为true
-                DeliveryMethod = SmtpDeliveryMethod.Network,//指定电子邮件发送方式
-                Host = smtpServer, //指定SMTP服务器
-                //Port = smtpPort,
-                UseDefaultCredentials = false, //不和请求一块发送
-                Credentials = new System.Net.NetworkCredential(username, password)//用户名和密码
+                TextBody = body//正文
             };
-            // 发送人和收件人
-            MailMessage mailMessage = new(username, recipient)
-            {
-                //主题
-                Subject = subject,
-                //内容
-                Body = body,
-                //正文编码
-                BodyEncoding = Encoding.UTF8,
-                //设置为HTML格式
-                IsBodyHtml = true,
-                //优先级
-                Priority = MailPriority.Low
-            };
-            // 发送邮件
-            smtpClient.Send(mailMessage);
+            message.Body = builder.ToMessageBody();
+            using var client = new MailKit.Net.Smtp.SmtpClient();
+            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            client.Connect(smtpServer, smtpPort, true);//网易、QQ支持 25(未加密)，465和587(SSL加密）
+            client.Authenticate(username, password);
+            client.Send(message);//发送邮件
         }
     }
 }
