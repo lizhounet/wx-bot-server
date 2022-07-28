@@ -42,8 +42,8 @@ namespace HZY.Infrastructure.Email
         public void SendEmail(string recipient, string subject, string body)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("发送人姓名", username));
-            message.To.Add(new MailboxAddress("收件人姓名", recipient));
+            message.From.Add(new MailboxAddress(username, username));
+            message.To.Add(new MailboxAddress(recipient, recipient));
             message.Subject = subject; //邮件标题
             var builder = new BodyBuilder
             {

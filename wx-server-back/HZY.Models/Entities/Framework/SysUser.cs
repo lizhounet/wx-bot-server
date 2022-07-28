@@ -46,4 +46,8 @@ public class SysUser : DefaultBaseEntity<Guid>
     /// 组织Id
     /// </summary>
     public int? OrganizationId { get; set; }
+    /// <summary>
+    /// 用户状态 (1=激活，2=未激活，3=停用)
+    /// </summary>
+    public int? UserState { get; set; }
 }

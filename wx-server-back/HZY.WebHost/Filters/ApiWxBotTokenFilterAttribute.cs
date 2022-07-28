@@ -51,7 +51,7 @@ namespace HZY.WebHost.Filters
             if (Guid.TryParse(applicationToken, out Guid _applicationToken))
             {
                 //查询applicationToken是否合法
-                if (!_sysUserRepository.Any(s => s.Id == _applicationToken))
+                if (!_sysUserRepository.Any(s => s.Id == _applicationToken && s.UserState == 1))
                 {
                     var data = ApiResult.ResultMessage(ApiResultCodeEnum.Warn, unAuthMessage);
                     context.Result = new JsonResult(data);

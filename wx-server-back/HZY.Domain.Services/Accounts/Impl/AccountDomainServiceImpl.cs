@@ -137,7 +137,10 @@ public class AccountDomainServiceImpl : IAccountDomainService
         {
             MessageBox.Show("账户或者密码错误!");
         }
-
+        if (sysUser.UserState != 1)
+        {
+            MessageBox.Show("您的账号已停用或未激活!");
+        }
         //string code = Tools.GetCookie("loginCode");
         //if (string.IsNullOrEmpty(code)) throw new MessageBox("验证码失效");
         //if (!code.ToLower().Equals(loginCode.ToLower())) throw new MessageBox("验证码不正确");
