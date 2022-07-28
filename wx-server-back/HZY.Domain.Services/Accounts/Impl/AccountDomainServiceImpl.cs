@@ -173,6 +173,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
             Email = userRegisterDto.Email,
             LoginName = userRegisterDto.Email,
             Password = Tools.Md5Encrypt(userRegisterDto.Password),
+            UserState = 1,
             OrganizationId = 1
         };
         SysUser sysUser = await _sysUserRepository.InsertAsync(user);

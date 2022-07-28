@@ -7,7 +7,11 @@
             <a href="javascript:void(0)" @click="methods.getFirst">查看一级</a>
           </template>
           <a-spin :spinning="state.tree.loadingTree">
-            <a-tree v-model:expandedKeys="state.tree.expandedKeys" v-model:selectedKeys="state.tree.selectedKeys" :tree-data="state.tree.data" />
+            <a-tree
+              v-model:expandedKeys="state.tree.expandedKeys"
+              v-model:selectedKeys="state.tree.selectedKeys"
+              :tree-data="state.tree.data"
+            />
           </a-spin>
         </a-card>
       </a-col>
@@ -17,15 +21,32 @@
           <template #search>
             <a-row :gutter="[15, 15]">
               <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-                <a-input v-model:value="state.search.vm.name" placeholder="真实名称" />
+                <a-input
+                  v-model:value="state.search.vm.name"
+                  placeholder="真实名称"
+                />
               </a-col>
               <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-                <a-input v-model:value="state.search.vm.loginName" placeholder="账户名称" />
+                <a-input
+                  v-model:value="state.search.vm.loginName"
+                  placeholder="账户名称"
+                />
               </a-col>
               <!--button-->
-              <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6" style="float: right">
-                <a-button type="primary" class="mr-15" @click="methods.findList">查询</a-button>
-                <a-button class="mr-15" @click="methods.onResetSearch">重置</a-button>
+              <a-col
+                :xs="24"
+                :sm="12"
+                :md="8"
+                :lg="6"
+                :xl="6"
+                style="float: right"
+              >
+                <a-button type="primary" class="mr-15" @click="methods.findList"
+                  >查询</a-button
+                >
+                <a-button class="mr-15" @click="methods.onResetSearch"
+                  >重置</a-button
+                >
               </a-col>
             </a-row>
           </template>
@@ -42,7 +63,12 @@
             </template>
             <!-- 批量删除 -->
             <template v-if="power.delete && !$props.isFindBack">
-              <a-popconfirm title="您确定要删除吗?" @confirm="methods.deleteList()" okText="确定" cancelText="取消">
+              <a-popconfirm
+                title="您确定要删除吗?"
+                @confirm="methods.deleteList()"
+                okText="确定"
+                cancelText="取消"
+              >
                 <a-button type="danger">
                   <template #icon>
                     <AppIcon name="DeleteOutlined" />
@@ -64,7 +90,9 @@
             <a-dropdown>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="1" @click="methods.exportExcel">导出 Excel</a-menu-item>
+                  <a-menu-item key="1" @click="methods.exportExcel"
+                    >导出 Excel</a-menu-item
+                  >
                 </a-menu>
               </template>
               <a-button>
@@ -75,13 +103,19 @@
           </template>
           <!-- 工具栏右侧插槽 -->
           <template #toolbar-right>
-            <a-input v-model:value="state.search.vm.name" placeholder="名称" @keyup="methods.findList" />
+            <a-input
+              v-model:value="state.search.vm.name"
+              placeholder="名称"
+              @keyup="methods.findList"
+            />
             <a-button @click="methods.onResetSearch">重置</a-button>
             <!-- 检索 -->
             <template v-if="power.search">
               <a-button @click="state.search.state = !state.search.state">
                 <template #icon>
-                  <AppIcon :name="state.search.state ? 'UpOutlined' : 'DownOutlined'" />
+                  <AppIcon
+                    :name="state.search.state ? 'UpOutlined' : 'DownOutlined'"
+                  />
                 </template>
                 检索
               </a-button>
@@ -89,8 +123,18 @@
             <!-- 列的隐藏显示 -->
             <a-popover>
               <template #content>
-                <div v-for="item in state.columns.filter((w) => w.fieldName.substr(0, 1) != '_')">
-                  <a-checkbox v-model:checked="item.show" @change="() => nextTick(() => refList.table.refreshColumn())">{{ item.title }}</a-checkbox>
+                <div
+                  v-for="item in state.columns.filter(
+                    (w) => w.fieldName.substr(0, 1) != '_'
+                  )"
+                >
+                  <a-checkbox
+                    v-model:checked="item.show"
+                    @change="
+                      () => nextTick(() => refList.table.refreshColumn())
+                    "
+                    >{{ item.title }}</a-checkbox
+                  >
                 </div>
               </template>
               <a-button><AppIcon name="BarsOutlined" /></a-button>
@@ -100,18 +144,53 @@
           <!-- 表格 -->
           <template #table-col-default>
             <!-- 动态列 -->
-            <template v-for="item in state.columns.filter((w) => w.fieldName != 'id')">
-              <vxe-column :field="item.fieldName" :title="item.title" :visible="item.show" :key="item.id" v-if="item.fieldName != 'id'"></vxe-column>
+            <template
+              v-for="item in state.columns.filter((w) => w.fieldName != 'id')"
+            >
+              <template v-if="item.fieldName == 'userState'">
+                <vxe-column
+                  :field="item.fieldName"
+                  :title="item.title"
+                  :visible="item.show"
+                  :key="item.id"
+                >
+                  <template #default="{ row }">
+                    <p v-if="row.userState == 1" style="color:green">已激活</p>
+                    <p v-if="row.userState == 2" style="color:gray">未激活</p>
+                    <p v-if="row.userState == 3" style="color:red">已停用</p>
+                  </template>
+                </vxe-column>
+              </template>
+              <template v-else>
+                <vxe-column
+                  :field="item.fieldName"
+                  :title="item.title"
+                  :visible="item.show"
+                  :key="item.id"
+                  v-if="item.fieldName != 'id'"
+                ></vxe-column>
+              </template>
             </template>
             <!--  v-if="power.update || power.delete" 预防操作列还存在 -->
-            <vxe-column field="id" title="操作" v-if="(power.update || power.delete) && !$props.isFindBack">
+            <vxe-column
+              field="id"
+              title="操作"
+              v-if="(power.update || power.delete) && !$props.isFindBack"
+            >
               <template #default="{ row }">
                 <template v-if="power.update">
-                  <a href="javascript:void(0)" @click="methods.openForm(row.id)">编辑</a>
+                  <a href="javascript:void(0)" @click="methods.openForm(row.id)"
+                    >编辑</a
+                  >
                 </template>
                 <a-divider type="vertical" />
                 <template v-if="power.delete">
-                  <a-popconfirm title="您确定要删除吗?" @confirm="methods.deleteList(row.id)" okText="确定" cancelText="取消">
+                  <a-popconfirm
+                    title="您确定要删除吗?"
+                    @confirm="methods.deleteList(row.id)"
+                    okText="确定"
+                    cancelText="取消"
+                  >
                     <a class="text-danger">删除</a>
                   </a-popconfirm>
                 </template>
@@ -286,7 +365,10 @@ const methods = {
     setCheckboxRow() {
       if (!props.isFindBack) return;
       refList.value.table.setAllCheckboxRow(false);
-      refList.value.table.setCheckboxRow(methods.findBack.getRowsByIds(state.findBack.defaultRowIds), true);
+      refList.value.table.setCheckboxRow(
+        methods.findBack.getRowsByIds(state.findBack.defaultRowIds),
+        true
+      );
     },
     //查找带回事件
     onChange() {

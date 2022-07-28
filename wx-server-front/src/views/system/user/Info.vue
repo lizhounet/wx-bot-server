@@ -58,6 +58,15 @@
               </a-radio-group>
             </a-form-item>
           </a-col>
+          <a-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+            <a-form-item label="用户状态">
+              <a-radio-group v-model:value="state.vm.form.userState">
+                <a-radio :value="1">已激活</a-radio>
+                <a-radio :value="2">未激活</a-radio>
+                 <a-radio :value="3">停用</a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-col>
 
           <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <a-form-item label="所属岗位">
