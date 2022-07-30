@@ -1032,6 +1032,11 @@
             组织Id
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.Framework.SysUser.UserState">
+            <summary>
+            用户状态 (1=激活，2=未激活，3=停用)
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.Framework.SysUserPost">
             <summary>
             用户鱼岗位绑定表
@@ -1280,14 +1285,9 @@
              天行机器人key => 备注: 天行机器人key
             </summary>
         </member>
-        <member name="P:HZY.Models.Entities.WxBotConfig.TencentSecretId">
+        <member name="P:HZY.Models.Entities.WxBotConfig.VlwHttpUrl">
             <summary>
-             腾讯TencentSecretId => 备注: 腾讯TencentSecretId
-            </summary>
-        </member>
-        <member name="P:HZY.Models.Entities.WxBotConfig.TencentSecretKey">
-            <summary>
-             腾讯TencentSecretKey => 备注: 腾讯TencentSecretKey
+             vlw,我的框架的http调用地址 => 备注: vlw,我的框架的http调用地址
             </summary>
         </member>
         <member name="T:HZY.Models.Entities.WxContact">

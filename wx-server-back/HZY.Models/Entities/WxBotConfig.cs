@@ -39,17 +39,10 @@ namespace HZY.Models.Entities
         /// </summary>
         public String TianXingApiKey { get; set; }
 
-
         /// <summary>
-        ///  腾讯TencentSecretId => 备注: 腾讯TencentSecretId
+        ///  vlw,我的框架的http调用地址 => 备注: vlw,我的框架的http调用地址
         /// </summary>
-        public String TencentSecretId { get; set; }
-
-
-        /// <summary>
-        ///  腾讯TencentSecretKey => 备注: 腾讯TencentSecretKey
-        /// </summary>
-        public String TencentSecretKey { get; set; }
+        public String VlwHttpUrl { get; set; }
 
 
     }
