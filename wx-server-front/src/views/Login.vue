@@ -14,8 +14,8 @@
               </a-input>
             </a-form-item>
             <a-form-item>
-              <a-input-password type="password" v-model:value="state.userPassword" placeholder="请输入密码" size="large" ref="inputPassword"
-                @keyup.enter="methods.check">
+              <a-input-password type="password" v-model:value="state.userPassword" placeholder="请输入密码" size="large"
+                ref="inputPassword" @keyup.enter="methods.check">
                 <template #prefix>
                   <AppIcon name="LockOutlined" style="color: #1890ff; font-size: 14px" />
                 </template>
@@ -29,8 +29,12 @@
             <a-button type="link" @click="methods.goRegister" size="small">去注册</a-button>
           </div>
         </div>
+        <div class="btn">
+          <a-switch v-model:checked="checked" checked-children="off" un-checked-children="on" size="small" />
+        </div>
       </a-card>
     </div>
+    <Particles v-show="checked" />
   </div>
 </template>
 
@@ -40,6 +44,7 @@ import { useLayoutStore, useAppStore } from "@/store";
 import router from "@/router/index";
 import tools from "@/scripts/tools";
 import loginService from "@/service/system/loginService";
+import Particles from "@/components/Particles";
 
 
 const state = reactive({
@@ -53,6 +58,7 @@ const loading = ref(false);
 const layoutStore = useLayoutStore();
 const appStore = useAppStore();
 const title = layoutStore.state.title;
+const checked = ref(false);
 
 const methods = {
   check() {
@@ -98,8 +104,8 @@ onMounted(() => {
   //可以解开一下注解 放置一个背景图片
   // background: url("../assets/images/login3.jpg") no-repeat;
   // background: url("../assets/undraw_Tree_swing_re_pqee.png") no-repeat;
-   background-size: cover;
-   background: #f0f2f5 url("../assets/background.svg") no-repeat 50%;
+  background-size: cover;
+  background: #f0f2f5 url("../assets/background.svg") no-repeat 50%;
 
   .login-modal {
     position: absolute;
@@ -137,6 +143,12 @@ onMounted(() => {
 
     .register {
       text-align: right;
+    }
+
+    .btn {
+      padding: 0 24px;
+      display: flex;
+      justify-content: end;
     }
 
   }
