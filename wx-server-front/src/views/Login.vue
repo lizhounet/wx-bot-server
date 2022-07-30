@@ -1,8 +1,7 @@
 <template>
   <div id="login">
-    <div class="login-modal"></div>
     <div class="login-container">
-      <a-card>
+      <a-card :class="checked ? 'breathe' : ''">
         <div class="login-title">{{ title }}登录</div>
         <div class="p-24">
           <a-form layout="vertical">
@@ -107,16 +106,6 @@ onMounted(() => {
   background-size: cover;
   background: #f0f2f5 url("../assets/background.svg") no-repeat 50%;
 
-  .login-modal {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    // background-color: #000000;
-    // background: #f0f2f5;
-    margin: 0 auto;
-    // opacity: 0.3;
-  }
-
   .login-container {
     position: absolute;
     width: 26rem;
@@ -151,6 +140,20 @@ onMounted(() => {
       justify-content: end;
     }
 
+  }
+
+  .breathe {
+    animation: change 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes change {
+    0% {
+      box-shadow: 0 0 0 #000000, 0 0 0 #000000 inset;
+    }
+
+    100% {
+      box-shadow: 0 0 25px hsl(60, 100%, 60%), 0 0 0px rgba(60, 100%, 60%, 0.6) inset;
+    }
   }
 
   @media (max-width: 720px) {
