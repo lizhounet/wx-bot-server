@@ -44,6 +44,10 @@ namespace HZY.Models.Entities
         /// </summary>
         public String VlwHttpUrl { get; set; }
 
+        /// <summary>
+        ///  自动同意好友请求是否开启 => 备注: 自动同意好友请求是否开启
+        /// </summary>
+        public Int32 AutoAgreeFriendVerify { get; set; } = 0;
 
     }
 }

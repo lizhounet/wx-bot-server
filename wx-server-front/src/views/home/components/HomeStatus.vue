@@ -1,36 +1,38 @@
 <template>
-  <a-card class="home-status" :bordered="false" hoverable :headStyle="headStyle">
-    <template #title>
-      小助手状态
-      <a-tag :color="state.online ? '#87d068' : '#6a615d'">{{ state.online ? '在线' : '离线' }}</a-tag>
-    </template>
-    <div class="content">
-      <a-image :width="150" class="avatar" :preview="false" v-if="state.loginQrCode == null"
-        :src="state.wxUserInfo.avatarUrl" />
-      <a-image :width="150" :preview="false" v-if="state.loginQrCode" :src="state.loginQrCode" />
-      <template v-if="state.online">
-        <div class="content-info">
-          <div class="name">微信id: {{ state.wxUserInfo.wxId }}</div>
-          <div class="name">微信code: {{ state.wxUserInfo.wxCode }}</div>
-          <div class="name">昵称: {{ state.wxUserInfo.wxName }}</div>
-        </div>
+  <a-spin tip="正在获取登录二维码" :spinning="loading">
+    <a-card class="home-status" :bordered="false" hoverable :headStyle="headStyle">
+      <template #title>
+        小助手状态
+        <a-tag :color="state.online ? '#87d068' : '#6a615d'">{{ state.online ? '在线' : '离线' }}</a-tag>
       </template>
-      <template v-if="!state.online">
-        <div class="content-info">
-          <div class="name">请扫码登录</div>
-          <a @click="methods.getLoginQrCode()" v-show="!state.online">获取登录二维码</a>
-        </div>
-      </template>
-    </div>
-  </a-card>
+      <div class="content">
+        <a-image :width="150" class="avatar" :preview="false" v-if="state.online" :src="state.wxUserInfo.avatarUrl" />
+        <a-image :width="150" :preview="false" v-if="!state.online" :src="state.loginQrCode" />
+        <template v-if="state.online">
+          <div class="content-info">
+            <div class="name">微信id: {{ state.wxUserInfo.wxId }}</div>
+            <div class="name">微信code: {{ state.wxUserInfo.wxCode }}</div>
+            <div class="name">昵称: {{ state.wxUserInfo.wxName }}</div>
+          </div>
+        </template>
+        <template v-if="!state.online">
+          <div class="content-info">
+            <div class="name">请扫码登录</div>
+            <a @click="methods.getLoginQrCode" v-show="!state.online">获取登录二维码</a>
+          </div>
+        </template>
+      </div>
+    </a-card>
+  </a-spin>
 </template>
 <script>
 export default { name: "HomeStatus" };
 </script>
 <script setup>
 import { headStyle } from "@/views/home/config";
-import { onMounted, reactive, toRefs } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import homeService from "@/service/home/homeService";
+import tools from "@/scripts/tools";
 
 //微信用户信息
 const state = reactive({
@@ -42,29 +44,26 @@ const state = reactive({
   },
   loginQrCode: null,
   online: false,//是否在线
+  remindLoginOk: false,//是否提醒成功登录
 });
+const loading = ref(false);
+
 
 onMounted(() => {
   methods.startUpdateUserStatus();
 });
 const methods = {
-  init: async () => {
-    let res = await homeService.getWxUserInfo();
-    if (res && res.code == 1) {
-      if (res.data) {
-        state.wxUserInfo = res.data;
-        state.online = state.wxUserInfo.wxId != null && state.wxUserInfo.wxId != ''
-      }
-    }
-  },
   getLoginQrCode: async () => {
+     loading.value = true;
     let res = await homeService.getLoginQrCode();
     if (res && res.code == 1) {
       if (res.data) {
+        tools.message("登录二维码获取成功,请扫码登录!", "成功");
         state.loginQrCode = res.data;
-
+        state.remindLoginOk = false;
       }
     }
+     loading.value = false;
   },
   /**
    * 启动更新用户状态
@@ -77,14 +76,17 @@ const methods = {
           if (res.data) {
             state.wxUserInfo = res.data;
             state.online = state.wxUserInfo.wxId != null && state.wxUserInfo.wxId != ''
+            if (state.online && !state.remindLoginOk) {
+              tools.message("登陆成功!", "成功");
+              state.remindLoginOk = true;
+            }
           }
         }
       }).catch(e => {
         console.log(e)
         clearInterval(timer)
-
       });
-    }, 3000);
+    }, 5000);
   },
 };
 </script>

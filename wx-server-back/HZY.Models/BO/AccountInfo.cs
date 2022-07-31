@@ -40,4 +40,6 @@ public class AccountInfo : SysUser
     /// 菜单功能集合
     /// </summary>
     public List<Dictionary<string, object>> MenuPowers { get; set; }
+
+ 
 }

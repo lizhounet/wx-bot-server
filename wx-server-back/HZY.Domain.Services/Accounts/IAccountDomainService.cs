@@ -1,5 +1,6 @@
 ﻿using HZY.Models.BO;
 using HZY.Models.DTO.Framework;
+using HZY.Models.Entities;
 using HZY.Models.Entities.Framework;
 using HzyScanDiService;
 using System.Threading.Tasks;
@@ -16,6 +17,14 @@ public interface IAccountDomainService : IScopedDependency
     /// </summary>
     /// <returns></returns>
     AccountInfo GetAccountInfo();
+
+    /// <summary>
+    /// 获取个微小助手基础配置
+    /// </summary>
+    /// <returns></returns>
+    WxBotConfig GetWxBotConfig();
+
+
 
     /// <summary>
     /// 检查账户密码信息
@@ -74,5 +83,11 @@ public interface IAccountDomainService : IScopedDependency
     /// <param name="id"></param>
     /// <returns></returns>
     bool DeleteCacheAccountInfoById(string id);
+    /// <summary>
+    /// 删除个微小助手基础配置 根据id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    bool DeleteCacheWxBotConfigById(string id);
 
 }

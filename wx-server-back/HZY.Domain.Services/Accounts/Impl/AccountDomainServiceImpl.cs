@@ -21,7 +21,6 @@ namespace HZY.Domain.Services.Accounts.Impl;
 public class AccountDomainServiceImpl : IAccountDomainService
 {
     private readonly string AccountInfoCacheName = "AccountInfo";
-    private readonly string emailVerifyCodeCacheName = "EmailVerifyCode:{0}";
     private readonly AccountInfo _accountInfo;
     private readonly AppConfiguration _appConfiguration;
     private readonly TokenService _tokenService;
@@ -32,6 +31,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
     private readonly IAdminRepository<SysRole> _sysRoleRepository;
     private readonly IAdminRepository<SysPost> _sysPostRepository;
     private readonly IAdminRepository<SysUserPost> _sysUserPostRepository;
+    private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
     private readonly EmailService _emailService;
 
     public AccountDomainServiceImpl(IAdminRepository<SysUser> sysUserRepository,
@@ -43,7 +43,8 @@ public class AccountDomainServiceImpl : IAccountDomainService
         IAdminRepository<SysRole> sysRoleRepository,
         IAdminRepository<SysPost> sysPostRepository,
         IAdminRepository<SysUserPost> sysUserPostRepository,
-        EmailService emailService)
+        EmailService emailService,
+        IAdminRepository<WxBotConfig> wxBotConfigRepository)
     {
         _sysUserRepository = sysUserRepository;
         _appConfiguration = appConfiguration;
@@ -56,6 +57,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
         _sysUserPostRepository = sysUserPostRepository;
         _emailService = emailService;
         this._accountInfo = this.FindAccountInfoByToken();
+        _wxBotConfigRepository = wxBotConfigRepository;
     }
 
     /// <summary>
@@ -106,11 +108,33 @@ public class AccountDomainServiceImpl : IAccountDomainService
         return this.SetCacheByAccountInfo(accountInfo);
     }
 
+    private WxBotConfig FindWxBotConfigByToken()
+    {
+        //获取用户id
+        var id = _tokenService.GetAccountIdByToken();
+        if (id == Guid.Empty || id == default)
+        {
+            return default;
+        }
+        //先取缓存
+        WxBotConfig wxBotConfig = _memoryCache.Get<WxBotConfig>(string.Format(CacheKeyConsts.WxBotConfigKey, id));
+        if (wxBotConfig != null) return wxBotConfig;
+        wxBotConfig = _wxBotConfigRepository.Find(w => w.ApplicationToken == id.ToString());
+        if (wxBotConfig == null) return default;
+        //设置缓存
+        return _memoryCache.Set(string.Format(CacheKeyConsts.WxBotConfigKey, id), wxBotConfig, DateTime.Now.AddHours(1));
+    }
+
     /// <summary>
     /// 获取当前登录账户信息
     /// </summary>
     /// <returns></returns>
     public virtual AccountInfo GetAccountInfo() => this._accountInfo ?? FindAccountInfoByToken();
+    /// <summary>
+    /// 获取当前个人小助手配置信息
+    /// </summary>
+    /// <returns></returns>
+    public virtual WxBotConfig GetWxBotConfig() => FindWxBotConfigByToken();
 
     /// <summary>
     /// 检查账户 登录信息 并返回 token
@@ -156,7 +180,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
             MessageBox.Show("邮箱已经被注册!");
         }
         //验证验证码
-        string code = _memoryCache.Get<string>(string.Format(emailVerifyCodeCacheName, userRegisterDto.Email));
+        string code = _memoryCache.Get<string>(string.Format(CacheKeyConsts.EmailVerifyCodeCacheKey, userRegisterDto.Email));
         if (string.IsNullOrEmpty(code))
         {
             MessageBox.Show("验证码已失效,请重新发送!");
@@ -209,7 +233,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
         string subject = "【个微小助手】请查收您的邮箱验证码";
         string body = $"您的邮箱为：{email}，验证码为：{code} \n验证码的有效期为5分钟，请在有效期内输入！";
         _emailService.SendEmail(email, subject, body);
-        _memoryCache.Set(string.Format(emailVerifyCodeCacheName, email), code, DateTime.Now.AddMinutes(5));
+        _memoryCache.Set(string.Format(CacheKeyConsts.EmailVerifyCodeCacheKey, email), code, DateTime.Now.AddMinutes(5));
     }
 
     /// <summary>
@@ -276,6 +300,18 @@ public class AccountDomainServiceImpl : IAccountDomainService
     public virtual bool DeleteCacheAccountInfoById(string id)
     {
         _memoryCache.Remove(GetCacheKeyById(id));
+        this.DeleteCacheWxBotConfigById(id);
+        return true;
+    }
+
+    /// <summary>
+    /// 删除个微小助手基础配置 根据id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public virtual bool DeleteCacheWxBotConfigById(string id)
+    {
+        _memoryCache.Remove(string.Format(CacheKeyConsts.WxBotConfigKey, id));
         return true;
     }
 

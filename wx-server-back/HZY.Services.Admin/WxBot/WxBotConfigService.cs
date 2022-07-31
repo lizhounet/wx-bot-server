@@ -33,6 +33,7 @@ namespace HZY.Services.Admin
         private readonly IMemoryCache _cache;
         private readonly IAdminRepository<WxTimedTask> _timedTaskRepository;
         private readonly IAdminRepository<WxSayEveryDay> _sayEveryDayRepository;
+        private readonly IAccountDomainService _accountService;
         public WxBotConfigService(IAdminRepository<WxBotConfig> defaultRepository,
             IAccountDomainService accountService,
             IMemoryCache cache,
@@ -40,6 +41,7 @@ namespace HZY.Services.Admin
             IAdminRepository<WxSayEveryDay> sayEveryDayRepository)
             : base(defaultRepository)
         {
+            _accountService=accountService;
             this._accountInfo = accountService.GetAccountInfo();
             _cache = cache;
             _timedTaskRepository = timedTaskRepository;
@@ -67,9 +69,11 @@ namespace HZY.Services.Admin
         /// </summary>
         /// <param name="form">form</param>
         /// <returns></returns>
-        public Task<WxBotConfig> SaveFormAsync(WxBotConfig form)
+        public async Task<WxBotConfig> SaveFormAsync(WxBotConfig form)
         {
-            return this._defaultRepository.InsertOrUpdateAsync(form);
+            WxBotConfig wxBotConfig = await this._defaultRepository.InsertOrUpdateAsync(form);
+            _accountService.DeleteCacheWxBotConfigById(wxBotConfig.ApplicationToken.ToString());
+            return wxBotConfig;
         }
         /// <summary>
         /// 客户端获取微信机器人配置

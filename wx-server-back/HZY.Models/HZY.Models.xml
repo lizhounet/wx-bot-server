@@ -84,6 +84,16 @@
             功能常量 打印
             </summary>
         </member>
+        <member name="F:HZY.Models.Consts.CacheKeyConsts.WxBotConfigKey">
+            <summary>
+            个微小助手基础配置 缓存key
+            </summary>
+        </member>
+        <member name="F:HZY.Models.Consts.CacheKeyConsts.EmailVerifyCodeCacheKey">
+            <summary>
+            邮箱验证缓存key
+            </summary>
+        </member>
         <member name="T:HZY.Models.DTO.DevelopmentTool.GenContextDto">
             <summary>
             生成代码上下文
@@ -1288,6 +1298,11 @@
         <member name="P:HZY.Models.Entities.WxBotConfig.VlwHttpUrl">
             <summary>
              vlw,我的框架的http调用地址 => 备注: vlw,我的框架的http调用地址
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxBotConfig.AutoAgreeFriendVerify">
+            <summary>
+             自动同意好友请求是否开启 => 备注: 自动同意好友请求是否开启
             </summary>
         </member>
         <member name="T:HZY.Models.Entities.WxContact">

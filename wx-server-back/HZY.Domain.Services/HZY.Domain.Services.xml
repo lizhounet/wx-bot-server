@@ -15,6 +15,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.GetWxBotConfig">
+            <summary>
+            获取个微小助手基础配置
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.CheckAccountAsync(System.String,System.String,System.String)">
             <summary>
             检查账户密码信息
@@ -74,6 +80,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.DeleteCacheWxBotConfigById(System.String)">
+            <summary>
+            删除个微小助手基础配置 根据id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl">
             <summary>
             当前登录账户服务
@@ -88,6 +101,12 @@
         <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.GetAccountInfo">
             <summary>
             获取当前登录账户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.GetWxBotConfig">
+            <summary>
+            获取当前个人小助手配置信息
             </summary>
             <returns></returns>
         </member>
@@ -132,6 +151,13 @@
         <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.DeleteCacheAccountInfoById(System.String)">
             <summary>
             删除缓存账户信息 根据id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.DeleteCacheWxBotConfigById(System.String)">
+            <summary>
+            删除个微小助手基础配置 根据id
             </summary>
             <param name="id"></param>
             <returns></returns>

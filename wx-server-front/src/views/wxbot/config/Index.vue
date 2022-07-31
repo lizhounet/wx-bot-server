@@ -11,6 +11,21 @@
       <a-form-item label="平台应用Token">
         {{ state.vm.form.applicationToken }}
       </a-form-item>
+      <a-form-item label="vlw,我的框架 调用地址">
+        <a-input
+                v-model:value="state.vm.form.vlwHttpUrl"
+                placeholder="请输入 vlw,我的框架 调用地址"
+              />
+      </a-form-item>
+      <a-form-item label="自动同意好友请求是否开启">
+        <a-switch
+          v-model:checked="state.vm.form.autoAgreeFriendVerify"
+          checked-children="开"
+          un-checked-children="关"
+          :checkedValue="1"
+          :unCheckedValue="0"
+        />
+      </a-form-item>
       <a-form-item label="群聊自动回复是否开启">
         <a-switch
           v-model:checked="state.vm.form.groupAutoReplyFlag"

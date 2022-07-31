@@ -7,7 +7,7 @@ export default {
      * @param {*} userPassword 
      */
     getWxUserInfo() {
-        return get('/admin/home/user-info');
+        return get('/admin/home/user-info', null, false);
     },
     /**
     * 获取登录二维码
