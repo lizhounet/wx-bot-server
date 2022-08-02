@@ -32,7 +32,7 @@ namespace HZY.Domain.Services.QuartzWxBot.Jobs
                 _stopwatch.Restart();
                 //取job传进来的定时任务的id
                 everyDayId = context.MergedJobDataMap.GetString("JobData");
-                everyDayId += $"情侣每日说({everyDayId})开始执行,开始时间{DateTime.Now:yyy-MM-dd HH:mm:ss}\r\n";
+                logText += $"情侣每日说({everyDayId})开始执行,开始时间{DateTime.Now:yyy-MM-dd HH:mm:ss}\r\n";
                 //执行
                 await Task.Delay(1000);
                 logText += await _contentSendService.ExecSayEveryDayAsync(Guid.Parse(everyDayId));

@@ -79,8 +79,8 @@ namespace HZY.Services.Admin
                         w.TaskState,
                         TaskStateText = w.TaskState.GetDescription(),
                         w.RobotWxId,
-                        LastModificationTime = w.LastModificationTime.ToString("yyyy-MM-dd"),
-                        CreationTime = w.CreationTime.ToString("yyyy-MM-dd")
+                        w.LastModificationTime,
+                        w.CreationTime
                     })
                 ;
 

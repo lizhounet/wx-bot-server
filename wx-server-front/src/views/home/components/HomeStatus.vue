@@ -18,7 +18,7 @@
         <template v-if="!state.online">
           <div class="content-info">
             <div class="name">请扫码登录</div>
-            <a @click="methods.getLoginQrCode" v-show="!state.online">获取登录二维码</a>
+            <a @click="methods.getLoginQrCode" >点击获取登录二维码</a>
           </div>
         </template>
       </div>
@@ -29,10 +29,11 @@
 export default { name: "HomeStatus" };
 </script>
 <script setup>
-import { headStyle } from "@/views/home/config";
 import { onMounted, ref, reactive } from "vue";
+
 import homeService from "@/service/home/homeService";
 import tools from "@/scripts/tools";
+
 
 //微信用户信息
 const state = reactive({
@@ -42,7 +43,7 @@ const state = reactive({
     wxCode: "未登录",
     wxName: "未登录",
   },
-  loginQrCode: null,
+  loginQrCode: "https://i.52112.com/icon/jpg/256/20210901/130307/5566843.jpg",
   online: false,//是否在线
   remindLoginOk: false,//是否提醒成功登录
 });
@@ -54,7 +55,7 @@ onMounted(() => {
 });
 const methods = {
   getLoginQrCode: async () => {
-     loading.value = true;
+    loading.value = true;
     let res = await homeService.getLoginQrCode();
     if (res && res.code == 1) {
       if (res.data) {
@@ -63,30 +64,33 @@ const methods = {
         state.remindLoginOk = false;
       }
     }
-     loading.value = false;
+    loading.value = false;
   },
   /**
    * 启动更新用户状态
    */
   startUpdateUserStatus: () => {
-    let timer = setInterval(() => {
-      homeService.getWxUserInfo().then(res => {
-        console.log(res);
-        if (res && res.code == 1) {
-          if (res.data) {
-            state.wxUserInfo = res.data;
-            state.online = state.wxUserInfo.wxId != null && state.wxUserInfo.wxId != ''
-            if (state.online && !state.remindLoginOk) {
-              tools.message("登陆成功!", "成功");
-              state.remindLoginOk = true;
-            }
+    methods.getWxUserInfo();
+    window.updateUserStatusTimed = setInterval(()=>{methods.getWxUserInfo()}, 3000);
+  },
+  getWxUserInfo() {
+    homeService.getWxUserInfo().then(res => {
+      console.log(res);
+      if (res && res.code == 1) {
+        if (res.data) {
+          state.wxUserInfo = res.data;
+          state.online = state.wxUserInfo.wxId != null && state.wxUserInfo.wxId != ''
+          if (state.online && !state.remindLoginOk) {
+            tools.message("登陆成功!", "成功");
+            state.remindLoginOk = true;
+            clearInterval(window.updateUserStatusTimed)
           }
         }
-      }).catch(e => {
-        console.log(e)
-        clearInterval(timer)
-      });
-    }, 5000);
+      }
+    }).catch(e => {
+      console.log(e)
+      clearInterval(window.updateUserStatusTimed)
+    });
   },
 };
 </script>

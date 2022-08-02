@@ -1,4 +1,4 @@
-import {get, post, download } from '@/scripts/request';
+import { get, post, download } from '@/scripts/request';
 import tools from "@/scripts/tools";
 
 const controllerName = "admin/WxSayEveryDay";
@@ -47,5 +47,33 @@ export default {
      */
     exportExcel(search) {
         return download(`${controllerName}/exportExcel`, search);
-    }
+    },
+    /**
+  * 执行定时任务
+  * @param {每日说id} id 
+  */
+    execTimedTask(id) {
+        return post(`${controllerName}/exec/${id}`);
+    },
+    /**
+    * 启动定时任务
+    * @param {每日说id} id 
+    */
+    startTimdTask(id) {
+        return post(`${controllerName}/start/${id}`);
+    },
+    /**
+    * 停止定时任务
+    * @param {每日说id} id 
+    */
+    stopTimdTask(id) {
+        return post(`${controllerName}/stop/${id}`);
+    },
+    /**
+    * 查询定时任务运行日志
+    * @param {每日说id} id 
+    */
+    queryRunLog(id) {
+        return post(`${controllerName}/queryRunLog/${id}`);
+    },
 };

@@ -84,24 +84,29 @@
             功能常量 打印
             </summary>
         </member>
+        <member name="F:HZY.Models.Consts.CacheKeyConsts.OnlineWxUserInfoKey">
+            <summary>
+            登录微信的信息 缓存key 参数0=用户id
+            </summary>
+        </member>
         <member name="F:HZY.Models.Consts.CacheKeyConsts.WxBotConfigKey">
             <summary>
-            个微小助手基础配置 缓存key
+            个微小助手基础配置 缓存key 参数0=用户id
             </summary>
         </member>
         <member name="F:HZY.Models.Consts.CacheKeyConsts.EmailVerifyCodeCacheKey">
             <summary>
-            邮箱验证缓存key
+            邮箱验证缓存key 参数0=邮箱地址
             </summary>
         </member>
         <member name="F:HZY.Models.Consts.CacheKeyConsts.JobTimedTaskExecLogKey">
             <summary>
-            Job定时任务日志key
+            Job定时任务日志key 参数0=用户id
             </summary>
         </member>
         <member name="F:HZY.Models.Consts.CacheKeyConsts.JobSayEveryDayLogKey">
             <summary>
-            Job情侣每日说日志key
+            Job情侣每日说日志key 参数0=用户id
             </summary>
         </member>
         <member name="T:HZY.Models.DTO.DevelopmentTool.GenContextDto">

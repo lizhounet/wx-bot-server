@@ -15,12 +15,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.GetWxBotConfig">
-            <summary>
-            获取个微小助手基础配置
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.CheckAccountAsync(System.String,System.String,System.String)">
             <summary>
             检查账户密码信息
@@ -80,13 +74,6 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:HZY.Domain.Services.Accounts.IAccountDomainService.DeleteCacheWxBotConfigById(System.String)">
-            <summary>
-            删除个微小助手基础配置 根据id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="T:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl">
             <summary>
             当前登录账户服务
@@ -101,12 +88,6 @@
         <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.GetAccountInfo">
             <summary>
             获取当前登录账户信息
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.GetWxBotConfig">
-            <summary>
-            获取当前个人小助手配置信息
             </summary>
             <returns></returns>
         </member>
@@ -151,13 +132,6 @@
         <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.DeleteCacheAccountInfoById(System.String)">
             <summary>
             删除缓存账户信息 根据id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:HZY.Domain.Services.Accounts.Impl.AccountDomainServiceImpl.DeleteCacheWxBotConfigById(System.String)">
-            <summary>
-            删除个微小助手基础配置 根据id
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -686,6 +660,31 @@
             </summary>
             <param name="question">提问（建议urlencode）</param>
             <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.WxBot.WxAccountService">
+            <summary>
+            微信账号服务
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetLoginQrCodeAsync(System.String)">
+            <summary>
+            获取登录二维码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetWxBotConfigByApplictionTokenAsync(System.String)">
+            <summary>
+            根据applictionToken获取用户配置的WxBotConfig
+            </summary>
+            <param name="applictionToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetWxUserInfoByApplictionTokenAsync(System.String)">
+            <summary>
+            根据applictionToken获取当前登录的微信用户信息
+            </summary>
+            <param name="applictionToken"></param>
             <returns></returns>
         </member>
     </members>

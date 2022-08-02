@@ -41,7 +41,7 @@ namespace HZY.Services.Admin
             IAdminRepository<WxSayEveryDay> sayEveryDayRepository)
             : base(defaultRepository)
         {
-            _accountService=accountService;
+            _accountService = accountService;
             this._accountInfo = accountService.GetAccountInfo();
             _cache = cache;
             _timedTaskRepository = timedTaskRepository;
@@ -72,7 +72,7 @@ namespace HZY.Services.Admin
         public async Task<WxBotConfig> SaveFormAsync(WxBotConfig form)
         {
             WxBotConfig wxBotConfig = await this._defaultRepository.InsertOrUpdateAsync(form);
-            _accountService.DeleteCacheWxBotConfigById(wxBotConfig.ApplicationToken.ToString());
+            await RedisHelper.DelAsync(string.Format(CacheKeyConsts.WxBotConfigKey, wxBotConfig.ApplicationToken));
             return wxBotConfig;
         }
         /// <summary>
@@ -105,8 +105,7 @@ namespace HZY.Services.Admin
         /// <returns></returns>
         public WxUserInfoDTO GetWxUserInfo()
         {
-            WxUserInfoDTO userInfo = _cache.Get<WxUserInfoDTO>(string.Format(CacheKeyConsts.WxUserInfoKey, _accountInfo.Id.ToStr()));
-
+            WxUserInfoDTO userInfo = _cache.Get<WxUserInfoDTO>(string.Format(CacheKeyConsts.OnlineWxUserInfoKey, _accountInfo.Id.ToStr()));
             return userInfo ?? default;
         }
     }

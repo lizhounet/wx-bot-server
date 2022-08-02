@@ -87,7 +87,7 @@ public class WxClientController : ControllerBase
     public bool UpDateWxUserInfo([FromRoute] string applicationToken, [FromBody] WxUserInfoDTO wxUserInfo)
     {
         //缓存30S
-        _cache.Set(string.Format(CacheKeyConsts.WxUserInfoKey, applicationToken), wxUserInfo, TimeSpan.FromSeconds(30));
+        _cache.Set(string.Format(CacheKeyConsts.OnlineWxUserInfoKey, applicationToken), wxUserInfo, TimeSpan.FromSeconds(30));
         return true;
 
     }

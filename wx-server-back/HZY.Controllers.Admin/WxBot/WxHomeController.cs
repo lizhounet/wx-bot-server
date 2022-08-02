@@ -6,21 +6,11 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using HZY.EFCore.PagingViews;
+using HZY.Models.DTO.WxBot;
+using HZY.Domain.Services.WxBot;
 using HZY.Infrastructure;
 using HZY.Infrastructure.Controllers;
-using HZY.Infrastructure.Filters;
-using HZY.Infrastructure.Permission;
 using HZY.Infrastructure.Permission.Attributes;
-using HZY.Models.BO;
-using HZY.Models.Consts;
-using HZY.Models.DTO;
-using HZY.Models.DTO.Framework;
-using HZY.Models.Entities.Framework;
-using HZY.Services.Admin.Framework;
-using HZY.Services.Admin;
-using HZY.Models.Entities;
-using HZY.Models.DTO.WxBot;
 
 namespace HZY.Controllers.Admin
 {
@@ -29,12 +19,11 @@ namespace HZY.Controllers.Admin
     /// </summary>
     [ApiExplorerSettings(GroupName = nameof(ApiVersions.WxBot))]
     [Route("api/admin/home")]
-    public class WxHomeController : AdminBaseController<WxHomeService>
+    public class WxHomeController : AdminBaseController<WxAccountService>
     {
-        public WxHomeController(WxHomeService defaultService) 
+        public WxHomeController(WxAccountService defaultService) 
             : base(defaultService)
         {
-
         }
        
         /// <summary>
@@ -42,18 +31,18 @@ namespace HZY.Controllers.Admin
         /// </summary>
         /// <returns></returns>
         [ActionDescriptor(DisplayName = "获取微信登录二维码")]
-        [HttpGet("login-qrcode")]
-        public async Task<string> GetLoginQrCodeAsync() 
-            => await this._defaultService.GetLoginQrCodeAsync();
+        [HttpGet("login-qrcode/{applictionToken}")]
+        public async Task<string> GetLoginQrCodeAsync([FromRoute]string applictionToken) 
+            => await this._defaultService.GetLoginQrCodeAsync(applictionToken);
 
         /// <summary>
         /// 获取微信登录用户信息
         /// </summary>
         /// <returns></returns>
         [ActionDescriptor(DisplayName = "获取微信用户信息")]
-        [HttpGet("user-info")]
-        public async Task<WxUserInfoDTO> GetWxUserInfoAsync() => 
-            await this._defaultService.GetWxUserInfoAsync();
+        [HttpGet("user-info/{applictionToken}")]
+        public async Task<WxUserInfoDTO> GetWxUserInfoAsync([FromRoute] string applictionToken) => 
+            await this._defaultService.GetWxUserInfoByApplictionTokenAsync(applictionToken);
 
     }
 }

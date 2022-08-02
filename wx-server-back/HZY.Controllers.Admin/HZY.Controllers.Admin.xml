@@ -749,13 +749,13 @@
             首页 控制器
             </summary>
         </member>
-        <member name="M:HZY.Controllers.Admin.WxHomeController.GetLoginQrCodeAsync">
+        <member name="M:HZY.Controllers.Admin.WxHomeController.GetLoginQrCodeAsync(System.String)">
             <summary>
             获取微信登录二维码
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HZY.Controllers.Admin.WxHomeController.GetWxUserInfoAsync">
+        <member name="M:HZY.Controllers.Admin.WxHomeController.GetWxUserInfoAsync(System.String)">
             <summary>
             获取微信登录用户信息
             </summary>
@@ -855,6 +855,13 @@
         <member name="M:HZY.Controllers.Admin.WxSayEveryDayController.StopSayEveryDayAsync(System.Guid)">
             <summary>
             停止情侣每日说
+            </summary>
+            <param name="everyDayId">每日说id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxSayEveryDayController.QueryRunLogAsync(System.Guid)">
+            <summary>
+            查询情侣每日说运行日志
             </summary>
             <param name="everyDayId">每日说id</param>
             <returns></returns>

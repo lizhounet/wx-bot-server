@@ -17,15 +17,6 @@ public interface IAccountDomainService : IScopedDependency
     /// </summary>
     /// <returns></returns>
     AccountInfo GetAccountInfo();
-
-    /// <summary>
-    /// 获取个微小助手基础配置
-    /// </summary>
-    /// <returns></returns>
-    WxBotConfig GetWxBotConfig();
-
-
-
     /// <summary>
     /// 检查账户密码信息
     /// </summary>
@@ -83,11 +74,4 @@ public interface IAccountDomainService : IScopedDependency
     /// <param name="id"></param>
     /// <returns></returns>
     bool DeleteCacheAccountInfoById(string id);
-    /// <summary>
-    /// 删除个微小助手基础配置 根据id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    bool DeleteCacheWxBotConfigById(string id);
-
 }

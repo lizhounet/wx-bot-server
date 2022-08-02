@@ -108,33 +108,11 @@ public class AccountDomainServiceImpl : IAccountDomainService
         return this.SetCacheByAccountInfo(accountInfo);
     }
 
-    private WxBotConfig FindWxBotConfigByToken()
-    {
-        //获取用户id
-        var id = _tokenService.GetAccountIdByToken();
-        if (id == Guid.Empty || id == default)
-        {
-            return default;
-        }
-        //先取缓存
-        WxBotConfig wxBotConfig = _memoryCache.Get<WxBotConfig>(string.Format(CacheKeyConsts.WxBotConfigKey, id));
-        if (wxBotConfig != null) return wxBotConfig;
-        wxBotConfig = _wxBotConfigRepository.Find(w => w.ApplicationToken == id.ToString());
-        if (wxBotConfig == null) return default;
-        //设置缓存
-        return _memoryCache.Set(string.Format(CacheKeyConsts.WxBotConfigKey, id), wxBotConfig, DateTime.Now.AddHours(1));
-    }
-
     /// <summary>
     /// 获取当前登录账户信息
     /// </summary>
     /// <returns></returns>
     public virtual AccountInfo GetAccountInfo() => this._accountInfo ?? FindAccountInfoByToken();
-    /// <summary>
-    /// 获取当前个人小助手配置信息
-    /// </summary>
-    /// <returns></returns>
-    public virtual WxBotConfig GetWxBotConfig() => FindWxBotConfigByToken();
 
     /// <summary>
     /// 检查账户 登录信息 并返回 token
@@ -278,7 +256,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
     public virtual AccountInfo SetCacheByAccountInfo(AccountInfo accountInfo)
     {
         //缓存 1 小时
-        return _memoryCache.Set(GetCacheKeyById(accountInfo.Id.ToString()), accountInfo, DateTime.Now.AddHours(1));
+        return _memoryCache.Set(GetCacheKeyById(accountInfo.Id.ToString()), accountInfo);
     }
 
     /// <summary>
@@ -300,18 +278,6 @@ public class AccountDomainServiceImpl : IAccountDomainService
     public virtual bool DeleteCacheAccountInfoById(string id)
     {
         _memoryCache.Remove(GetCacheKeyById(id));
-        this.DeleteCacheWxBotConfigById(id);
-        return true;
-    }
-
-    /// <summary>
-    /// 删除个微小助手基础配置 根据id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public virtual bool DeleteCacheWxBotConfigById(string id)
-    {
-        _memoryCache.Remove(string.Format(CacheKeyConsts.WxBotConfigKey, id));
         return true;
     }
 
