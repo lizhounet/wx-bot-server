@@ -7,6 +7,13 @@ using HZY.EFCore.Repositories.Admin.Core;
 using HZY.Infrastructure.ApiResultManage;
 using Quartz;
 using HZY.Models.BO;
+using HZY.Domain.Services.WxBot;
+using HZY.Domain.Services.QuartzWxBot;
+using HZY.Domain.Services.QuartzWxBot.Model;
+using HZY.Domain.Services.QuartzWxBot.Jobs;
+using HZY.Models.Enums;
+using Masuit.Tools.Reflection;
+using HZY.Models.Consts;
 
 namespace HZY.Services.Admin
 {
@@ -18,15 +25,18 @@ namespace HZY.Services.Admin
         private readonly ContentSendService _contentSendService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly AccountInfo _accountInfo;
+        private readonly IWxBotQuartzJobService _quartzJobService;
         public WxTimedTaskService(IAdminRepository<WxTimedTask> defaultRepository,
             IAdminRepository<WxBotConfig> wxBotConfigRepository,
            IAccountDomainService accountService,
-           ContentSendService contentSendService)
+           ContentSendService contentSendService,
+          IWxBotQuartzJobService quartzJobService)
             : base(defaultRepository)
         {
             _wxBotConfigRepository = wxBotConfigRepository;
             _accountInfo = accountService.GetAccountInfo();
             _contentSendService = contentSendService;
+            _quartzJobService = quartzJobService;
         }
 
         /// <summary>
@@ -57,8 +67,11 @@ namespace HZY.Services.Admin
                         w.SendContent,
                         w.SendTime,
                         w.ClosingRemarks,
-                        LastModificationTime = w.LastModificationTime.ToString("yyyy-MM-dd"),
-                        CreationTime = w.CreationTime.ToString("yyyy-MM-dd")
+                        w.TaskState,
+                        TaskStateText= w.TaskState.GetDescription(),
+                        w.RobotWxId,
+                        w.LastModificationTime,
+                       w.CreationTime
                     })
                 ;
 
@@ -75,6 +88,8 @@ namespace HZY.Services.Admin
         /// <returns></returns>
         public async Task DeleteListAsync(List<Guid> ids)
         {
+            foreach (var id in ids)
+                await StopTimdTaskAsync(id);
             await this._defaultRepository.DeleteByIdsAsync(ids);
         }
 
@@ -121,9 +136,63 @@ namespace HZY.Services.Admin
         {
             WxTimedTask wxTimedTask = await this._defaultRepository.FindByIdAsync(taskId);
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
-            string content = await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (wxTimedTask.SendType, wxTimedTask.SendContent, wxTimedTask.HttpSendUrl));
-            if (string.IsNullOrEmpty(wxTimedTask.ClosingRemarks)) return content;
-            return $"{content}\n\n————————{wxTimedTask.ClosingRemarks}";
+            return await _contentSendService.GetTimedTaskContentAsync(wxTimedTask, wxBotConfig);
+
+        }
+        /// <summary>
+        /// 启动定时任务
+        /// </summary>
+        /// <param name="timedTaskId"></param>
+        /// <returns></returns>
+
+        public async Task<bool> StartTimdTaskAsync(Guid timedTaskId)
+        {
+            WxTimedTask wxTimedTask = await this._defaultRepository.FindByIdAsync(timedTaskId);
+            var jobSchedule = new WxBotJobSchedule
+            {
+                JobData = wxTimedTask.Id.ToString(),
+                Cron = wxTimedTask.SendTime,
+                GroupName = "定时任务",
+                JobType = typeof(TimedTaskJob),
+                TaskName = $"定时任务-{wxTimedTask.Id}"
+
+            };
+            await _quartzJobService.RunAsync(jobSchedule);
+            //修改任务为运行中
+            wxTimedTask.TaskState = ETaskState.RUNNING;
+            await _defaultRepository.UpdateByIdAsync(wxTimedTask);
+            return true;
+        }
+        /// <summary>
+        /// 停止定时任务
+        /// </summary>
+        /// <param name="timedTaskId"></param>
+        /// <returns></returns>
+        public async Task<bool> StopTimdTaskAsync(Guid timedTaskId)
+        {
+            WxTimedTask wxTimedTask = await this._defaultRepository.FindByIdAsync(timedTaskId);
+            var jobSchedule = new WxBotJobSchedule
+            {
+                JobData = wxTimedTask.Id.ToString(),
+                Cron = wxTimedTask.SendTime,
+                GroupName = "定时任务",
+                JobType = typeof(TimedTaskJob),
+                TaskName = $"定时任务-{wxTimedTask.Id}"
+
+            };
+            await _quartzJobService.CloseAsync(jobSchedule);
+            //修改任务为已停止
+            wxTimedTask.TaskState = ETaskState.STOP;
+            await _defaultRepository.UpdateByIdAsync(wxTimedTask);
+            return true;
+        }
+        /// <summary>
+        /// 查询定时任务运行日志
+        /// </summary>
+        /// <param name="timedTaskId"></param>
+        /// <returns></returns>
+        public async Task<List<string>> QueryRunLogAsync(Guid timedTaskId) {
+          return  (await RedisHelper.LRangeAsync(string.Format(CacheKeyConsts.JobTimedTaskExecLogKey, timedTaskId), 0, 50))?.ToList();
         }
 
 

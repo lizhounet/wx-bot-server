@@ -15,10 +15,17 @@ using HZY.Models.DTO;
 using HZY.Models.Entities;
 using HZY.Services.Admin.Core;
 using HZY.EFCore.Repositories.Admin.Core;
-using HZY.Services.Admin.WxBot.Http;
 using Quartz;
 using HZY.Infrastructure.ApiResultManage;
 using HZY.Models.BO;
+using HZY.Domain.Services.WxBot.Http;
+using HZY.Domain.Services.WxBot;
+using HZY.Domain.Services.QuartzWxBot.Model;
+using HZY.Domain.Services.QuartzWxBot.Jobs;
+using HZY.Domain.Services.QuartzWxBot;
+using HZY.Models.Enums;
+using Masuit.Tools.Reflection;
+using HZY.Models.Consts;
 
 namespace HZY.Services.Admin
 {
@@ -30,15 +37,21 @@ namespace HZY.Services.Admin
         private readonly TianXingService _tianXingService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly AccountInfo _accountInfo;
-        public WxSayEveryDayService(IAdminRepository<WxSayEveryDay> defaultRepository, 
+        private readonly ContentSendService _contentSendService;
+        private readonly IWxBotQuartzJobService _quartzJobService;
+        public WxSayEveryDayService(IAdminRepository<WxSayEveryDay> defaultRepository,
             TianXingService tianXingService,
             IAdminRepository<WxBotConfig> wxBotConfigRepository,
-            IAccountDomainService accountService)
+            IAccountDomainService accountService,
+            ContentSendService contentSendService,
+           IWxBotQuartzJobService quartzJobService)
             : base(defaultRepository)
         {
             _tianXingService = tianXingService;
             _wxBotConfigRepository = wxBotConfigRepository;
+            _contentSendService = contentSendService;
             _accountInfo = accountService.GetAccountInfo();
+            _quartzJobService = quartzJobService;
         }
 
         /// <summary>
@@ -63,6 +76,9 @@ namespace HZY.Services.Admin
                         w.City,
                         w.ClosingRemarks,
                         AnniversaryDay = w.AnniversaryDay.ToString("yyyy-MM-dd"),
+                        w.TaskState,
+                        TaskStateText = w.TaskState.GetDescription(),
+                        w.RobotWxId,
                         LastModificationTime = w.LastModificationTime.ToString("yyyy-MM-dd"),
                         CreationTime = w.CreationTime.ToString("yyyy-MM-dd")
                     })
@@ -81,6 +97,8 @@ namespace HZY.Services.Admin
         /// <returns></returns>
         public async Task DeleteListAsync(List<Guid> ids)
         {
+            foreach (var id in ids)
+                await StopSayEveryDayAsync(id);
             await this._defaultRepository.DeleteByIdsAsync(ids);
         }
 
@@ -138,25 +156,64 @@ namespace HZY.Services.Admin
             //获取机器人
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
             WxSayEveryDay wxSayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
-            if (wxSayEveryDay == null) return "";
-            //获取天气
-            string weather = await _tianXingService.GetWeatherAsync(wxBotConfig.TianXingApiKey, wxSayEveryDay.City);
-            //获取每日一句
-            string dayOne = await _tianXingService.GetDayOneAsync(wxBotConfig.TianXingApiKey);
-            //获取情话
-            string loveWords = await _tianXingService.GetLoveWordsAsync(wxBotConfig.TianXingApiKey);
-            //计算在一起多少天
-            int days = (DateTime.Now.Date - wxSayEveryDay.AnniversaryDay.Date).Days;
-            string result = $"😘{DateTime.Now:yyyy-MM-dd HH:mm} {Tools.GetWeekByDate(DateTime.Now)}\n\n👫宝贝,今天是我们在一起的第{days}天啦" +
-                $"\n\n☀️元气满满的一天开始啦,要开心噢^_^" +
-                $"\n\n{wxSayEveryDay.City} 今日天气:" +
-                $"\n{weather}" +
-                $"\n\n💪每日一句:" +
-                $"\n{dayOne}" +
-                $"\n\n💑情话对你说:" +
-                $"\n{loveWords}" +
-                $"\n\n————————{wxSayEveryDay.ClosingRemarks}";
-            return result;
+            return await _contentSendService.GetSayEveryDayTextAsync(wxSayEveryDay, wxBotConfig);
+        }
+
+        /// <summary>
+        /// 启动定时任务
+        /// </summary>
+        /// <param name="everyDayId"></param>
+        /// <returns></returns>
+
+        public async Task<bool> StartSayEveryDayAsync(Guid everyDayId)
+        {
+            WxSayEveryDay sayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
+            var jobSchedule = new WxBotJobSchedule
+            {
+                JobData = sayEveryDay.Id.ToString(),
+                Cron = sayEveryDay.SendTime,
+                GroupName = "情侣每日说",
+                JobType = typeof(SayEveryDayJob),
+                TaskName = $"情侣每日说-{sayEveryDay.Id}"
+
+            };
+            await _quartzJobService.RunAsync(jobSchedule);
+            //修改任务为运行中
+            sayEveryDay.TaskState = ETaskState.RUNNING;
+            await _defaultRepository.UpdateByIdAsync(sayEveryDay);
+            return true;
+        }
+        /// <summary>
+        /// 停止情侣每日说
+        /// </summary>
+        /// <param name="everyDayId"></param>
+        /// <returns></returns>
+        public async Task<bool> StopSayEveryDayAsync(Guid everyDayId)
+        {
+            WxSayEveryDay sayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
+            var jobSchedule = new WxBotJobSchedule
+            {
+                JobData = sayEveryDay.Id.ToString(),
+                Cron = sayEveryDay.SendTime,
+                GroupName = "情侣每日说",
+                JobType = typeof(SayEveryDayJob),
+                TaskName = $"情侣每日说-{sayEveryDay.Id}"
+
+            };
+            await _quartzJobService.CloseAsync(jobSchedule);
+            //修改任务为已停止
+            sayEveryDay.TaskState = ETaskState.STOP;
+            await _defaultRepository.UpdateByIdAsync(sayEveryDay);
+            return true;
+        }
+        /// <summary>
+        /// 查询情侣每日说运行日志
+        /// </summary>
+        /// <param name="everyDayId"></param>
+        /// <returns></returns>
+        public async Task<List<string>> QueryRunLogAsync(Guid everyDayId)
+        {
+            return (await RedisHelper.LRangeAsync(string.Format(CacheKeyConsts.JobSayEveryDayLogKey, everyDayId), 0, 50))?.ToList();
         }
     }
 }

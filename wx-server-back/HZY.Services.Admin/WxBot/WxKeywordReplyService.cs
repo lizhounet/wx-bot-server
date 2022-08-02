@@ -1,25 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
-
-using HzyEFCoreRepositories.Extensions;
-
 using HZY.Domain.Services.Accounts;
-using HZY.Domain.Services.Upload;
 using HZY.EFCore.PagingViews;
 using HZY.Infrastructure;
-using HZY.Models.DTO;
 using HZY.Models.Entities;
-using HZY.Models.Entities.Framework;
 using HZY.Services.Admin.Core;
-using HZY.Services.Admin.Framework;
 using HZY.EFCore.Repositories.Admin.Core;
-using HZY.Services.Admin.WxBot.Http;
 using HZY.Models.Enums;
 using HZY.Models.BO;
+using HZY.Domain.Services.WxBot;
+using HZY.Domain.Services.WxBot.Http;
 
 namespace HZY.Services.Admin
 {
@@ -143,12 +131,12 @@ namespace HZY.Services.Admin
                 && w.KeyWord.Split(",").Contains(keyword));
                 if (jqReply != null)
                 {
-                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (jqReply.SendType, jqReply.SendContent, jqReply.HttpSendUrl));
+                    return await _contentSendService.GetkeyWorldContentAsync(jqReply, wxBotConfig);
                 }
                 else
                 {
                     WxKeywordReply mhReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
-                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (mhReply.SendType, mhReply.SendContent, mhReply.HttpSendUrl));
+                    return await _contentSendService.GetkeyWorldContentAsync(mhReply, wxBotConfig);
                 }
             }
             return null;

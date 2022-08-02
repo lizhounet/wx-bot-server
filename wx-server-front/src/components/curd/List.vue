@@ -30,6 +30,7 @@
             height="auto"
             border
             stripe
+            show-overflow
             :data="tableData.data"
             :row-config="{ isCurrent: true, isHover: true }"
             :column-config="{ isCurrent: true, resizable: true }"

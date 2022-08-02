@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="xYohttp-dotnet" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\HZY.EFCore\HZY.EFCore.csproj" />
 		<ProjectReference Include="..\HZY.Infrastructure\HZY.Infrastructure.csproj" />
 		<ProjectReference Include="..\HZY.Models\HZY.Models.csproj" />

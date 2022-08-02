@@ -23,8 +23,8 @@ using System.Text.Json;
 using HZY.Infrastructure.TextJson;
 using Swashbuckle.AspNetCore.Filters;
 using Newtonsoft.Json.Serialization;
-using HZY.Services.Admin.WxBot.Http;
 using HZY.Infrastructure.Email;
+using HZY.Domain.Services.WxBot.Http;
 
 namespace HZY.WebHost.Configure;
 

@@ -10,7 +10,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HZY.Services.Admin.WxBot.Http
+namespace HZY.Domain.Services.WxBot.Http
 {
     /// <summary>
     /// 天行接口服务

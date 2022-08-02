@@ -17,18 +17,16 @@ namespace HZY.Domain.Services.Quartz.Impl
         private ConcurrentBag<JobLoggerInfo> jobLoggerInfos;
         private string JobLoggerKey = "HZY.Infrastructure.Quartz:JobLogger";
         private long ListMaxValue = 9999;//集合最大值
-        private readonly IRedisService _redisService;
 
-        public JobLoggerService(IRedisService redisService)
+        public JobLoggerService()
         {
             jobLoggerInfos ??= new ConcurrentBag<JobLoggerInfo>();
-            _redisService = redisService;
         }
 
         public IEnumerable<JobLoggerInfo> FindListById(Guid tasksId)
         {
             if (tasksId == Guid.Empty) return new ConcurrentBag<JobLoggerInfo>();
-            var json = _redisService.Database.StringGet($"{JobLoggerKey}:{tasksId}");
+            var json = RedisHelper.Get($"{JobLoggerKey}:{tasksId}");
             return string.IsNullOrWhiteSpace(json) ? new List<JobLoggerInfo>() : JsonConvert.DeserializeObject<List<JobLoggerInfo>>(json);
         }
 
@@ -45,13 +43,8 @@ namespace HZY.Domain.Services.Quartz.Impl
             }
 
             list.Add(jobLoggerInfo);
-
-            _redisService.Database.StringSet($"{JobLoggerKey}:{tasksId}", JsonConvert.SerializeObject(list), TimeSpan.FromDays(1));
+            RedisHelper.Set($"{JobLoggerKey}:{tasksId}", JsonConvert.SerializeObject(list), TimeSpan.FromDays(1));
         }
-
-
-
-
 
     }
 }

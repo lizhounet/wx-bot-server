@@ -18,13 +18,6 @@ namespace HZY.Domain.Services.Quartz.Impl
     public class DataService : IDataService
     {
         private string PathOrKey { get; set; }
-        private readonly IRedisService _redisService;
-
-        public DataService(IRedisService redisService)
-        {
-            _redisService = redisService;
-        }
-
         public bool Init(string pathOrKey)
         {
             PathOrKey = pathOrKey;
@@ -38,7 +31,8 @@ namespace HZY.Domain.Services.Quartz.Impl
         /// <returns></returns>
         public async Task<IEnumerable<T>> ReadDataAsync<T>()
         {
-            var data = await this._redisService.Database.StringGetAsync(PathOrKey);
+
+            var data = await RedisHelper.GetAsync(PathOrKey);
             return string.IsNullOrWhiteSpace(data) ? default : JsonConvert.DeserializeObject<IEnumerable<T>>(data);
         }
 
@@ -49,7 +43,7 @@ namespace HZY.Domain.Services.Quartz.Impl
         public async Task<bool> WriteDataAsync<T>(T contents)
         {
             var json = JsonConvert.SerializeObject(contents);
-            await this._redisService.Database.StringSetAsync(PathOrKey, json);//, TimeSpan.FromDays(1)
+            await RedisHelper.SetAsync(PathOrKey, json);
             return true;
         }
 

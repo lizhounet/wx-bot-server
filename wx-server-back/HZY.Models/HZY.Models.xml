@@ -94,6 +94,16 @@
             邮箱验证缓存key
             </summary>
         </member>
+        <member name="F:HZY.Models.Consts.CacheKeyConsts.JobTimedTaskExecLogKey">
+            <summary>
+            Job定时任务日志key
+            </summary>
+        </member>
+        <member name="F:HZY.Models.Consts.CacheKeyConsts.JobSayEveryDayLogKey">
+            <summary>
+            Job情侣每日说日志key
+            </summary>
+        </member>
         <member name="T:HZY.Models.DTO.DevelopmentTool.GenContextDto">
             <summary>
             生成代码上下文
@@ -1267,12 +1277,17 @@
         </member>
         <member name="T:HZY.Models.Entities.WxBotConfig">
             <summary>
-            微信联系人
+            个微小助手基础配置
             </summary>
         </member>
         <member name="P:HZY.Models.Entities.WxBotConfig.ApplicationToken">
             <summary>
              应用Token => 备注: 应用Token
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxBotConfig.RobotWxId">
+            <summary>
+             机器人微信id => 备注: 机器人微信id
             </summary>
         </member>
         <member name="P:HZY.Models.Entities.WxBotConfig.GroupAutoReplyFlag">
@@ -1425,6 +1440,16 @@
              纪念日 => 备注: 纪念日
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxSayEveryDay.TaskState">
+            <summary>
+            任务状态(1=运行中,2=未运行,3=已停止) => 备注: 任务状态
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxSayEveryDay.RobotWxId">
+            <summary>
+             机器人微信id => 备注: 机器人微信id
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.WxTimedTask">
             <summary>
             微信机器人定时任务
@@ -1470,22 +1495,30 @@
              结尾备注 => 备注: 结尾备注
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxTimedTask.TaskState">
+            <summary>
+            任务状态(1=运行中,2=未运行,3=已停止) => 备注: 任务状态
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxTimedTask.RobotWxId">
+            <summary>
+             机器人微信id => 备注: 机器人微信id
+            </summary>
+        </member>
         <member name="T:HZY.Models.Enums.EMatchType">
             <summary>
             机器人回复关键字匹配类型 枚举
+            </summary>
+        </member>
+        <member name="T:HZY.Models.Enums.ETaskState">
+            <summary>
+            任务状态 枚举
             </summary>
         </member>
         <member name="T:HZY.Models.Enums.ETimedTaskSendType">
             <summary>
             定时任务发送类型 枚举
             </summary>
-        </member>
-        <member name="M:HZY.Models.Enums.ETimedTaskSendTypeEX.GetDescription(HZY.Models.Enums.ETimedTaskSendType)">
-            <summary>
-            获取枚举描述
-            </summary>
-            <param name="taskSendType"></param>
-            <returns></returns>
         </member>
         <member name="T:HZY.Models.Enums.EWxBotType">
             <summary>

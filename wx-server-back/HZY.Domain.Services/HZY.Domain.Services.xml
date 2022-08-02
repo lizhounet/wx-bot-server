@@ -162,6 +162,77 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.Impl.WxBotQuartzJobService.RunAsync(HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule)">
+            <summary>
+            开始运行一个调度器
+            </summary>
+            <param name="jobSchedule"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.Impl.WxBotQuartzJobService.CloseAsync(HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule)">
+            <summary>
+            关闭调度器
+            </summary>
+            <param name="jobSchedule"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.QuartzWxBot.IWxBotQuartzJobService">
+            <summary>
+            微信机器人Quartz服务
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.IWxBotQuartzJobService.RunAsync(HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule)">
+            <summary>
+            开始运行一个任务调度器
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.IWxBotQuartzJobService.CloseAsync(HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule)">
+            <summary>
+            关闭任务调度
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.QuartzWxBot.Jobs.SayEveryDayJob">
+            <summary>
+            情侣每日说 job
+            </summary>
+        </member>
+        <member name="T:HZY.Domain.Services.QuartzWxBot.Jobs.TimedTaskJob">
+            <summary>
+            定时任务 job
+            </summary>
+        </member>
+        <member name="T:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule">
+            <summary>
+            微信机器人job任务描述实体
+            </summary>
+        </member>
+        <member name="P:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule.JobData">
+            <summary>
+            任务需要的参数
+            </summary>
+        </member>
+        <member name="P:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule.TaskName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule.GroupName">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule.Cron">
+            <summary>
+            间隔表达式
+            </summary>
+        </member>
+        <member name="P:HZY.Domain.Services.QuartzWxBot.Model.WxBotJobSchedule.JobType">
+            <summary>
+            job类型
+            </summary>
+        </member>
         <member name="T:HZY.Domain.Services.Quartz.IDataService">
             <summary>
             文件数据服务
@@ -481,6 +552,140 @@
             </summary>
             <param name="iFormFile"></param>
             <param name="folder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.WxBot.ContentSendService">
+            <summary>
+            内容发送 服务 
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.BotReplyAsync(System.String,System.String,System.String)">
+            <summary>
+            机器人回复
+            </summary>
+            <param name="applicationToken">applicationToken</param>
+            <param name="keyword">关键字</param>
+             <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.GetTimedTaskContentAsync(HZY.Models.Entities.WxTimedTask,HZY.Models.Entities.WxBotConfig)">
+            <summary>
+            获取定时任务发送内容
+            </summary>
+            <param name="wxTimedTask">微信机器人定时任务</param>
+            <param name="wxBotConfig">个微小助手基础配置</param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.GetkeyWorldContentAsync(HZY.Models.Entities.WxKeywordReply,HZY.Models.Entities.WxBotConfig)">
+            <summary>
+            获取关键字回复发送内容
+            </summary>
+            <param name="keywordReply">关键词回复表</param>
+            <param name="wxBotConfig">个微小助手基础配置</param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.GetSayEveryDayTextAsync(HZY.Models.Entities.WxSayEveryDay,HZY.Models.Entities.WxBotConfig)">
+            <summary>
+            获取每日说文本
+            </summary>
+            <param name="sayEveryDay">每日说实体</param>
+            <param name="wxBotConfig">个微小助手基础配置</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.ExecSayEveryDayAsync(System.Guid)">
+            <summary>
+            执行情侣每日说
+            </summary>
+            <param name="everyDayId">每日说id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.ExecTimedTaskAsync(System.Guid)">
+            <summary>
+            执行定时任务
+            </summary>
+            <param name="timedTaskId">定时任务id</param>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.WxBot.Http.HttpService">
+            <summary>
+            http服务
+            </summary>
+        </member>
+        <member name="T:HZY.Domain.Services.WxBot.Http.TianXingService">
+            <summary>
+            天行接口服务
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetBotReplyAsync(System.String,System.String,System.String)">
+            <summary>
+            获取机器人回复
+            </summary>
+            <param name="key">天行key</param>
+            <param name="question">提问（建议urlencode）</param>
+            <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetWeatherAsync(System.String,System.String)">
+            <summary>
+            获取天气
+            </summary>
+            <param name="key">天行key</param>
+            <param name="city">城市</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetJokesAsync(System.String,System.String)">
+            <summary>
+            获取笑话
+            </summary>
+            <param name="key">天行key</param>
+            <param name="num">返回数量</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetStoryAsync(System.String,System.String,System.String)">
+            <summary>
+            获取故事
+            </summary>
+            <param name="key">天行key</param>
+            <param name="type">故事类型，成语1、睡前2、童话3、寓言4</param>
+            <param name="num">返回数量</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetLoveWordsAsync(System.String)">
+            <summary>
+            获取情话
+            </summary>
+            <param name="key">天行key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetNewsAsync(System.String,System.String,System.String)">
+            <summary>
+            获取新闻咨询
+            </summary>
+            <param name="key">天行key</param>
+            <param name="num">获取条数</param>
+            <param name="col">新闻频道id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.TianXingService.GetDayOneAsync(System.String)">
+            <summary>
+            获取每日一句
+            </summary>
+            <param name="key">天行key</param>
+            <returns></returns>
+        </member>
+        <member name="T:HZY.Domain.Services.WxBot.Http.XiaoiBotService">
+            <summary>
+            小i机器人服务
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Http.XiaoiBotService.GetBotReplyAsync(System.String,System.String)">
+            <summary>
+            获取机器人回复
+            </summary>
+            <param name="question">提问（建议urlencode）</param>
+            <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
             <returns></returns>
         </member>
     </members>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace HZY.Models.Enums
 {
@@ -25,22 +19,5 @@ namespace HZY.Models.Enums
         XHDQ = 5,
         [Description("HTTP请求")]
         HTTP = 6,
-    }
-    public static class ETimedTaskSendTypeEX
-    {
-        /// <summary>
-        /// 获取枚举描述
-        /// </summary>
-        /// <param name="taskSendType"></param>
-        /// <returns></returns>
-        public static string GetDescription(this ETimedTaskSendType taskSendType)
-        {
-            Type type = taskSendType.GetType();
-            FieldInfo fd = type.GetField(taskSendType.ToString());
-            if (fd == null) return default;
-
-            var attrs = fd.GetCustomAttributes(typeof(DescriptionAttribute), false).ToList();
-            return (attrs?.FirstOrDefault() as DescriptionAttribute).Description;
-        }
     }
 }

@@ -1,23 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HZY.EFCore.PagingViews;
 using HZY.Infrastructure;
 using HZY.Infrastructure.Controllers;
 using HZY.Infrastructure.Filters;
-using HZY.Infrastructure.Permission;
 using HZY.Infrastructure.Permission.Attributes;
-using HZY.Models.BO;
 using HZY.Models.Consts;
-using HZY.Models.DTO;
-using HZY.Models.DTO.Framework;
-using HZY.Models.Entities.Framework;
-using HZY.Services.Admin.Framework;
 using HZY.Services.Admin;
 using HZY.Models.Entities;
+using HZY.Domain.Services.WxBot;
 
 namespace HZY.Controllers.Admin
 {
@@ -28,12 +18,13 @@ namespace HZY.Controllers.Admin
     [ApiExplorerSettings(GroupName = nameof(ApiVersions.WxBot))]
     public class WxTimedTaskController : AdminBaseController<WxTimedTaskService>
     {
-        public WxTimedTaskController(WxTimedTaskService defaultService) 
+        private readonly ContentSendService _contentSendService;
+        public WxTimedTaskController(WxTimedTaskService defaultService, ContentSendService contentSendService)
             : base(defaultService)
         {
-
+            _contentSendService = contentSendService;
         }
-        
+
         /// <summary>
         /// 获取列表
         /// </summary>
@@ -84,6 +75,53 @@ namespace HZY.Controllers.Admin
         public Task<WxTimedTask> SaveFormAsync([FromBody] WxTimedTask form)
         {
             return this._defaultService.SaveFormAsync(form);
+        }
+
+        /// <summary>
+        /// 启动定时任务
+        /// </summary>
+        /// <param name="timedTaskId">定时任务id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "启动定时任务")]
+        [HttpPost("start/{timedTaskId}")]
+        public async Task<bool> StartTimdTaskAsync([FromRoute] Guid timedTaskId)
+        {
+            return await this._defaultService.StartTimdTaskAsync(timedTaskId);
+        }
+        /// <summary>
+        /// 执行定时任务
+        /// </summary>
+        /// <param name="timedTaskId">定时任务id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "执行定时任务")]
+        [HttpPost("exec/{timedTaskId}")]
+        public async Task<bool> ExecTimedTaskAsync([FromRoute] Guid timedTaskId)
+        {
+            await this._contentSendService.ExecTimedTaskAsync(timedTaskId);
+            return true;
+        }
+        /// <summary>
+        /// 停止定时任务
+        /// </summary>
+        /// <param name="timedTaskId">定时任务id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "停止定时任务")]
+        [HttpPost("stop/{timedTaskId}")]
+        public async Task<bool> StopTimdTaskAsync([FromRoute] Guid timedTaskId)
+        {
+            return await this._defaultService.StopTimdTaskAsync(timedTaskId);
+        }
+
+        /// <summary>
+        /// 查询定时任务运行日志
+        /// </summary>
+        /// <param name="timedTaskId">定时任务id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "查询定时任务运行日志")]
+        [HttpPost("queryRunLog/{timedTaskId}")]
+        public async Task<List<string>> QueryRunLogAsync([FromRoute] Guid timedTaskId)
+        {
+            return await this._defaultService.QueryRunLogAsync(timedTaskId);
         }
     }
 }

@@ -6,7 +6,7 @@ using HZY.Models.Enums;
 namespace HZY.Models.Entities
 {
     /// <summary>
-    /// 微信联系人
+    /// 个微小助手基础配置
     /// </summary>
     public class WxBotConfig : DefaultBaseEntity<Guid>
     {
@@ -15,7 +15,10 @@ namespace HZY.Models.Entities
         ///  应用Token => 备注: 应用Token
         /// </summary>
         public String ApplicationToken { get; set; }
-
+        /// <summary>
+        ///  机器人微信id => 备注: 机器人微信id
+        /// </summary>
+        public String RobotWxId { get; set; }
 
         /// <summary>
         ///  群聊自动回复是否开启 => 备注: 群聊自动回复是否开启

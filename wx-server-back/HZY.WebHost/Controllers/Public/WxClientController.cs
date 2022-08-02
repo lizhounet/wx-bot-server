@@ -1,4 +1,5 @@
-﻿using HZY.Infrastructure;
+﻿using HZY.Domain.Services.WxBot;
+using HZY.Infrastructure;
 using HZY.Infrastructure.Filters;
 using HZY.Models.Consts;
 using HZY.Models.DTO;
@@ -7,7 +8,6 @@ using HZY.Models.DTO.WxBot;
 using HZY.Models.Entities;
 using HZY.Services.Admin;
 using HZY.Services.Admin.Framework;
-using HZY.Services.Admin.WxBot.Http;
 using HZY.WebHost.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;

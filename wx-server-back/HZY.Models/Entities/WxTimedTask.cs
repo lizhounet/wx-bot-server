@@ -45,7 +45,6 @@ namespace HZY.Models.Entities
         /// </summary>
         public String HttpSendUrl { get; set; }
 
-
         /// <summary>
         ///  发送时间(cron表达式) => 备注: 发送时间(cron表达式)
         /// </summary>
@@ -54,6 +53,15 @@ namespace HZY.Models.Entities
         ///  结尾备注 => 备注: 结尾备注
         /// </summary>
         public String ClosingRemarks { get; set; }
+        /// <summary>
+        /// 任务状态(1=运行中,2=未运行,3=已停止) => 备注: 任务状态
+        /// </summary>
+        public ETaskState TaskState { set; get; } = ETaskState.NOTRUNNING;
+        /// <summary>
+        ///  机器人微信id => 备注: 机器人微信id
+        /// </summary>
+        public String RobotWxId { get; set; }
+
 
     }
 }

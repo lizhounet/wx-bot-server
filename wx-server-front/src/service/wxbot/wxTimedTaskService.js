@@ -47,5 +47,27 @@ export default {
      */
     exportExcel(search) {
         return download(`${controllerName}/exportExcel`, search);
-    }
+    },
+     /**
+     * 执行定时任务
+     * @param {定时任务id} id 
+     */
+      execTimedTask(id) {
+        return post(`${controllerName}/exec/${id}`);
+    },
+     /**
+     * 启动定时任务
+     * @param {定时任务id} id 
+     */
+      startTimdTask(id) {
+        return post(`${controllerName}/start/${id}`);
+    },
+     /**
+     * 停止定时任务
+     * @param {定时任务id} id 
+     */
+      stopTimdTask(id) {
+        return post(`${controllerName}/stop/${id}`);
+    },
+
 };

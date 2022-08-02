@@ -20,6 +20,7 @@ using HZY.Models.Entities.Framework;
 using HZY.Services.Admin.Framework;
 using HZY.Services.Admin;
 using HZY.Models.Entities;
+using HZY.Domain.Services.WxBot;
 
 namespace HZY.Controllers.Admin
 {
@@ -30,10 +31,11 @@ namespace HZY.Controllers.Admin
     [ApiExplorerSettings(GroupName = nameof(ApiVersions.WxBot))]
     public class WxSayEveryDayController : AdminBaseController<WxSayEveryDayService>
     {
-        public WxSayEveryDayController(WxSayEveryDayService defaultService) 
+        private readonly ContentSendService _contentSendService;
+        public WxSayEveryDayController(WxSayEveryDayService defaultService,ContentSendService contentSendService) 
             : base(defaultService)
         {
-
+            _contentSendService = contentSendService;
         }
         
         /// <summary>
@@ -87,8 +89,51 @@ namespace HZY.Controllers.Admin
         {
             return this._defaultService.SaveFormAsync(form);
         }
-
-    
+        /// <summary>
+        /// 启动情侣每日说
+        /// </summary>
+        /// <param name="everyDayId">每日说id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "启动情侣每日说")]
+        [HttpPost("start/{everyDayId}")]
+        public async Task<bool> StartSayEveryDayAsync([FromRoute] Guid everyDayId)
+        {
+            return await this._defaultService.StartSayEveryDayAsync(everyDayId);
+        }
+        /// <summary>
+        /// 执行情侣每日说
+        /// </summary>
+        /// <param name="everyDayId">每日说id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "执行情侣每日说")]
+        [HttpPost("exec/{everyDayId}")]
+        public async Task<bool> ExecSayEveryDayAsync([FromRoute] Guid everyDayId)
+        {
+            await this._contentSendService.ExecSayEveryDayAsync(everyDayId);
+            return true;
+        }
+        /// <summary>
+        /// 停止情侣每日说
+        /// </summary>
+        /// <param name="everyDayId">每日说id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "停止情侣每日说")]
+        [HttpPost("stop/{everyDayId}")]
+        public async Task<bool> StopSayEveryDayAsync([FromRoute] Guid everyDayId)
+        {
+            return await this._defaultService.StopSayEveryDayAsync(everyDayId);
+        }
+        /// <summary>
+        /// 查询情侣每日说运行日志
+        /// </summary>
+        /// <param name="everyDayId">每日说id</param>
+        /// <returns></returns>
+        [ActionDescriptor(DisplayName = "查询情侣每日说运行日志")]
+        [HttpPost("queryRunLog/{everyDayId}")]
+        public async Task<List<string>> QueryRunLogAsync([FromRoute] Guid everyDayId)
+        {
+            return await this._defaultService.QueryRunLogAsync(everyDayId);
+        }
 
     }
 }

@@ -893,16 +893,6 @@
             读取 xml 摘要
             </summary>
         </member>
-        <member name="P:HZY.Infrastructure.Redis.Impl.RedisServiceImpl.Database">
-            <summary>
-            get database
-            </summary>
-        </member>
-        <member name="T:HZY.Infrastructure.Redis.IRedisService">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="M:HZY.Infrastructure.Redis.RedisUtil.AddRedisService(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
             <summary>
             注册 Redis 模块

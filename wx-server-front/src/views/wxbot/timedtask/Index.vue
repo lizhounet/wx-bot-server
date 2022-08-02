@@ -9,8 +9,12 @@
           </a-col>
           <!--button-->
           <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" style="float: right">
-            <a-button type="primary" class="mr-15" @click="methods.findList">查询</a-button>
-            <a-button class="mr-15" @click="methods.onResetSearch">重置</a-button>
+            <a-button type="primary" class="mr-15" @click="methods.findList"
+              >查询</a-button
+            >
+            <a-button class="mr-15" @click="methods.onResetSearch"
+              >重置</a-button
+            >
           </a-col>
         </a-row>
       </template>
@@ -27,7 +31,12 @@
         </template>
         <!-- 批量删除 -->
         <template v-if="power.delete">
-          <a-popconfirm title="您确定要删除吗?" @confirm="methods.deleteList()" okText="确定" cancelText="取消">
+          <a-popconfirm
+            title="您确定要删除吗?"
+            @confirm="methods.deleteList()"
+            okText="确定"
+            cancelText="取消"
+          >
             <a-button type="danger">
               <template #icon>
                 <AppIcon name="DeleteOutlined" />
@@ -39,13 +48,19 @@
       </template>
       <!-- 工具栏右侧插槽 -->
       <template #toolbar-right>
-        <a-input v-model:value="state.search.vm.name" placeholder="名称" @keyup="methods.findList" />
+        <a-input
+          v-model:value="state.search.vm.name"
+          placeholder="名称"
+          @keyup="methods.findList"
+        />
         <a-button @click="methods.onResetSearch">重置</a-button>
         <!-- 检索 -->
         <template v-if="power.search">
           <a-button @click="state.search.state = !state.search.state">
             <template #icon>
-              <AppIcon :name="state.search.state ? 'UpOutlined' : 'DownOutlined'" />
+              <AppIcon
+                :name="state.search.state ? 'UpOutlined' : 'DownOutlined'"
+              />
             </template>
             检索
           </a-button>
@@ -53,10 +68,16 @@
         <!-- 列的隐藏显示 -->
         <a-popover>
           <template #content>
-            <div v-for="item in state.columns.filter((w) => w.fieldName.substr(0, 1) != '_')">
-              <a-checkbox v-model:checked="item.show" @change="() => nextTick(() => refList.table.refreshColumn())">{{
-                  item.title
-              }}</a-checkbox>
+            <div
+              v-for="item in state.columns.filter(
+                (w) => w.fieldName.substr(0, 1) != '_'
+              )"
+            >
+              <a-checkbox
+                v-model:checked="item.show"
+                @change="() => nextTick(() => refList.table.refreshColumn())"
+                >{{ item.title }}</a-checkbox
+              >
             </div>
           </template>
           <a-button>
@@ -68,33 +89,109 @@
 
       <!-- 表格 -->
       <template #table-col-default>
-          <vxe-column field="receivingObjectWxId" title="接收对象wxId" show-overflow ></vxe-column>
-          <vxe-column field="receivingObjectName" title="接收对象" show-overflow ></vxe-column>
-          <vxe-column field="sendTypeText" title="发送类型" width="80">
-          </vxe-column>
-          <vxe-column field="sendContent" title="发送内容" show-overflow min-width="220"></vxe-column>
-          <vxe-column field="sendTime" title="发送时间(cron表达式)" show-overflow ></vxe-column>
-          <vxe-column field="closingRemarks" title="结尾备注" show-overflow></vxe-column>
-          <vxe-column field="creationTime" title="创建时间"></vxe-column>
-          <vxe-column field="id" title="操作" v-if="(power.update || power.delete)">
-            <template #default="{ row }">
-              <template v-if="power.update">
-                <a href="javascript:void(0)" @click="methods.openForm(row.id)">编辑</a>
+        <vxe-column
+          field="robotWxId"
+          title="机器人微信id"
+          width="150"
+        ></vxe-column>
+        <vxe-column
+          field="receivingObjectWxId"
+          title="接收对象wxId"
+          width="150"
+        ></vxe-column>
+        <vxe-column
+          field="receivingObjectName"
+          title="接收对象"
+          width="200"
+        ></vxe-column>
+        <vxe-column field="sendTypeText" title="发送类型" width="80">
+        </vxe-column>
+        <vxe-column
+          field="sendContent"
+          title="发送内容"
+          width="250"
+        ></vxe-column>
+        <vxe-column
+          field="sendTime"
+          title="发送时间(cron表达式)"
+          width="150"
+        ></vxe-column>
+        <vxe-column
+          field="closingRemarks"
+          title="结尾备注"
+          width="100"
+        ></vxe-column>
+        <vxe-column
+          field="taskStateText"
+          title="运行状态"
+          width="100"
+        ></vxe-column>
+        <vxe-column
+          field="creationTime"
+          title="创建时间"
+          width="150"
+        ></vxe-column>
+        <vxe-column
+          field="id"
+          title="操作"
+          v-if="power.update || power.delete"
+          width="300"
+          fixed="right"
+        >
+          <template #default="{ row }">
+            <template v-if="power.update">
+              <template v-if="row.taskState == 1">
+                <a
+                  href="javascript:void(0)"
+                  @click="methods.stopTimdTask(row.id)"
+                  >停止</a
+                >
               </template>
-                <a-divider type="vertical" />
-               <template v-if="power.update">
-                <a href="javascript:void(0)" @click="methods.send(row.id)">立即发送</a>
-              </template>
-              <a-divider type="vertical" />
-              <template v-if="power.delete">
-                <a-popconfirm title="您确定要删除吗?" @confirm="methods.deleteList(row.id)" okText="确定" cancelText="取消">
-                  <a class="text-danger">删除</a>
-                </a-popconfirm>
+              <template v-else>
+                <a
+                  href="javascript:void(0)"
+                  @click="methods.startTimdTask(row.id)"
+                  >启动</a
+                >
               </template>
             </template>
-          </vxe-column>
-        </template>
-        <!--  v-if="power.update || power.delete" 预防操作列还存在 -->
+            <a-divider type="vertical" />
+            <template v-if="power.update">
+              <a
+                href="javascript:void(0)"
+                @click="methods.execTimedTask(row.id)"
+                >立即发送</a
+              >
+            </template>
+            <a-divider type="vertical" />
+            <template v-if="power.update">
+              <a
+                href="javascript:void(0)"
+                @click="methods.execTimedTask(row.id)"
+                >查看日志</a
+              >
+            </template>
+            <a-divider type="vertical" />
+            <template v-if="power.update">
+              <a href="javascript:void(0)" @click="methods.openForm(row.id)"
+                >编辑</a
+              >
+            </template>
+            <a-divider type="vertical" />
+            <template v-if="power.delete">
+              <a-popconfirm
+                title="您确定要删除吗?"
+                @confirm="methods.deleteList(row.id)"
+                okText="确定"
+                cancelText="取消"
+              >
+                <a class="text-danger">删除</a>
+              </a-popconfirm>
+            </template>
+          </template>
+        </vxe-column>
+      </template>
+      <!--  v-if="power.update || power.delete" 预防操作列还存在 -->
     </List>
 
     <!--表单弹层-->
@@ -151,7 +248,7 @@ const methods = {
     methods.findList();
   },
   //重置检索条件
- onResetSearch() {
+  onResetSearch() {
     state.page = 1;
     let searchVm = state.search.vm;
     for (let key in searchVm) {
@@ -190,9 +287,27 @@ const methods = {
   openForm(id) {
     refForm.value.openForm({ visible: true, key: id });
   },
-  // exportExcel() {
-  //   service.exportExcel(state.search.vm);
-  // },
+  execTimedTask(id) {
+    service.execTimedTask(id).then((res) => {
+      if (res.code != 1) return;
+      tools.message("执行成功!", "成功");
+      methods.findList();
+    });
+  },
+  startTimdTask(id) {
+     service.startTimdTask(id).then((res) => {
+      if (res.code != 1) return;
+      tools.message("启动成功!", "成功");
+      methods.findList();
+    });
+  },
+  stopTimdTask(id) {
+     service.stopTimdTask(id).then((res) => {
+      if (res.code != 1) return;
+      tools.message("停止成功!", "成功");
+      methods.findList();
+    });
+  },
 };
 
 onMounted(() => {

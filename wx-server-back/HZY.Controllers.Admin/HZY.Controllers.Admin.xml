@@ -838,6 +838,27 @@
             <param name="form">form</param>
             <returns></returns>
         </member>
+        <member name="M:HZY.Controllers.Admin.WxSayEveryDayController.StartSayEveryDayAsync(System.Guid)">
+            <summary>
+            启动情侣每日说
+            </summary>
+            <param name="everyDayId">每日说id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxSayEveryDayController.ExecSayEveryDayAsync(System.Guid)">
+            <summary>
+            执行情侣每日说
+            </summary>
+            <param name="everyDayId">每日说id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxSayEveryDayController.StopSayEveryDayAsync(System.Guid)">
+            <summary>
+            停止情侣每日说
+            </summary>
+            <param name="everyDayId">每日说id</param>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Controllers.Admin.WxTimedTaskController">
             <summary>
             微信机器人定时任务 控制器
@@ -871,6 +892,34 @@
             保存
             </summary>
             <param name="form">form</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxTimedTaskController.StartTimdTaskAsync(System.Guid)">
+            <summary>
+            启动定时任务
+            </summary>
+            <param name="timedTaskId">定时任务id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxTimedTaskController.ExecTimedTaskAsync(System.Guid)">
+            <summary>
+            执行定时任务
+            </summary>
+            <param name="timedTaskId">定时任务id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxTimedTaskController.StopTimdTaskAsync(System.Guid)">
+            <summary>
+            停止定时任务
+            </summary>
+            <param name="timedTaskId">定时任务id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Controllers.Admin.WxTimedTaskController.QueryRunLogAsync(System.Guid)">
+            <summary>
+            查询定时任务运行日志
+            </summary>
+            <param name="timedTaskId">定时任务id</param>
             <returns></returns>
         </member>
     </members>

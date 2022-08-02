@@ -1,5 +1,4 @@
-﻿using HZY.Infrastructure.Redis.Impl;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace HZY.Infrastructure.Redis
 {
@@ -13,7 +12,9 @@ namespace HZY.Infrastructure.Redis
         /// <param name="connectionString"></param>
         public static void AddRedisService(this IServiceCollection services, string connectionString)
         {
-            services.AddSingleton(typeof(IRedisService), serviceProvider => new RedisServiceImpl(connectionString));
+            var csredis = new CSRedis.CSRedisClient(connectionString);
+            RedisHelper.Initialization(csredis);
+            services.AddSingleton(csredis);
         }
 
 
