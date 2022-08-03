@@ -115,6 +115,8 @@
 
     <!--表单弹层-->
     <Info ref="refForm" @onSuccess="() => methods.findList()" />
+    <!-- 日志抽屉 -->
+    <Cdrawer v-model:visible="visible" ref="refCdrawer" />
   </div>
 </template>
 
@@ -128,6 +130,7 @@ import { useAppStore } from "@/store";
 import List from "@/components/curd/List.vue";
 import AppIcon from "@/components/AppIcon.vue";
 import Info from "./Info.vue";
+import Cdrawer from '@/components/Cdrawer.vue'
 import tools from "@/scripts/tools";
 import service from "@/service/wxbot/wxTimedTaskService";
 import router from "@/router";
@@ -154,6 +157,10 @@ const state = reactive({
 //表单 ref 对象
 const refForm = ref(null);
 const refList = ref(null);
+
+// 抽屉数据
+const visible = ref(false)
+const refCdrawer = ref(null);
 
 //权限
 const power = appStore.getPowerByMenuId(router.currentRoute.value.meta.menuId);
@@ -228,9 +235,16 @@ const methods = {
     });
   },
   showLog(id) {
-    service.queryRunLog(id).then((res) => {
-      if (res.code != 1) return;
-    });
+    visible.value = true
+    setTimeout(()=>{
+      refCdrawer.value.state.data = [
+    "定时任务(08da6101-30b6-4fa2-8932-c7f39547e911)开始,开始时间2022-08-02 14:56:10\r\n发送消息给@@c21facaa72f5b4462470e83ed36996ea1711ff9f18c744434ec67cae3f55aaeb,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n发送消息给@@5d65a7d48e02cbb4a6a52e5099e7c128afbd1a977d472e65aec59ce858b5b620,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n发送消息给@@6f611762b19e705893f24f42d6d5db6a095f49397735524e8ee5952e895a429c,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n发送消息给@@ad4f84a47d47b73ab9a52513c3ee07637ef65c31867db462d21be8dd7b09098a,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n发送消息给@@06e3c98f781329b78051d0bdea49e663e72152e5ec1036401b3a999bb988ff6a,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n发送消息给@@4b4079f8b85220d7fad62c344b8385eda7be9270013df2e636b6705246371c0e,消息内容：2022-08-02 14:56 星期二\n\r\n1、破纪录！世界最大集装箱船在上海出坞\r\n2、卫健委：昨日新增本土46+327例 在这些地方\r\n3、8月1日天津新增4例阳性感染者 均为地铁安检员\r\n4、甘肃省新增确诊病例10例 新增无症状感染者69例\r\n5、陈中入选世界跆拳道联盟首届名人堂\r\n6、实弹射击+军事训练！渤海南海部分海域禁止驶入\r\n7、江西鄱阳湖水位一个月下降近5米\r\n8、我国唯一以“东方红”命名火车站完成改建\r\n9、NASA称中方未分享火箭残骸信息，中方驳斥\r\n10、佩洛西真会窜访台湾？打“擦边球”目的何在？\r\n新闻详情查看：https://www.tianapi.com/weixin/news/?col=7\r\n\n\n————————周大帅\r\n耗时1666 毫秒|结果=成功\r\n定时任务(08da6101-30b6-4fa2-8932-c7f39547e911)结束,结束时间2022-08-02 14:56:11\r\n",
+  ]
+    },2000)
+    console.log(refCdrawer.value);
+    // service.queryRunLog(id).then((res) => {
+    //   if (res.code != 1) return;
+    // });
   },
 };
 
