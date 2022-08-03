@@ -1,4 +1,5 @@
 ﻿using HZY.Domain.Services.Quartz;
+using HZY.Domain.Services.QuartzWxBot;
 using HZY.EFCore;
 using HZY.Infrastructure;
 using HZY.Infrastructure.MemoryMQ.Interfaces;
@@ -84,6 +85,11 @@ public class AppConfigure
             var _taskService = app.Services.GetRequiredService<ITaskService>();
             _taskService.RecoveryTaskAsync().Wait();
         }
+        #endregion
+        #region 恢复微信机器人的所有job任务
+
+        var wxBotTaskService = app.Services.GetRequiredService<WxBotTaskService>();
+        wxBotTaskService.RecoveryTaskAsync().Wait();
         #endregion
 
         #region 使用 DbContext

@@ -207,6 +207,29 @@
             job类型
             </summary>
         </member>
+        <member name="T:HZY.Domain.Services.QuartzWxBot.WxBotTaskService">
+            <summary>
+            微信机器人任务服务
+            </summary>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.WxBotTaskService.RecoveryTaskAsync">
+            <summary>
+            恢复所有数据库状态正在运行的任务
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.WxBotTaskService.QueryRunningWxTimedTasks">
+            <summary>
+            查询数据库正在运行的微信定时任务
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.QuartzWxBot.WxBotTaskService.QueryRunningWxSayEveryDays">
+            <summary>
+            查询数据库正在运行的情侣每日说
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Domain.Services.Quartz.IDataService">
             <summary>
             文件数据服务

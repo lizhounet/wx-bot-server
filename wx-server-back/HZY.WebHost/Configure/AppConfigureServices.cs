@@ -188,6 +188,7 @@ public class AppConfigureServices
                     Title = item
                 });
             }
+            options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
             //为 Swagger JSON and UI设置xml文档注释路径
             Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory)

@@ -56,12 +56,13 @@ namespace HZY.Domain.Services.WxBot
         public async Task<WxUserInfoDTO> GetWxUserInfoByApplictionTokenAsync(string applictionToken)
         {
             WxUserInfoDTO wxUserInfoDTO = RedisHelper.Get<WxUserInfoDTO>(string.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken));
+
             if (wxUserInfoDTO != null) return wxUserInfoDTO;
             WxBotConfig wxBotConfig = await GetWxBotConfigByApplictionTokenAsync(applictionToken);
             XyoHttpApi xyoHttpApi=new(wxBotConfig.VlwHttpUrl, applictionToken);
 
             //获取登录的机器人列表
-            GetRobotListVo robotList = await xyoHttpApi.GetRobotListAsync();
+            RobotListVo robotList = await xyoHttpApi.GetRobotListAsync();
             Robot robot = robotList.Data.FirstOrDefault();
             var userInfo = new WxUserInfoDTO
             {
@@ -73,11 +74,7 @@ namespace HZY.Domain.Services.WxBot
             if (robotList.Number > 0)
             {
                 //登录成功 把用户信息存入redis
-                RedisHelper.Set(String.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken), userInfo);
-            }
-            else
-            {
-                RedisHelper.Del(String.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken));
+                RedisHelper.Set(String.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken), userInfo,TimeSpan.FromHours(1));
             }
             return wxUserInfoDTO;
         }
