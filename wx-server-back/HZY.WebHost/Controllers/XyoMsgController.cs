@@ -1,12 +1,10 @@
-﻿using HZY.Infrastructure.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using xYohttp_dotnet.Controllers;
 using xYohttp_dotnet.Domain.Model.CallBackMsg;
 using xYohttp_dotnet.Domain.Model.Dto;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace HZY.WebHost.Controllers;
+
 
 /// <summary>
 /// xyo 消息回调 Controller
@@ -60,7 +58,7 @@ public class XyoMsgController: XyoMsgControllerBase
         return 0;
     }
 
-    public override int OnEventpublicChat(EventPrivateChatMsg msg)
+    public override int OnEventPrivateChat(EventPrivateChatMsg msg)
     {
         return 0;
     }
@@ -69,20 +67,10 @@ public class XyoMsgController: XyoMsgControllerBase
     {
         return 0;
     }
-    /// <summary>
-    /// 新的账号登录成功/下线
-    /// </summary>
-    /// <param name="msg">事件消息实体</param>
-    /// <returns></returns>
     public override int OnLogin(LoginMsg msg)
     {
         return 0;
     }
-    /// <summary>
-    /// 被邀请入群事件 PS: 企业微信不传递此事件
-    /// </summary>
-    /// <param name="msg">事件消息实体</param>
-    /// <returns></returns>
     public override int OnEventInvitedInGroup(EventInvitedInGroupMsg msg)
     {
         return 0;

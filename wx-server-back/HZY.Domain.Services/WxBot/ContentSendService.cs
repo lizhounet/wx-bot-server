@@ -15,23 +15,23 @@ namespace HZY.Domain.Services.WxBot
     {
         private readonly TianXingService _tianXingService;
         private readonly XiaoiBotService _xiaoiBotService;
-        private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly IAdminRepository<WxTimedTask> _timedTaskRepository;
         private readonly IAdminRepository<WxSayEveryDay> _sayEveryDayRepository;
         private readonly HttpService _httpService;
+        private readonly WxAccountService _wxAccountService;
         public ContentSendService(TianXingService tianXingService,
-              IAdminRepository<WxBotConfig> wxBotConfigRepository,
               XiaoiBotService xiaoiBotService,
               HttpService httpService,
               IAdminRepository<WxTimedTask> timedTaskRepository,
-              IAdminRepository<WxSayEveryDay> sayEveryDayRepository)
+              IAdminRepository<WxSayEveryDay> sayEveryDayRepository,
+              WxAccountService wxAccountService)
         {
             _tianXingService = tianXingService;
-            _wxBotConfigRepository = wxBotConfigRepository;
             _xiaoiBotService = xiaoiBotService;
             _httpService = httpService;
             _timedTaskRepository = timedTaskRepository;
             _sayEveryDayRepository = sayEveryDayRepository;
+            _wxAccountService = wxAccountService;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace HZY.Domain.Services.WxBot
         /// <returns></returns>
         public async Task<string> BotReplyAsync(string applicationToken, string keyword, string uniqueid)
         {
-            WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
+            WxBotConfig wxBotConfig = await _wxAccountService.GetWxBotConfigByApplictionTokenAsync(applicationToken);
             return wxBotConfig.ReplyBotType switch
             {
                 EWxBotType.TIANXING => await _tianXingService.GetBotReplyAsync(wxBotConfig.TianXingApiKey, keyword, uniqueid),
@@ -133,10 +133,11 @@ namespace HZY.Domain.Services.WxBot
             WxSayEveryDay sayEveryDay = await _sayEveryDayRepository.FindByIdAsync(everyDayId);
             if (sayEveryDay != null)
             {
-                WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == sayEveryDay.ApplicationToken);
+                WxBotConfig wxBotConfig = await _wxAccountService.GetWxBotConfigByApplictionTokenAsync(sayEveryDay.ApplicationToken);
                 //获取发送内容
                 string content = await this.GetSayEveryDayTextAsync(sayEveryDay, wxBotConfig);
-                var xyoHttp = new XyoHttpApi(wxBotConfig.VlwHttpUrl, sayEveryDay.ApplicationToken);
+
+                var xyoHttp = await _wxAccountService.GetXyoHttpApiAsync(sayEveryDay.ApplicationToken);
                 //需要发送的微信
                 var wxIds = sayEveryDay.ReceivingObjectWxId.Split(",").ToList();
                 foreach (var wxId in wxIds)
@@ -159,10 +160,10 @@ namespace HZY.Domain.Services.WxBot
             WxTimedTask wxTimedTask = await _timedTaskRepository.FindByIdAsync(timedTaskId);
             if (wxTimedTask != null)
             {
-                WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == wxTimedTask.ApplicationToken);
+                WxBotConfig wxBotConfig = await _wxAccountService.GetWxBotConfigByApplictionTokenAsync(wxTimedTask.ApplicationToken);
                 //获取发送内容
                 string content = await this.GetTimedTaskContentAsync(wxTimedTask, wxBotConfig);
-                var xyoHttp = new XyoHttpApi(wxBotConfig.VlwHttpUrl, wxTimedTask.ApplicationToken);
+                var xyoHttp = await _wxAccountService.GetXyoHttpApiAsync(wxTimedTask.ApplicationToken);
                 //需要发送的微信
                 var wxIds = wxTimedTask.ReceivingObjectWxId.Split(",").ToList();
                 foreach (var wxId in wxIds)

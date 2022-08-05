@@ -1,4 +1,5 @@
 ﻿using HZY.EFCore.Repositories.Admin.Core;
+using HZY.Infrastructure.ApiResultManage;
 using HZY.Models.Consts;
 using HZY.Models.DTO.WxBot;
 using HZY.Models.Entities;
@@ -15,7 +16,17 @@ namespace HZY.Domain.Services.WxBot
     {
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         public WxAccountService(IAdminRepository<WxBotConfig> wxBotConfigRepository) {
-            _wxBotConfigRepository= wxBotConfigRepository;
+            _wxBotConfigRepository = wxBotConfigRepository;
+        }
+        /// <summary>
+        /// 获取XyoHttpApi
+        /// </summary>
+        /// <param name="applictionToken"></param>
+        /// <returns></returns>
+        public async Task<XyoHttpApi> GetXyoHttpApiAsync(string applictionToken) {
+            WxBotConfig wxBotConfig = await GetWxBotConfigByApplictionTokenAsync(applictionToken);
+            if (wxBotConfig == null) MessageBox.Show($"找不到applictionToken:{applictionToken}的个微小助手基础配置");
+            return new XyoHttpApi(wxBotConfig.VlwHttpUrl, applictionToken);
         }
 
         /// <summary>
@@ -24,8 +35,7 @@ namespace HZY.Domain.Services.WxBot
         /// <returns></returns>
         public async Task<string> GetLoginQrCodeAsync(string applictionToken)
         {
-            WxBotConfig wxBotConfig = await GetWxBotConfigByApplictionTokenAsync(applictionToken);
-            XyoHttpApi xyoHttpApi = new(wxBotConfig.VlwHttpUrl, applictionToken);
+            XyoHttpApi xyoHttpApi = await GetXyoHttpApiAsync(applictionToken);
             //退出已打开的微信
             await xyoHttpApi.ExitWeChatLoginWinAsync();
             //获取登录二维码
