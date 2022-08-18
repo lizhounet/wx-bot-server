@@ -70,7 +70,7 @@ export default {
         return post(`${controllerName}/stop/${id}`);
     },
     /**
-    * 查询定时任务运行日志
+    * 查询每日说任务运行日志
     * @param {每日说id} id 
     */
     queryRunLog(id) {

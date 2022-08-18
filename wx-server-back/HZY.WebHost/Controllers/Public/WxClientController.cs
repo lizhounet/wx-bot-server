@@ -112,7 +112,7 @@ public class WxClientController : ControllerBase
     [HttpGet("keyword-reply/{applicationToken}")]
     public async Task<string> KeywordReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword)
     {
-        return await this._wxKeywordReplyService.KeywordReply(applicationToken, keyword);
+        return await this._contentSendService.GetkeyWorldContentAsync(keyword, applicationToken);
     }
 
     /// <summary>

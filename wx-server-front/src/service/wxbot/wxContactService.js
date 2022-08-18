@@ -48,4 +48,10 @@ export default {
     saveForm(form) {
         return post(`${controllerName}/saveForm`, form);
     },
+    /**
+     * 更新联系人
+     */
+    updateContact(){
+        return post(`${controllerName}/updateContact`);
+    }
 };

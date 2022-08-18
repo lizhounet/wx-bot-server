@@ -70,7 +70,6 @@
 
       <!-- 表格 -->
       <template #table-col-default>
-        <vxe-column field="robotWxId" title="机器人微信id" width="150"></vxe-column>
         <vxe-column field="receivingObjectWxId" title="接收对象wxId" width="150"></vxe-column>
         <vxe-column field="receivingObjectName" title="接收对象" width="200"></vxe-column>
         <vxe-column field="sendTypeText" title="发送类型" width="80"></vxe-column>
@@ -235,11 +234,10 @@ const methods = {
     });
   },
   showLog(id) {
-    console.log(refCdrawer.value);
     service.queryRunLog(id).then((res) => {
       if (res.code != 1) return;
-       visible.value = true
-      refCdrawer.value.state.data=res.data;
+      visible.value = true
+      refCdrawer.value.state.data = res.data;
     });
   },
 };

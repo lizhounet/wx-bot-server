@@ -58,6 +58,10 @@ namespace HZY.Models.Entities
         ///  机器人微信id => 备注: 机器人微信id
         /// </summary>
         public String RobotWxId { get; set; }
+        /// <summary>
+        ///  下一次生日日期 => 备注: 下一次生日日期
+        /// </summary>
+        public DateTime BirthdayDate { set; get; } = DateTime.Now;
 
 
     }

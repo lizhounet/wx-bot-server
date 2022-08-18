@@ -1455,6 +1455,11 @@
              机器人微信id => 备注: 机器人微信id
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxSayEveryDay.BirthdayDate">
+            <summary>
+             下一次生日日期 => 备注: 下一次生日日期
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.WxTimedTask">
             <summary>
             微信机器人定时任务

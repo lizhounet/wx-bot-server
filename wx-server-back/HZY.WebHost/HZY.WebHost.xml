@@ -152,14 +152,84 @@
             xyo 消息回调 Controller
             </summary>
         </member>
-        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnLogin(xYohttp_dotnet.Domain.Model.CallBackMsg.LoginMsg)">
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventGroupEstablishAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupEstablishMsg)">
+            <summary>
+            创建新的群聊事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventGroupMemberDecreaseAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupMemberDecreaseMsg)">
+            <summary>
+            群成员减少事件 PS: 群成员退出
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventGroupNameChangeAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupNameChangeMsg)">
+            <summary>
+            群名称变动事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventGroupMemberAddAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupMemberAddMsg)">
+            <summary>
+            群成员增加事件 PS: 新人进群
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventGroupChatAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupChatMsg)">
+            <summary>
+            群消息事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventQRcodePaymentAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventQRcodePaymentMsg)">
+            <summary>
+            面对面收款事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventFrieneVerifyAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventFrieneVerifyMsg)">
+            <summary>
+            好友请求事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventDownloadFileAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventDownloadFileMsg)">
+            <summary>
+            文件下载结束事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventPrivateChatAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventPrivateChatMsg)">
+            <summary>
+            私聊消息事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventDeviceCallbackAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventDeviceCallbackMsg)">
+            <summary>
+            设备回调事件
+            </summary>
+            <param name="msg">事件消息实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnLoginAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.LoginMsg)">
             <summary>
             新的账号登录成功/下线
             </summary>
             <param name="msg">事件消息实体</param>
             <returns></returns>
         </member>
-        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventInvitedInGroup(xYohttp_dotnet.Domain.Model.CallBackMsg.EventInvitedInGroupMsg)">
+        <member name="M:HZY.WebHost.Controllers.XyoMsgController.OnEventInvitedInGroupAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventInvitedInGroupMsg)">
             <summary>
             被邀请入群事件 PS: 企业微信不传递此事件
             </summary>

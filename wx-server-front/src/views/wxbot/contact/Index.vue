@@ -5,38 +5,26 @@
       <template #search>
         <a-row :gutter="[15, 15]">
           <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <a-input
-              v-model:value="state.search.vm.name"
-              placeholder="昵称或者备注"
-            />
+            <a-input v-model:value="state.search.vm.name" placeholder="昵称或者备注" />
           </a-col>
           <!--button-->
           <a-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" style="float: right">
-            <a-button type="primary" class="mr-15" @click="methods.findList"
-              >查询</a-button
-            >
-            <a-button class="mr-15" @click="methods.onResetSearch"
-              >重置</a-button
-            >
+            <a-button type="primary" class="mr-15" @click="methods.findList">查询</a-button>
+            <a-button class="mr-15" @click="methods.onResetSearch">重置</a-button>
           </a-col>
         </a-row>
       </template>
 
       <!-- 工具栏右侧插槽 -->
       <template #toolbar-right>
-        <a-input
-          v-model:value="state.search.vm.name"
-          placeholder="名称"
-          @keyup="methods.findList"
-        />
+        <a-button @click="methods.updateContact" type="primary" >更新联系人</a-button>
+        <a-input v-model:value="state.search.vm.name" placeholder="名称" @keyup="methods.findList" />
         <a-button @click="methods.onResetSearch">重置</a-button>
         <!-- 检索 -->
         <template v-if="power.search">
           <a-button @click="state.search.state = !state.search.state">
             <template #icon>
-              <AppIcon
-                :name="state.search.state ? 'UpOutlined' : 'DownOutlined'"
-              />
+              <AppIcon :name="state.search.state ? 'UpOutlined' : 'DownOutlined'" />
             </template>
             检索
           </a-button>
@@ -44,20 +32,17 @@
         <!-- 列的隐藏显示 -->
         <a-popover>
           <template #content>
-            <div
-              v-for="item in state.columns.filter(
-                (w) => w.fieldName.substr(0, 1) != '_'
-              )"
-              :key="item.id"
-            >
-              <a-checkbox
-                v-model:checked="item.show"
-                @change="() => nextTick(() => refList.table.refreshColumn())"
-                >{{ item.title }}</a-checkbox
-              >
+            <div v-for="item in state.columns.filter(
+              (w) => w.fieldName.substr(0, 1) != '_'
+            )" :key="item.id">
+              <a-checkbox v-model:checked="item.show" @change="() => nextTick(() => refList.table.refreshColumn())">{{
+                  item.title
+              }}</a-checkbox>
             </div>
           </template>
-          <a-button><AppIcon name="BarsOutlined" /></a-button>
+          <a-button>
+            <AppIcon name="BarsOutlined" />
+          </a-button>
         </a-popover>
         <!--  -->
       </template>
@@ -78,16 +63,8 @@
             <img :src="row.avatarUrl" width="35" height="35" />
           </template>
         </vxe-column>
-        <vxe-column
-          field="lastModificationTime" 
-          title="更新时间"
-          show-overflow
-        ></vxe-column>
-        <vxe-column
-          field="creationTime"
-          title="创建时间"
-          show-overflow
-        ></vxe-column>
+        <vxe-column field="lastModificationTime" title="更新时间" show-overflow></vxe-column>
+        <vxe-column field="creationTime" title="创建时间" show-overflow></vxe-column>
       </template>
     </List>
 
@@ -182,9 +159,13 @@ const methods = {
   openForm(id) {
     refForm.value.openForm({ visible: true, key: id });
   },
-  // exportExcel() {
-  //   service.exportExcel(state.search.vm);
-  // },
+  updateContact() {
+    service.updateContact().then(res=>{
+       if (res.code != 1) return;
+      tools.message("更新联系人成功!", "成功");
+      methods.findList();
+    });
+  },
 };
 
 onMounted(() => {

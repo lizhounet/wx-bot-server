@@ -70,11 +70,11 @@ const methods = {
    * 启动更新用户状态
    */
   startUpdateUserStatus: () => {
-    methods.getWxUserInfo();
-    window.updateUserStatusTimed = setInterval(()=>{methods.getWxUserInfo()}, 3000);
+    methods.getWxUserInfo(true);
+    window.updateUserStatusTimed = setInterval(()=>{methods.getWxUserInfo(true)}, 3000);
   },
-  getWxUserInfo() {
-    homeService.getWxUserInfo().then(res => {
+  getWxUserInfo(bRefresh) {
+    homeService.getWxUserInfo(bRefresh).then(res => {
       console.log(res);
       if (res && res.code == 1) {
         if (res.data) {

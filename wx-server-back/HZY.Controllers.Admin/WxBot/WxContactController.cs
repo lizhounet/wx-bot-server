@@ -58,6 +58,16 @@ namespace HZY.Controllers.Admin
         {
             return await this._defaultService.FindAllAsync();
         }
+        /// <summary>
+        /// 更新联系人
+        /// </summary>
+        /// <returns></returns>
+        [ActionDescriptor(AdminFunctionConsts.Function_Display, DisplayName = "更新联系人")]
+        [HttpPost("updateContact")]
+        public async Task<bool> UpdateContactAsync()
+        {
+            return await this._defaultService.UpdateContactAsync();
+        }
 
     }
 }

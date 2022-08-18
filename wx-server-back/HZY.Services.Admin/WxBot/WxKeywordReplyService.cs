@@ -17,17 +17,14 @@ namespace HZY.Services.Admin
     public class WxKeywordReplyService : AdminBaseService<IAdminRepository<WxKeywordReply>>
     {
         private readonly ContentSendService _contentSendService;
-        private readonly TianXingService _tianXingService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly AccountInfo _accountInfo;
         public WxKeywordReplyService(IAdminRepository<WxKeywordReply> defaultRepository,
-            TianXingService tianXingService,
               IAdminRepository<WxBotConfig> wxBotConfigRepository,
               IAccountDomainService accountService,
               ContentSendService contentSendService)
             : base(defaultRepository)
         {
-            _tianXingService = tianXingService;
             _wxBotConfigRepository = wxBotConfigRepository;
             _accountInfo = accountService.GetAccountInfo();
             _contentSendService = contentSendService;
@@ -112,35 +109,6 @@ namespace HZY.Services.Admin
         {
             var tableViewModel = await this.FindListAsync(0, 0, search);
             return this.ExportExcelByPagingView(tableViewModel, null, "Id");
-        }
-        /// <summary>
-        /// 关键词回复
-        /// </summary>
-        /// <param name="applicationToken">applicationToken</param>
-        /// <param name="keyword">关键字</param>
-        /// <returns></returns>
-        public async Task<string> KeywordReply(string applicationToken, string keyword)
-        {
-            WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
-            List<WxKeywordReply> keywordReplys = this._defaultRepository.Select.Where(w => w.ApplicationToken == applicationToken)
-                .Where(w => w.KeyWord.Contains(keyword)).ToList();
-            if (keywordReplys != null && keywordReplys.Count > 0)
-            {
-                //精确匹配优先级高于模糊匹配
-                WxKeywordReply jqReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.JINGQUE
-                && w.KeyWord.Split(",").Contains(keyword));
-                if (jqReply != null)
-                {
-                    return await _contentSendService.GetkeyWorldContentAsync(jqReply, wxBotConfig);
-                }
-                else
-                {
-                    WxKeywordReply mhReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
-                    return await _contentSendService.GetkeyWorldContentAsync(mhReply, wxBotConfig);
-                }
-            }
-            return null;
-
         }
     }
 }

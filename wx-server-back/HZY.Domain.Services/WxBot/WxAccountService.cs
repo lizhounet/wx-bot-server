@@ -15,7 +15,8 @@ namespace HZY.Domain.Services.WxBot
     public class WxAccountService : IScopedSelfDependency
     {
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
-        public WxAccountService(IAdminRepository<WxBotConfig> wxBotConfigRepository) {
+        public WxAccountService(IAdminRepository<WxBotConfig> wxBotConfigRepository)
+        {
             _wxBotConfigRepository = wxBotConfigRepository;
         }
         /// <summary>
@@ -23,7 +24,8 @@ namespace HZY.Domain.Services.WxBot
         /// </summary>
         /// <param name="applictionToken"></param>
         /// <returns></returns>
-        public async Task<XyoHttpApi> GetXyoHttpApiAsync(string applictionToken) {
+        public async Task<XyoHttpApi> GetXyoHttpApiAsync(string applictionToken)
+        {
             WxBotConfig wxBotConfig = await GetWxBotConfigByApplictionTokenAsync(applictionToken);
             if (wxBotConfig == null) MessageBox.Show($"找不到applictionToken:{applictionToken}的个微小助手基础配置");
             return new XyoHttpApi(wxBotConfig.VlwHttpUrl, applictionToken);
@@ -48,11 +50,13 @@ namespace HZY.Domain.Services.WxBot
         /// </summary>
         /// <param name="applictionToken"></param>
         /// <returns></returns>
-        public async Task<WxBotConfig> GetWxBotConfigByApplictionTokenAsync(string applictionToken) {
+        public async Task<WxBotConfig> GetWxBotConfigByApplictionTokenAsync(string applictionToken)
+        {
             //查询缓存
             WxBotConfig wxBotConfig = RedisHelper.Get<WxBotConfig>(string.Format(CacheKeyConsts.WxBotConfigKey, applictionToken));
-            if(wxBotConfig!=null) return wxBotConfig;
+            if (wxBotConfig != null) return wxBotConfig;
             wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applictionToken);
+            if (wxBotConfig == null) return null;
             RedisHelper.Set(string.Format(CacheKeyConsts.WxBotConfigKey, applictionToken), wxBotConfig);
             return wxBotConfig;
 
@@ -62,19 +66,24 @@ namespace HZY.Domain.Services.WxBot
         /// 根据applictionToken获取当前登录的微信用户信息
         /// </summary>
         /// <param name="applictionToken"></param>
+        ///  <param name="bRefresh">是否刷新，默认取缓存</param>
         /// <returns></returns>
-        public async Task<WxUserInfoDTO> GetWxUserInfoByApplictionTokenAsync(string applictionToken)
+        public async Task<WxUserInfoDTO> GetWxUserInfoByApplictionTokenAsync(string applictionToken, bool bRefresh = false)
         {
-            WxUserInfoDTO wxUserInfoDTO = RedisHelper.Get<WxUserInfoDTO>(string.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken));
-
+            WxUserInfoDTO wxUserInfoDTO = null;
+            if (!bRefresh)
+            {
+                wxUserInfoDTO = RedisHelper.Get<WxUserInfoDTO>(string.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken));
+            }
             if (wxUserInfoDTO != null) return wxUserInfoDTO;
             WxBotConfig wxBotConfig = await GetWxBotConfigByApplictionTokenAsync(applictionToken);
-            XyoHttpApi xyoHttpApi=new(wxBotConfig.VlwHttpUrl, applictionToken);
+            if (wxBotConfig == null) return null;
+            XyoHttpApi xyoHttpApi = new(wxBotConfig.VlwHttpUrl, applictionToken);
 
             //获取登录的机器人列表
             RobotListVo robotList = await xyoHttpApi.GetRobotListAsync();
             Robot robot = robotList.Data.FirstOrDefault();
-            var userInfo = new WxUserInfoDTO
+            wxUserInfoDTO = new WxUserInfoDTO
             {
                 WxCode = robot?.WxNum,
                 WxId = robot?.WxId,
@@ -84,7 +93,7 @@ namespace HZY.Domain.Services.WxBot
             if (robotList.Number > 0)
             {
                 //登录成功 把用户信息存入redis
-                RedisHelper.Set(String.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken), userInfo,TimeSpan.FromHours(1));
+                RedisHelper.Set(String.Format(CacheKeyConsts.OnlineWxUserInfoKey, applictionToken), wxUserInfoDTO, TimeSpan.FromHours(1));
             }
             return wxUserInfoDTO;
         }

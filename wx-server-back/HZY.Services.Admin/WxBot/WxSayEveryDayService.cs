@@ -76,6 +76,7 @@ namespace HZY.Services.Admin
                         w.City,
                         w.ClosingRemarks,
                         AnniversaryDay = w.AnniversaryDay.ToString("yyyy-MM-dd"),
+                        BirthdayDate = w.BirthdayDate.ToString("yyyy-MM-dd"),
                         w.TaskState,
                         TaskStateText = w.TaskState.GetDescription(),
                         w.RobotWxId,

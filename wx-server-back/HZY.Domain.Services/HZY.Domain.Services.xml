@@ -574,7 +574,7 @@
             <returns></returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.GetkeyWorldContentAsync(HZY.Models.Entities.WxKeywordReply,HZY.Models.Entities.WxBotConfig)">
+        <member name="M:HZY.Domain.Services.WxBot.ContentSendService.GetkeyWorldContentAsync(System.String,System.String)">
             <summary>
             获取关键字回复发送内容
             </summary>
@@ -603,6 +603,22 @@
             执行定时任务
             </summary>
             <param name="timedTaskId">定时任务id</param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Handle.GroupChatHandle.HandleTextAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventGroupChatMsg,System.String)">
+            <summary>
+            文本消息处理
+            </summary>
+            <param name="msg"></param>
+            <param name="applictionToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HZY.Domain.Services.WxBot.Handle.PrivateChatHandle.HandleTextAsync(xYohttp_dotnet.Domain.Model.CallBackMsg.EventPrivateChatMsg,System.String)">
+            <summary>
+            文本消息处理
+            </summary>
+            <param name="msg"></param>
+            <param name="applictionToken"></param>
             <returns></returns>
         </member>
         <member name="T:HZY.Domain.Services.WxBot.Http.HttpService">
@@ -690,6 +706,13 @@
             微信账号服务
             </summary>
         </member>
+        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetXyoHttpApiAsync(System.String)">
+            <summary>
+            获取XyoHttpApi
+            </summary>
+            <param name="applictionToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetLoginQrCodeAsync(System.String)">
             <summary>
             获取登录二维码
@@ -703,11 +726,12 @@
             <param name="applictionToken"></param>
             <returns></returns>
         </member>
-        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetWxUserInfoByApplictionTokenAsync(System.String)">
+        <member name="M:HZY.Domain.Services.WxBot.WxAccountService.GetWxUserInfoByApplictionTokenAsync(System.String,System.Boolean)">
             <summary>
             根据applictionToken获取当前登录的微信用户信息
             </summary>
             <param name="applictionToken"></param>
+             <param name="bRefresh">是否刷新，默认取缓存</param>
             <returns></returns>
         </member>
     </members>

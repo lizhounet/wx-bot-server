@@ -77,6 +77,7 @@
         <vxe-column field="city" title="所在城市" width="150"></vxe-column>
         <vxe-column field="closingRemarks" title="结尾备注" width="150"></vxe-column>
         <vxe-column field="anniversaryDay" title="纪念日" width="150"></vxe-column>
+        <vxe-column field="birthdayDate" title="下一次生日日期" width="150"></vxe-column>
         <vxe-column field="taskStateText" title="运行状态" width="100"></vxe-column>
         <vxe-column field="creationTime" title="创建时间" width="150"></vxe-column>
         <!--  v-if="power.update || power.delete" 预防操作列还存在 -->
@@ -115,6 +116,8 @@
 
     <!--表单弹层-->
     <Info ref="refForm" @onSuccess="() => methods.findList()" />
+        <!-- 日志抽屉 -->
+    <Cdrawer v-model:visible="visible" ref="refCdrawer" />
   </div>
 </template>
 
@@ -127,6 +130,7 @@ import { defineComponent, onMounted, reactive, toRefs, ref } from "vue";
 import { useAppStore } from "@/store";
 import List from "@/components/curd/List.vue";
 import AppIcon from "@/components/AppIcon.vue";
+import Cdrawer from '@/components/Cdrawer.vue'
 import Info from "./Info.vue";
 import tools from "@/scripts/tools";
 import service from "@/service/wxbot/wxSayEveryDayService";
@@ -154,6 +158,10 @@ const state = reactive({
 //表单 ref 对象
 const refForm = ref(null);
 const refList = ref(null);
+
+// 抽屉数据
+const visible = ref(false)
+const refCdrawer = ref(null);
 
 //权限
 const power = appStore.getPowerByMenuId(router.currentRoute.value.meta.menuId);
@@ -228,7 +236,10 @@ const methods = {
   },
   showLog(id) {
     service.queryRunLog(id).then((res) => {
+      console.log(res);
       if (res.code != 1) return;
+      visible.value = true
+      refCdrawer.value.state.data = res.data;
     });
   },
 };

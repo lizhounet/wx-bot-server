@@ -32,11 +32,11 @@ namespace HZY.Domain.Services.QuartzWxBot.Jobs
                 _stopwatch.Restart();
                 //取job传进来的定时任务的id
                 everyDayId = context.MergedJobDataMap.GetString("JobData");
-                logText += $"情侣每日说({everyDayId})开始执行,开始时间{DateTime.Now:yyy-MM-dd HH:mm:ss}\r\n";
+                logText += $"\n情侣每日说({everyDayId})开始执行,开始时间{DateTime.Now:yyy-MM-dd HH:mm:ss}";
                 //执行
                 await Task.Delay(1000);
                 logText += await _contentSendService.ExecSayEveryDayAsync(Guid.Parse(everyDayId));
-                logText += $"耗时{_stopwatch.ElapsedMilliseconds} 毫秒|结果=成功\r\n";
+                logText += $"\n耗时{_stopwatch.ElapsedMilliseconds} 毫秒|结果=成功\r\n";
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace HZY.Domain.Services.QuartzWxBot.Jobs
             finally
             {
                 _stopwatch.Stop();
-                logText += $"情侣每日说({everyDayId})结束执行,结束时间{DateTime.Now:yyy-MM-dd HH:mm:ss}\r\n";
+                logText += $"\n情侣每日说({everyDayId})结束执行,结束时间{DateTime.Now:yyy-MM-dd HH:mm:ss}";
                 _logger.LogInformation(logText);
                 //日志写入redis
                 await RedisHelper.LPushAsync(string.Format(CacheKeyConsts.JobSayEveryDayLogKey, everyDayId), logText);

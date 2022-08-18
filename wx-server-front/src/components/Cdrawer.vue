@@ -1,20 +1,14 @@
 <template>
-  <a-drawer
-    v-model:visible="visible"
-    class="custom-class"
-    title="日志"
-    width="620"
-    placement="right"
-    @after-visible-change="close"
-  >
-  <div v-if="state.spinning" class="example">
-    <a-spin tip="Loading..." />
-  </div>
-  <div v-else class="content">
-    <pre>
-      <p v-for="(value,key) in state.data" :key="key"  v-html="value"></p>
+  <a-drawer v-model:visible="visible" class="custom-class" title="日志" width="700" placement="right"
+    @after-visible-change="close">
+    <div v-if="state.spinning" class="example">
+      <a-spin tip="Loading..." />
+    </div>
+    <div v-else class="content">
+      <pre>
+      <p v-for="(value, key) in state.data" :key="key"  v-html="value"></p>
     </pre>
-  </div>
+    </div>
   </a-drawer>
 
 </template>
@@ -22,23 +16,25 @@
 export default { name: "Cdrawer" };
 </script>
 <script setup>
-import { ref,reactive, defineProps, defineEmits, watch ,defineExpose} from "vue";
+import { ref, reactive, defineProps, defineEmits, watch, defineExpose } from "vue";
 
 const props = defineProps({ visible: Boolean });
 const v = ref(props.visible);
 const state = reactive({
-  spinning:true,
-  data:[]
+  spinning: true,
+  data: []
 })
 
-watch(() => props.visible,(value) => {
-  if (!value) state.data = []; state.spinning = true;
+watch(() => props.visible, (value) => {
+  if (!value) {
+    state.data = [];
+  }
   v.value = value;
-  });
+});
 
-watch(() => state.data,(value) => {
-    if (value.length>0) state.spinning = false;
-  });
+watch(() => state.data, (value) => {
+  state.spinning = false;
+});
 
 const emit = defineEmits(["update:visible"]);
 
@@ -60,7 +56,9 @@ defineExpose({
     padding: 30px 50px;
     margin: 20px 0;
   }
+
   .ant-drawer-body {
+
     // overflow: auto;
     p {
       border-bottom: 2px dashed #000000;

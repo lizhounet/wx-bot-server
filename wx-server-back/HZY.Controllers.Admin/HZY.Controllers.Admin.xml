@@ -744,6 +744,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HZY.Controllers.Admin.WxContactController.UpdateContactAsync">
+            <summary>
+            更新联系人
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Controllers.Admin.WxHomeController">
             <summary>
             首页 控制器
@@ -755,7 +761,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HZY.Controllers.Admin.WxHomeController.GetWxUserInfoAsync(System.String)">
+        <member name="M:HZY.Controllers.Admin.WxHomeController.GetWxUserInfoAsync(System.String,System.Boolean)">
             <summary>
             获取微信登录用户信息
             </summary>

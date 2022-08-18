@@ -6,11 +6,10 @@ export default {
     /**
      * 首页状态数据
      * 
-     * @param {*} userName 
-     * @param {*} userPassword 
+     * @param {*} bRefresh 
      */
-    getWxUserInfo() {
-        return get(`/admin/home/user-info/${userInfo.id}`, null, false);
+    getWxUserInfo(bRefresh) {
+        return get(`/admin/home/user-info/${userInfo.id}`, {bRefresh}, false);
     },
     /**
     * 获取登录二维码

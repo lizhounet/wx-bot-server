@@ -19,6 +19,9 @@ using HZY.Services.Admin.Framework;
 using HZY.EFCore.Repositories.Admin.Core;
 using HZY.Models.BO;
 using HZY.EFCore.Aop;
+using HZY.Domain.Services.WxBot;
+using xYohttp_dotnet.Http;
+using xYohttp_dotnet.Domain.Model.Vo;
 
 namespace HZY.Services.Admin
 {
@@ -28,11 +31,14 @@ namespace HZY.Services.Admin
     public class WxContactService : AdminBaseService<IAdminRepository<WxContact>>
     {
         private readonly AccountInfo _accountInfo;
+        private readonly WxAccountService _wxAccountService;
         public WxContactService(IAdminRepository<WxContact> defaultRepository,
-            IAccountDomainService accountService)
+            IAccountDomainService accountService,
+            WxAccountService wxAccountService)
             : base(defaultRepository)
         {
             this._accountInfo = accountService.GetAccountInfo();
+            this._wxAccountService = wxAccountService;
         }
         /// <summary>
         /// 获取所有联系人
@@ -42,6 +48,45 @@ namespace HZY.Services.Admin
         {
             return await _defaultRepository.ToListAsync(wxContact => wxContact.ApplicationToken == _accountInfo.Id.ToStr());
         }
+        /// <summary>
+        /// 获取所有联系人
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> UpdateContactAsync()
+        {
+            List<WxContact> wxContacts = new List<WxContact>();
+            Models.DTO.WxBot.WxUserInfoDTO wxUserInfoDTO = await _wxAccountService.GetWxUserInfoByApplictionTokenAsync(_accountInfo.Id.ToStr());
+            XyoHttpApi xyoHttpApi = await _wxAccountService.GetXyoHttpApiAsync(_accountInfo.Id.ToStr());
+            //远程获取联系人
+            List<WxFriendVo> wxFriendVos = await xyoHttpApi.GetFriendlistAsync(wxUserInfoDTO.WxId,1);
+            wxContacts.AddRange(wxFriendVos?.Select(w => new WxContact
+            {
+                WxId = w.Wxid,
+                WxCode = w.WxNum,
+                Alias = w.Note,
+                Name = w.Nickname,
+                Gender = w.Sex,
+                ApplicationToken = _accountInfo.Id.ToStr(),
+                AvatarUrl = w.Avatar
+            }));
+            List<WxGroupVo> wxGroupVos = await xyoHttpApi.GetGrouplistAsync(wxUserInfoDTO.WxId,1);
+            wxContacts.AddRange(wxGroupVos?.Select(w => new WxContact
+            {
+                WxId = w.WxId,
+                Alias = w.Nickname,
+                Name = w.Nickname,
+                ApplicationToken = _accountInfo.Id.ToStr(),
+                AvatarUrl = w.Avatar
+            }));
+            if (wxContacts.Count > 0) {
+                //先删除
+                await _defaultRepository.DeleteAsync(d => d.ApplicationToken == _accountInfo.Id.ToStr());
+                //插入数据库
+                await this._defaultRepository.InsertRangeAsync(wxContacts);
+            }
+            return true;
+        }
+
 
         /// <summary>
         /// 获取列表数据

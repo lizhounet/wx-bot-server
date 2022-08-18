@@ -21,18 +21,18 @@ namespace HZY.Controllers.Admin
     [Route("api/admin/home")]
     public class WxHomeController : AdminBaseController<WxAccountService>
     {
-        public WxHomeController(WxAccountService defaultService) 
+        public WxHomeController(WxAccountService defaultService)
             : base(defaultService)
         {
         }
-       
+
         /// <summary>
         /// 获取微信登录二维码
         /// </summary>
         /// <returns></returns>
         [ActionDescriptor(DisplayName = "获取微信登录二维码")]
         [HttpGet("login-qrcode/{applictionToken}")]
-        public async Task<string> GetLoginQrCodeAsync([FromRoute]string applictionToken) 
+        public async Task<string> GetLoginQrCodeAsync([FromRoute] string applictionToken)
             => await this._defaultService.GetLoginQrCodeAsync(applictionToken);
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace HZY.Controllers.Admin
         /// <returns></returns>
         [ActionDescriptor(DisplayName = "获取微信用户信息")]
         [HttpGet("user-info/{applictionToken}")]
-        public async Task<WxUserInfoDTO> GetWxUserInfoAsync([FromRoute] string applictionToken) => 
-            await this._defaultService.GetWxUserInfoByApplictionTokenAsync(applictionToken);
+        public async Task<WxUserInfoDTO> GetWxUserInfoAsync([FromRoute] string applictionToken, [FromQuery] bool bRefresh) =>
+            await this._defaultService.GetWxUserInfoByApplictionTokenAsync(applictionToken, bRefresh);
 
     }
 }

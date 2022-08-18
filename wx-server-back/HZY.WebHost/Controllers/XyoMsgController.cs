@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HZY.Domain.Services.WxBot;
+using HZY.Domain.Services.WxBot.Handle;
+using HZY.Models.DTO.WxBot;
+using Microsoft.AspNetCore.Mvc;
 using xYohttp_dotnet.Controllers;
 using xYohttp_dotnet.Domain.Model.CallBackMsg;
 using xYohttp_dotnet.Domain.Model.Dto;
@@ -11,68 +14,145 @@ namespace HZY.WebHost.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/xyoMsg")]
-public class XyoMsgController: XyoMsgControllerBase
+public class XyoMsgController : XyoMsgControllerBase
 {
-    [HttpPost("callback")]
-    public override XyoHttpReplyDto ProcessMessage(XyoHttpCallBackDto callBackDto)
-    {
-        return base.ProcessMessage(callBackDto);
-    }
-    public override int OnEventGroupEstablish(EventGroupEstablishMsg msg)
-    {
-        return 0;
-    }
 
-    public override int OnEventGroupMemberDecrease(EventGroupMemberDecreaseMsg msg)
-    {
-        return 0;
-    }
+    private readonly PrivateChatHandle _privateChatHandle;
+    private readonly GroupChatHandle _groupChatHandle;
+    private string applictionToken;
 
-    public override int OnEventGroupNameChange(EventGroupNameChangeMsg msg)
+    public XyoMsgController(
+        PrivateChatHandle privateChatHandle, GroupChatHandle groupChatHandle)
     {
-        return 0;
+        _privateChatHandle = privateChatHandle;
+        _groupChatHandle = groupChatHandle;
     }
+    [HttpPost("callback1")]
+    public override async Task<XyoHttpReplyDto> ProcessMessageAsync(XyoHttpCallBackDto callBackDto)
+    {
+        applictionToken = Request.Query["applictionToken"].ToString();
+        if (string.IsNullOrEmpty(applictionToken)) return new XyoHttpReplyDto(0);
+        return await base.ProcessMessageAsync(callBackDto);
+    }
+    /// <summary>
+    /// 创建新的群聊事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventGroupMemberAdd(EventGroupMemberAddMsg msg)
+    public override async Task<int> OnEventGroupEstablishAsync(EventGroupEstablishMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
     }
+    /// <summary>
+    /// 群成员减少事件 PS: 群成员退出
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventGroupChat(EventGroupChatMsg msg)
+    public override async Task<int> OnEventGroupMemberDecreaseAsync(EventGroupMemberDecreaseMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
     }
+    /// <summary>
+    /// 群名称变动事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventQRcodePayment(EventQRcodePaymentMsg msg)
+    public override async Task<int> OnEventGroupNameChangeAsync(EventGroupNameChangeMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
     }
+    /// <summary>
+    /// 群成员增加事件 PS: 新人进群
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventFrieneVerify(EventFrieneVerifyMsg msg)
-    {
-        return 0;
-    }
 
-    public override int OnEventDownloadFile(EventDownloadFileMsg msg)
+    public override async Task<int> OnEventGroupMemberAddAsync(EventGroupMemberAddMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
     }
+    /// <summary>
+    /// 群消息事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventPrivateChat(EventPrivateChatMsg msg)
+    public override async Task<int> OnEventGroupChatAsync(EventGroupChatMsg msg)
     {
-        return 0;
+        _groupChatHandle.OnEventGroupChatAsync(msg, applictionToken);
+        return await Task.FromResult(0);
     }
+    /// <summary>
+    /// 面对面收款事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
 
-    public override int OnEventDeviceCallback(EventDeviceCallbackMsg msg)
+    public override async Task<int> OnEventQRcodePaymentAsync(EventQRcodePaymentMsg msg)
     {
+        return await Task.FromResult(0);
+    }
+    /// <summary>
+    /// 好友请求事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+
+    public override async Task<int> OnEventFrieneVerifyAsync(EventFrieneVerifyMsg msg)
+    {
+        return await Task.FromResult(0);
+    }
+    /// <summary>
+    /// 文件下载结束事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+
+    public override async Task<int> OnEventDownloadFileAsync(EventDownloadFileMsg msg)
+    {
+        return await Task.FromResult(0);
+    }
+    /// <summary>
+    /// 私聊消息事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+
+    public override async Task<int> OnEventPrivateChatAsync(EventPrivateChatMsg msg)
+    {
+        await _privateChatHandle.OnEventPrivateChatAsync(msg, applictionToken);
         return 0;
     }
-    public override int OnLogin(LoginMsg msg)
+    /// <summary>
+    /// 设备回调事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+
+    public override async Task<int> OnEventDeviceCallbackAsync(EventDeviceCallbackMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
     }
-    public override int OnEventInvitedInGroup(EventInvitedInGroupMsg msg)
+    /// <summary>
+    /// 新的账号登录成功/下线
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+    public override async Task<int> OnLoginAsync(LoginMsg msg)
     {
-        return 0;
+        return await Task.FromResult(0);
+    }
+    /// <summary>
+    /// 被邀请入群事件 PS: 企业微信不传递此事件
+    /// </summary>
+    /// <param name="msg">事件消息实体</param>
+    /// <returns></returns>
+    public override async Task<int> OnEventInvitedInGroupAsync(EventInvitedInGroupMsg msg)
+    {
+        return await Task.FromResult(0);
     }
 }
