@@ -2,7 +2,7 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 9901
+EXPOSE 9902
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -27,7 +27,7 @@ RUN dotnet publish "HZY.WebHost.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS=http://+:9901
+ENV ASPNETCORE_URLS=http://+:9902
 #解决docker容器时间市区差八小时问题
 ENV TZ=Asia/Shanghai
 ENTRYPOINT ["dotnet", "HZY.WebHost.dll"]
