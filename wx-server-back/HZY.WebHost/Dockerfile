@@ -15,7 +15,7 @@ COPY ["HZY.FreeSqlCore/HZY.FreeSqlCore.csproj", "HZY.FreeSqlCore/"]
 COPY ["HZY.Services.Admin/HZY.Services.Admin.csproj", "HZY.Services.Admin/"]
 COPY ["HZY.Domain.Services/HZY.Domain.Services.csproj", "HZY.Domain.Services/"]
 COPY ["HZY.Controllers.Admin/HZY.Controllers.Admin.csproj", "HZY.Controllers.Admin/"]
-RUN dotnet restore "HZY.WebHost/HZY.WebHost.csproj"
+RUN dotnet restore "HZY.WebHost/HZY.WebHost.csproj" --no-cache
 COPY . .
 WORKDIR "/src/HZY.WebHost"
 RUN dotnet build "HZY.WebHost.csproj" -c Release -o /app/build
