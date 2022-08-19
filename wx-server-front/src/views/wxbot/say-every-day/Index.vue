@@ -117,7 +117,7 @@
     <!--表单弹层-->
     <Info ref="refForm" @onSuccess="() => methods.findList()" />
         <!-- 日志抽屉 -->
-    <Cdrawer v-model:visible="visible" ref="refCdrawer" />
+    <Cdrawer v-bind:visible="visible" ref="refCdrawer" />
   </div>
 </template>
 

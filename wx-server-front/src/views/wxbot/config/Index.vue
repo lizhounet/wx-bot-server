@@ -1,54 +1,36 @@
 <template>
   <div class="basic-config">
-    <a-form
-      layout="horizontal"
-      :model="state.vm.form"
-      v-bind="{
-        labelCol: { span: 4 },
-        wrapperCol: { span: 10 },
-      }"
-    >
+    <a-form layout="horizontal" :model="state.vm.form" v-bind="{
+      labelCol: { span: 4 },
+      wrapperCol: { span: 10 },
+    }">
       <a-form-item label="平台应用Token">
         {{ state.vm.form.applicationToken }}
       </a-form-item>
       <a-form-item label="vlw,我的框架 调用地址">
-        <a-input
-                v-model:value="state.vm.form.vlwHttpUrl"
-                placeholder="请输入 vlw,我的框架 调用地址"
-              />
+        <a-input v-model:value="state.vm.form.vlwHttpUrl" placeholder="请输入 vlw,我的框架 调用地址" />
       </a-form-item>
       <a-form-item label="自动同意好友请求是否开启">
-        <a-switch
-          v-model:checked="state.vm.form.autoAgreeFriendVerify"
-          checked-children="开"
-          un-checked-children="关"
-          :checkedValue="1"
-          :unCheckedValue="0"
-        />
+        <a-switch v-model:checked="state.vm.form.autoAgreeFriendVerify" checked-children="开" un-checked-children="关"
+          :checkedValue="1" :unCheckedValue="0" />
       </a-form-item>
+      <a-form-item>
+        <template #label>
+          自动同意好友请求验证规则
+        </template>
+        <a-input v-model:value="state.vm.form.AutoAgreeFriendVerifRrule" placeholder="请输入 自动同意好友请求验证规则 多个关键词用逗号隔开" />
+      </a-form-item>
+
       <a-form-item label="群聊自动回复是否开启">
-        <a-switch
-          v-model:checked="state.vm.form.groupAutoReplyFlag"
-          checked-children="开"
-          un-checked-children="关"
-          :checkedValue="1"
-          :unCheckedValue="0"
-        />
+        <a-switch v-model:checked="state.vm.form.groupAutoReplyFlag" checked-children="开" un-checked-children="关"
+          :checkedValue="1" :unCheckedValue="0" />
       </a-form-item>
       <a-form-item label="私聊自动回复是否开启">
-        <a-switch
-          v-model:checked="state.vm.form.talkPrivateAutoReplyFlag"
-          checked-children="开"
-          un-checked-children="关"
-          :checkedValue="1"
-          :unCheckedValue="0"
-        />
+        <a-switch v-model:checked="state.vm.form.talkPrivateAutoReplyFlag" checked-children="开" un-checked-children="关"
+          :checkedValue="1" :unCheckedValue="0" />
       </a-form-item>
       <a-form-item label="回复机器人类型">
-        <a-radio-group
-          v-model:value="state.vm.form.replyBotType"
-          default-value="1"
-        >
+        <a-radio-group v-model:value="state.vm.form.replyBotType" default-value="1">
           <a-radio :value="1">天行机器人</a-radio>
           <a-radio :value="2">小i机器人</a-radio>
         </a-radio-group>
@@ -57,10 +39,7 @@
         <a-form-item label="天行机器人key">
           <a-row :gutter="[15, 15]">
             <a-col :span="21">
-              <a-input
-                v-model:value="state.vm.form.tianXingApiKey"
-                placeholder="请输入 天行机器人key"
-              />
+              <a-input v-model:value="state.vm.form.tianXingApiKey" placeholder="请输入 天行机器人key" />
             </a-col>
             <a-col :span="3">
               <a-button type="link" href="https://www.tianapi.com/signup.html?source=ch4553544">申请地址</a-button>
@@ -139,6 +118,6 @@ onMounted(() => {
 </script>
 <style lang="less" scoped>
 .basic-config {
-// 
+  // 
 }
 </style>
