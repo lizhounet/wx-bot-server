@@ -81,8 +81,8 @@ namespace HZY.Domain.Services.WxBot
         /// <summary>
         /// 获取关键字回复发送内容
         /// </summary>
-        /// <param name="keywordReply">关键词回复表</param>
-        /// <param name="wxBotConfig">个微小助手基础配置</param>
+        /// <param name="keyword">关键词</param>
+        /// <param name="applicationToken">applicationToken</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public async Task<string> GetkeyWorldContentAsync(string keyword, string applicationToken)

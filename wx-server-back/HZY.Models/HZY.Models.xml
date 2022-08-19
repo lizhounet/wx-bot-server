@@ -1325,6 +1325,11 @@
              自动同意好友请求是否开启 => 备注: 自动同意好友请求是否开启
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxBotConfig.AutoAgreeFriendVerifRrule">
+            <summary>
+             自动同意好友请求验证规则 => 备注: 自动同意好友请求验证规则
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.WxContact">
             <summary>
             微信联系人

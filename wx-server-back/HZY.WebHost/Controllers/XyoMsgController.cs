@@ -19,13 +19,15 @@ public class XyoMsgController : XyoMsgControllerBase
 
     private readonly PrivateChatHandle _privateChatHandle;
     private readonly GroupChatHandle _groupChatHandle;
+    private readonly FrieneVerifyHandle _frieneVerifyHandle;
     private string applictionToken;
 
     public XyoMsgController(
-        PrivateChatHandle privateChatHandle, GroupChatHandle groupChatHandle)
+        PrivateChatHandle privateChatHandle, GroupChatHandle groupChatHandle, FrieneVerifyHandle frieneVerifyHandle)
     {
         _privateChatHandle = privateChatHandle;
         _groupChatHandle = groupChatHandle;
+        _frieneVerifyHandle = frieneVerifyHandle;
     }
     [HttpPost("callback1")]
     public override async Task<XyoHttpReplyDto> ProcessMessageAsync(XyoHttpCallBackDto callBackDto)
@@ -83,8 +85,8 @@ public class XyoMsgController : XyoMsgControllerBase
 
     public override async Task<int> OnEventGroupChatAsync(EventGroupChatMsg msg)
     {
-        _groupChatHandle.OnEventGroupChatAsync(msg, applictionToken);
-        return await Task.FromResult(0);
+        await _groupChatHandle.OnEventGroupChatAsync(msg, applictionToken);
+        return 0;
     }
     /// <summary>
     /// 面对面收款事件
@@ -104,7 +106,8 @@ public class XyoMsgController : XyoMsgControllerBase
 
     public override async Task<int> OnEventFrieneVerifyAsync(EventFrieneVerifyMsg msg)
     {
-        return await Task.FromResult(0);
+        await _frieneVerifyHandle.OnEventFrieneVerifyAsync(msg, applictionToken);
+        return 0;
     }
     /// <summary>
     /// 文件下载结束事件

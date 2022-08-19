@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="xYohttp-dotnet" Version="2.9.1" />
+	  <PackageReference Include="xYohttp-dotnet" Version="2.9.3" />
 	</ItemGroup>
 
 	<ItemGroup>
