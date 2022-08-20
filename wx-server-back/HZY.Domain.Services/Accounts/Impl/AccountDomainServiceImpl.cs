@@ -153,6 +153,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
     [Transactional]
     public virtual async Task<UserRegisterDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
+        MessageBox.Show("注册失败，暂时关闭注册功能!");
         if (this._sysUserRepository.Any(r => r.Email.Equals(userRegisterDto.Email)))
         {
             MessageBox.Show("邮箱已经被注册!");
@@ -203,6 +204,7 @@ public class AccountDomainServiceImpl : IAccountDomainService
     }
     public void SendEmailVerifyCodeAsync(SendEmailVerifyCodeDto emailVerifyCodeDto)
     {
+        MessageBox.Show("注册失败，暂时关闭注册功能!");
         string email = emailVerifyCodeDto.Email;
         if (!email.MatchEmail(true).isMatch) { MessageBox.Show("邮箱格式不正确!"); }
 

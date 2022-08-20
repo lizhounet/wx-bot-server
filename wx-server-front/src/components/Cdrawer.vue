@@ -40,6 +40,7 @@ const emit = defineEmits(["update:visible"]);
 
 // 关闭弹窗
 const close = () => {
+  console.log(v.value)
   emit("update:visible", v.value);
 };
 

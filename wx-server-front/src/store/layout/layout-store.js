@@ -10,7 +10,7 @@ const layoutStore = defineStore("layout-store", () => {
     //定义状态
     let state = reactive({
         loading: false,
-        title: '个微小助手管理平台',
+        title: '个微小助手管理平台-vlw版本',
         isMobile: false,
         // 鉴定是否移动设备分界值
         demarcation: 1080
