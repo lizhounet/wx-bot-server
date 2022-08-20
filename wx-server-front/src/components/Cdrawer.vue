@@ -1,6 +1,5 @@
 <template>
-  <a-drawer v-model:visible="visible" class="custom-class" title="日志" width="700" placement="right"
-    @after-visible-change="close">
+  <a-drawer v-model:visible="visible" class="custom-class" title="日志" width="700" placement="right">
     <div v-if="state.spinning" class="example">
       <a-spin tip="Loading..." />
     </div>
@@ -16,33 +15,30 @@
 export default { name: "Cdrawer" };
 </script>
 <script setup>
-import { ref, reactive, defineProps, defineEmits, watch, defineExpose } from "vue";
+import { reactive, defineProps, defineEmits, watch, defineExpose, computed } from "vue";
 
 const props = defineProps({ visible: Boolean });
-const v = ref(props.visible);
+const emit = defineEmits(["update:visible"]);
+const visible = computed({
+  get: () => props.visible,
+  set: (value) => emit("update:visible", value)
+})
+
+watch(() => visible, (value) => {
+  if (!value) {
+    state.data = [];
+  }
+  visible.value = value;
+});
+
 const state = reactive({
   spinning: true,
   data: []
 })
 
-watch(() => props.visible, (value) => {
-  if (!value) {
-    state.data = [];
-  }
-  v.value = value;
-});
-
 watch(() => state.data, (value) => {
   state.spinning = false;
 });
-
-const emit = defineEmits(["update:visible"]);
-
-// 关闭弹窗
-const close = () => {
-  console.log(v.value)
-  emit("update:visible", v.value);
-};
 
 defineExpose({
   state
