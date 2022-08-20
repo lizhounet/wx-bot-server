@@ -99,6 +99,7 @@ namespace HZY.Domain.Services.WxBot
                 {
                     reply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
                 }
+                if (reply == null) return null;
                 return reply.SendType switch
                 {
                     ETimedTaskSendType.WBNR => reply.SendContent,
