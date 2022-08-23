@@ -21,13 +21,15 @@ namespace HZY.Domain.Services.WxBot
         private readonly IAdminRepository<WxKeywordReply> _keywordReplyRepository;
         private readonly HttpService _httpService;
         private readonly WxAccountService _wxAccountService;
+        private readonly IAdminRepository<WxKeywordItem> _wxKeywordItemRepository;
         public ContentSendService(TianXingService tianXingService,
               XiaoiBotService xiaoiBotService,
               HttpService httpService,
               IAdminRepository<WxTimedTask> timedTaskRepository,
               IAdminRepository<WxSayEveryDay> sayEveryDayRepository,
               WxAccountService wxAccountService,
-              IAdminRepository<WxKeywordReply> keywordReplyRepository)
+              IAdminRepository<WxKeywordReply> keywordReplyRepository,
+              IAdminRepository<WxKeywordItem> wxKeywordItemRepository)
         {
             _tianXingService = tianXingService;
             _xiaoiBotService = xiaoiBotService;
@@ -36,6 +38,7 @@ namespace HZY.Domain.Services.WxBot
             _sayEveryDayRepository = sayEveryDayRepository;
             _wxAccountService = wxAccountService;
             _keywordReplyRepository = keywordReplyRepository;
+            _wxKeywordItemRepository = wxKeywordItemRepository;
         }
 
         /// <summary>
@@ -88,31 +91,34 @@ namespace HZY.Domain.Services.WxBot
         public async Task<string> GetkeyWorldContentAsync(string keyword, string applicationToken)
         {
             WxBotConfig wxBotConfig = await _wxAccountService.GetWxBotConfigByApplictionTokenAsync(applicationToken);
-            List<WxKeywordReply> keywordReplys = this._keywordReplyRepository.Select.Where(w => w.ApplicationToken == applicationToken)
-                .Where(w => w.KeyWord.Contains(keyword)).ToList();
-            if (keywordReplys != null && keywordReplys.Count > 0)
+            //精确匹配优先级高于模糊匹配
+            List<WxKeywordItem> wxKeywordItems = _wxKeywordItemRepository.Select.Where(w => w.ApplicationToken == applicationToken)
+                .Where(w => keyword.Contains(w.KeyWords)).ToList();
+            if (wxKeywordItems != null && wxKeywordItems.Count > 0)
             {
-                //精确匹配优先级高于模糊匹配
-                WxKeywordReply reply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.JINGQUE
-                && w.KeyWord.Split(",").Contains(keyword));
-                if (reply == null)
+                WxKeywordReply keywordReply = null;
+                //先取精确匹配
+                WxKeywordItem wxKeywordItem = wxKeywordItems.FirstOrDefault(w => w.KeyWords.Equals(keyword) && w.MatchType == EMatchType.JINGQUE);
+                if (wxKeywordItem == null)
                 {
-                    reply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
+                    //取模糊匹配
+                    wxKeywordItem = wxKeywordItems.FirstOrDefault(w => keyword.Contains(w.KeyWords) && w.MatchType == EMatchType.MOHU);
                 }
-                if (reply == null) return null;
-                return reply.SendType switch
+                if (wxKeywordItem == null) return null;
+                keywordReply = await _keywordReplyRepository.FindByIdAsync(wxKeywordItem.KeyWordReplyId);
+                if (keywordReply == null) return null;
+                return keywordReply.SendType switch
                 {
-                    ETimedTaskSendType.WBNR => reply.SendContent,
+                    ETimedTaskSendType.WBNR => keywordReply.SendContent,
                     ETimedTaskSendType.XWZX => await _tianXingService.GetNewsAsync(wxBotConfig.TianXingApiKey),
                     ETimedTaskSendType.GSDQ => await _tianXingService.GetStoryAsync(wxBotConfig.TianXingApiKey),
                     ETimedTaskSendType.TWQH => await _tianXingService.GetLoveWordsAsync(wxBotConfig.TianXingApiKey),
                     ETimedTaskSendType.XHDQ => await _tianXingService.GetJokesAsync(wxBotConfig.TianXingApiKey),
-                    ETimedTaskSendType.HTTP => await _httpService.GetAsync(reply.HttpSendUrl),
+                    ETimedTaskSendType.HTTP => await _httpService.GetAsync(keywordReply.HttpSendUrl),
                     _ => throw new NotImplementedException(),
                 };
             }
             return null;
-
         }
         /// <summary>
         /// 获取每日说文本

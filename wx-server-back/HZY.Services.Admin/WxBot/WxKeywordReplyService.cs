@@ -8,6 +8,8 @@ using HZY.Models.Enums;
 using HZY.Models.BO;
 using HZY.Domain.Services.WxBot;
 using HZY.Domain.Services.WxBot.Http;
+using HZY.Models.DTO.WxBot;
+using System.Linq;
 
 namespace HZY.Services.Admin
 {
@@ -16,18 +18,15 @@ namespace HZY.Services.Admin
     /// </summary>
     public class WxKeywordReplyService : AdminBaseService<IAdminRepository<WxKeywordReply>>
     {
-        private readonly ContentSendService _contentSendService;
-        private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
+        private readonly IAdminRepository<WxKeywordItem> _wxKeywordItemRepository;
         private readonly AccountInfo _accountInfo;
         public WxKeywordReplyService(IAdminRepository<WxKeywordReply> defaultRepository,
-              IAdminRepository<WxBotConfig> wxBotConfigRepository,
-              IAccountDomainService accountService,
-              ContentSendService contentSendService)
+              IAdminRepository<WxKeywordItem> wxKeywordItemRepository,
+              IAccountDomainService accountService)
             : base(defaultRepository)
         {
-            _wxBotConfigRepository = wxBotConfigRepository;
+            _wxKeywordItemRepository = wxKeywordItemRepository;
             _accountInfo = accountService.GetAccountInfo();
-            _contentSendService = contentSendService;
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace HZY.Services.Admin
                         SendTypeText = w.SendType.ToDescriptionOrString(),
                         w.SendContent,
                         w.TakeEffectType,
-                        w.KeyWord,
+                        KeyWord = string.Join(",", _wxKeywordItemRepository.Select.Where(r => r.KeyWordReplyId == w.Id).Select(r => r.KeyWords).ToList()),
                         w.MatchType,
                         MatchTypeText = w.MatchType.ToDescriptionOrString(),
                         LastModificationTime = w.LastModificationTime.ToString("yyyy-MM-dd"),
@@ -84,9 +83,11 @@ namespace HZY.Services.Admin
             var res = new Dictionary<string, object>();
             var form = await this._defaultRepository.FindByIdAsync(id);
             form = form.NullSafe();
+            List<WxKeywordItem> wxKeywordItems = _wxKeywordItemRepository.ToList(w => w.KeyWordReplyId == form.Id);
 
             res[nameof(id)] = id == Guid.Empty ? "" : id;
             res[nameof(form)] = form;
+            res[nameof(wxKeywordItems)] = wxKeywordItems;
             return res;
         }
 
@@ -95,9 +96,29 @@ namespace HZY.Services.Admin
         /// </summary>
         /// <param name="form">form</param>
         /// <returns></returns>
-        public Task<WxKeywordReply> SaveFormAsync(WxKeywordReply form)
+        public async Task<WxKeywordReply> SaveFormAsync(WxKeywordReply form)
         {
-            return this._defaultRepository.InsertOrUpdateAsync(form);
+            var keyWords = form.KeyWord.Split(",").ToList();
+            WxKeywordReply keywordReply = await this._defaultRepository.InsertOrUpdateAsync(form);
+            //删除对应关键词
+            await _wxKeywordItemRepository.DeleteAsync(w => w.KeyWordReplyId == keywordReply.Id);
+            //添加关键词
+            if (keyWords.Count > 0)
+            {
+                List<WxKeywordItem> wxKeywordItems = new List<WxKeywordItem>();
+                keyWords.ForEach(w =>
+                        {
+                            wxKeywordItems.Add(new WxKeywordItem
+                            {
+                                KeyWordReplyId = keywordReply.Id,
+                                KeyWords = w,
+                                ApplicationToken= keywordReply.ApplicationToken,
+                                MatchType=keywordReply.MatchType
+                            });
+                        });
+                await _wxKeywordItemRepository.InsertRangeAsync(wxKeywordItems);
+            }
+            return keywordReply;
         }
 
         /// <summary>

@@ -1370,6 +1370,31 @@
              头像 => 备注: 头像
             </summary>
         </member>
+        <member name="T:HZY.Models.Entities.WxKeywordItem">
+            <summary>
+            关键词回复的关键词
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordItem.ApplicationToken">
+            <summary>
+             应用Token => 备注: 应用Token
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordItem.KeyWordReplyId">
+            <summary>
+             关键词回复id => 备注: 关键词回复id
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordItem.KeyWords">
+            <summary>
+             关键词 => 备注: 关键词
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordItem.MatchType">
+            <summary>
+             匹配类型(模糊匹配,精确匹配) => 备注: 匹配类型(模糊匹配,精确匹配)
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.WxKeywordReply">
             <summary>
             关键词回复表

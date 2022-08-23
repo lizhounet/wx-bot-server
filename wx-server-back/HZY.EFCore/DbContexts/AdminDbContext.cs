@@ -68,6 +68,8 @@ public class AdminDbContext : DbContextBase
     public DbSet<WxContact> WxContact { get; set; }
     public DbSet<WxKeywordReply> WxKeywordReply { get; set; }
     public DbSet<WxSayEveryDay> WxSayEveryDay { get; set; }
+    public DbSet<WxKeywordItem> WxKeywordItem { get; set; }
+    
     #endregion
 
     #endregion
@@ -101,6 +103,7 @@ public class AdminDbContext : DbContextBase
         modelBuilder.Entity<WxContact>().ToTable("wx_contact");
         modelBuilder.Entity<WxKeywordReply>().ToTable("wx_keyword_reply");
         modelBuilder.Entity<WxSayEveryDay>().ToTable("wx_say_every_day");
+        modelBuilder.Entity<WxKeywordItem>().ToTable("wx_keyword_item");
     }
 
 

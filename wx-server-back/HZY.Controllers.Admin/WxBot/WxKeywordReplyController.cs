@@ -19,6 +19,7 @@ using HZY.Models.DTO.Framework;
 using HZY.Models.Entities;
 using HZY.Services.Admin.Framework;
 using HZY.Services.Admin;
+using HZY.Models.DTO.WxBot;
 
 namespace HZY.Controllers.Admin
 {
