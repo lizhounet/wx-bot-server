@@ -73,14 +73,14 @@
               />
             </a-form-item>
           </a-col>
-          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <!-- <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
             <a-form-item label="生效类型">
               <a-input
                 v-model:value="state.vm.form.takeEffectType"
                 placeholder="请输入 生效类型"
               />
             </a-form-item>
-          </a-col>
+          </a-col> -->
         </a-row>
       </a-form>
     </a-spin>

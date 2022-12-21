@@ -971,6 +971,20 @@
             <returns></returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
+        <member name="T:HZY.Services.Admin.WxBot.Http.ChatGptService">
+            <summary>
+            ChatGpt服务
+            </summary>
+        </member>
+        <member name="M:HZY.Services.Admin.WxBot.Http.ChatGptService.GetBotReplyAsync(System.String,System.String,System.String)">
+            <summary>
+            获取机器人回复
+            </summary>
+            <param name="key">天行key</param>
+            <param name="question">提问（建议urlencode）</param>
+            <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
+            <returns></returns>
+        </member>
         <member name="T:HZY.Services.Admin.WxBot.Http.HttpService">
             <summary>
             http服务

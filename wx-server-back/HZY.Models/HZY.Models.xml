@@ -1032,6 +1032,11 @@
             组织Id
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.Framework.SysUser.UserState">
+            <summary>
+            用户状态 (1=激活，2=未激活，3=停用)
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.Framework.SysUserPost">
             <summary>
             用户鱼岗位绑定表
@@ -1290,6 +1295,11 @@
              腾讯TencentSecretKey => 备注: 腾讯TencentSecretKey
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxBotConfig.ChatGptKey">
+            <summary>
+             ChatGptKey => 备注: ChatGptKey
+            </summary>
+        </member>
         <member name="T:HZY.Models.Entities.WxContact">
             <summary>
             微信联系人
@@ -1408,6 +1418,11 @@
         <member name="P:HZY.Models.Entities.WxSayEveryDay.AnniversaryDay">
             <summary>
              纪念日 => 备注: 纪念日
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxSayEveryDay.BirthdayDate">
+            <summary>
+            下一次生日日期
             </summary>
         </member>
         <member name="T:HZY.Models.Entities.WxTimedTask">

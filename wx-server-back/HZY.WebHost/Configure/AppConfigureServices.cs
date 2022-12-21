@@ -228,6 +228,7 @@ public class AppConfigureServices
         services.AddHttpClient<HttpService>();
         services.AddHttpClient<TianXingService>();
         services.AddHttpClient<XiaoiBotService>();
+        services.AddScoped<ChatGptService>();
         //注入邮箱服务
         services.AddEmailService(appConfiguration.EmailServerConfig);
     }

@@ -17,5 +17,7 @@ namespace HZY.Models.Enums
         TIANXING = 1,
         [Description("小i机器人")]
         XIAOI = 2,
+        [Description("CHATGPT")]
+        CHATGPT = 3
     }
 }

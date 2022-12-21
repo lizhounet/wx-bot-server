@@ -49,6 +49,10 @@ namespace HZY.Models.Entities
         ///  纪念日 => 备注: 纪念日
         /// </summary>
         public DateTime AnniversaryDay { get; set; } = DateTime.Now;
+        /// <summary>
+        /// 下一次生日日期
+        /// </summary>
+        public DateTime? BirthdayDate { set; get; } = DateTime.Now;
 
 
     }

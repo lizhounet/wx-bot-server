@@ -115,6 +115,11 @@
           title="纪念日"
           show-overflow
         ></vxe-column>
+        <vxe-column
+          field="birthdayDate"
+          title="下一次生日日期"
+          show-overflow
+        ></vxe-column>
         <!--  v-if="power.update || power.delete" 预防操作列还存在 -->
         <vxe-column field="id" title="操作" v-if="power.update || power.delete">
           <template #default="{ row }">

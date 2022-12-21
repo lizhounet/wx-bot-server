@@ -64,7 +64,8 @@ namespace HZY.Services.Admin
                         w.ClosingRemarks,
                         AnniversaryDay = w.AnniversaryDay.ToString("yyyy-MM-dd"),
                         LastModificationTime = w.LastModificationTime.ToString("yyyy-MM-dd"),
-                        CreationTime = w.CreationTime.ToString("yyyy-MM-dd")
+                        CreationTime = w.CreationTime.ToString("yyyy-MM-dd"),
+                        w.BirthdayDate
                     })
                 ;
 
@@ -137,25 +138,38 @@ namespace HZY.Services.Admin
         {
             //获取机器人
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
-            WxSayEveryDay wxSayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
-            if (wxSayEveryDay == null) return "";
+            WxSayEveryDay sayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
+            if (sayEveryDay == null) return "";
             //获取天气
-            string weather = await _tianXingService.GetWeatherAsync(wxBotConfig.TianXingApiKey, wxSayEveryDay.City);
+            string weather = await _tianXingService.GetWeatherAsync(wxBotConfig.TianXingApiKey, sayEveryDay.City);
             //获取每日一句
             string dayOne = await _tianXingService.GetDayOneAsync(wxBotConfig.TianXingApiKey);
             //获取情话
             string loveWords = await _tianXingService.GetLoveWordsAsync(wxBotConfig.TianXingApiKey);
             //计算在一起多少天
-            int days = (DateTime.Now.Date - wxSayEveryDay.AnniversaryDay.Date).Days;
-            string result = $"😘{DateTime.Now:yyyy-MM-dd HH:mm} {Tools.GetWeekByDate(DateTime.Now)}\n\n👫宝贝,今天是我们在一起的第{days}天啦" +
-                $"\n\n☀️元气满满的一天开始啦,要开心噢^_^" +
-                $"\n\n{wxSayEveryDay.City} 今日天气:" +
-                $"\n{weather}" +
-                $"\n\n💪每日一句:" +
-                $"\n{dayOne}" +
-                $"\n\n💑情话对你说:" +
-                $"\n{loveWords}" +
-                $"\n\n————————{wxSayEveryDay.ClosingRemarks}";
+            int days = (DateTime.Now.Date - sayEveryDay.AnniversaryDay.Date).Days;
+            //计算下次周年日期
+            int anniversary = (DateTime.Now.Date.Year - sayEveryDay.AnniversaryDay.Date.Year);
+            anniversary = anniversary == 0 ? 1 : anniversary;
+            if (sayEveryDay.AnniversaryDay.Date.AddYears(anniversary)
+                < DateTime.Now.Date) anniversary++;
+            //计算下次周年还有多少天
+            int anniversaryDays = (sayEveryDay.AnniversaryDay.Date.AddYears(anniversary) - DateTime.Now.Date).Days;
+            //计算生日还有多少天
+            DateTime birthdayDate = sayEveryDay.BirthdayDate?.Date ?? DateTime.Now;
+            int birthdays = (birthdayDate - DateTime.Now.Date).Days;
+            string result = $"😘{DateTime.Now:yyyy-MM-dd HH:mm} {Tools.GetWeekByDate(DateTime.Now)}\n" +
+               $"\n🤗元气满满的一天开始啦,要开心噢^_^" +
+               $"\n👫宝贝,今天是我们相恋的第{days}天" +
+               $"\n👫距离你的生日还有{birthdays}天" +
+               $"\n👫距离我们恋爱{anniversary}周年纪念日还有{anniversaryDays}天" +
+               $"\n\n🌤天气情况:" +
+               $"\n{weather}" +
+               $"\n\n💪每日一句:" +
+               $"\n{dayOne}" +
+               $"\n\n💑情话对你说:" +
+               $"\n{loveWords}" +
+               $"\n————————{sayEveryDay.ClosingRemarks}";
             return result;
         }
     }

@@ -71,6 +71,16 @@
               />
             </a-form-item>
           </a-col>
+          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <a-form-item label="下一次生日">
+              <a-date-picker
+                placeholder="请选择 下一次生日"
+                valueFormat="YYYY-MM-DD"
+                style="width: 100%"
+                v-model:value="state.vm.form.birthdayDate"
+              />
+            </a-form-item>
+          </a-col>
         </a-row>
       </a-form>
     </a-spin>

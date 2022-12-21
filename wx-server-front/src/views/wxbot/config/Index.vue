@@ -36,6 +36,7 @@
         >
           <a-radio :value="1">天行机器人</a-radio>
           <a-radio :value="2">小i机器人</a-radio>
+          <a-radio :value="3">ChatGpt</a-radio>
         </a-radio-group>
       </a-form-item>
       <v-show v-show="state.vm.form.replyBotType == 1">
@@ -53,7 +54,7 @@
           </a-row>
         </a-form-item>
       </v-show>
-      <!-- <v-show v-show="state.vm.form.replyBotType == 2">
+      <v-show v-show="state.vm.form.replyBotType == 2">
         <a-form-item label="腾讯TencentSecretId">
           <a-row :gutter="[15, 15]">
             <a-col :span="22">
@@ -73,7 +74,22 @@
             placeholder="请输入 腾讯TencentSecretKey"
           />
         </a-form-item>
-      </v-show> -->
+      </v-show>
+      <v-show v-show="state.vm.form.replyBotType == 3">
+        <a-form-item label="ChatGpt">
+          <a-row :gutter="[15, 15]">
+            <a-col :span="22">
+              <a-input
+                v-model:value="state.vm.form.chatGptKey"
+                placeholder="请输入 ChatGptKey"
+              />
+            </a-col>
+            <a-col :span="2">
+              <a-button type="link" href="https://readdevdocs.com/blog/makemoney/%E4%B8%AD%E5%9B%BD%E5%8C%BA%E6%B3%A8%E5%86%8COpenAI%E8%B4%A6%E5%8F%B7%E8%AF%95%E7%94%A8ChatGPT%E6%8C%87%E5%8D%97.html#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87">ChatGpt注册教程</a-button>
+            </a-col>
+          </a-row>
+        </a-form-item>
+      </v-show>
       <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
         <a-button type="primary" @click="methods.saveForm()">保存</a-button>
       </a-form-item>

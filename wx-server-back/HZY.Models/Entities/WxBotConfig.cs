@@ -50,6 +50,10 @@ namespace HZY.Models.Entities
         ///  腾讯TencentSecretKey => 备注: 腾讯TencentSecretKey
         /// </summary>
         public String TencentSecretKey { get; set; }
+        /// <summary>
+        ///  ChatGptKey => 备注: ChatGptKey
+        /// </summary>
+        public string ChatGptKey { set; get; }
 
 
     }

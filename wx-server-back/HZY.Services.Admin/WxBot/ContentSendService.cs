@@ -14,17 +14,20 @@ namespace HZY.Services.Admin
     {
         private readonly TianXingService _tianXingService;
         private readonly XiaoiBotService _xiaoiBotService;
+        private readonly ChatGptService _chatGptService;
         IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly HttpService _httpService;
         public ContentSendService(TianXingService tianXingService,
               IAdminRepository<WxBotConfig> wxBotConfigRepository,
               XiaoiBotService xiaoiBotService,
+              ChatGptService chatGptService,
               HttpService httpService)
         {
             _tianXingService = tianXingService;
             _wxBotConfigRepository = wxBotConfigRepository;
             _xiaoiBotService = xiaoiBotService;
             _httpService = httpService;
+            _chatGptService= chatGptService;
         }
 
         /// <summary>
@@ -41,6 +44,7 @@ namespace HZY.Services.Admin
             {
                 EWxBotType.TIANXING => await _tianXingService.GetBotReplyAsync(wxBotConfig.TianXingApiKey, keyword, uniqueid),
                 EWxBotType.XIAOI => await _xiaoiBotService.GetBotReplyAsync(keyword, uniqueid),
+                EWxBotType.CHATGPT => await _chatGptService.GetBotReplyAsync(wxBotConfig.ChatGptKey, keyword, uniqueid),
                 _ => "我什么都不知道",
             };
         }
