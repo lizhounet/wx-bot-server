@@ -83,10 +83,12 @@ namespace HZY.Services.Admin.WxBot.Http
                 var jObject = await GetAsync("/tianqi/index", parmars);
                 if (jObject == null) return defaultWeather;
                 var data = jObject["newslist"][0];
-                return $"🌈tips:{data["tips"]}\n" +
-                    $"今天：{data["weather"]}\n" +
-                    $"温度：{data["lowest"]}/{data["highest"]}\n" +
-                    $"风向：{data["wind"]}";
+                return $"今日天气：{data["weather"]}\n" +
+                    $"最高气温：{data["highest"]}\n" +
+                    $"最低气温：{data["lowest"]}\n" +
+                    $"当前温度：{data["real"]}\n" +
+                    $"风向：{data["wind"]}\n" +
+                    $"风力等级：{data["windsc"]}";
             }
             catch (Exception ex)
             {
