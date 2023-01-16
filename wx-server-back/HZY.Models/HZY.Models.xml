@@ -1365,11 +1365,6 @@
              http请求url => 备注: http请求url
             </summary>
         </member>
-        <member name="P:HZY.Models.Entities.WxKeywordReply.TakeEffectType">
-            <summary>
-             生效类型 => 备注: 生效类型
-            </summary>
-        </member>
         <member name="P:HZY.Models.Entities.WxKeywordReply.KeyWord">
             <summary>
              关键词 => 备注: 关键词
@@ -1378,6 +1373,16 @@
         <member name="P:HZY.Models.Entities.WxKeywordReply.MatchType">
             <summary>
              匹配类型(模糊匹配,精确匹配) => 备注: 匹配类型(模糊匹配,精确匹配)
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordReply.AnalyzeExpression">
+            <summary>
+            http内容解析表达式
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxKeywordReply.MessageType">
+            <summary>
+            消息类型
             </summary>
         </member>
         <member name="T:HZY.Models.Entities.WxSayEveryDay">
@@ -1470,9 +1475,24 @@
              结尾备注 => 备注: 结尾备注
             </summary>
         </member>
+        <member name="P:HZY.Models.Entities.WxTimedTask.AnalyzeExpression">
+            <summary>
+            http内容解析表达式
+            </summary>
+        </member>
+        <member name="P:HZY.Models.Entities.WxTimedTask.MessageType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
         <member name="T:HZY.Models.Enums.EMatchType">
             <summary>
             机器人回复关键字匹配类型 枚举
+            </summary>
+        </member>
+        <member name="T:HZY.Models.Enums.EMessageType">
+            <summary>
+            消息类型
             </summary>
         </member>
         <member name="T:HZY.Models.Enums.ETimedTaskSendType">
@@ -1490,6 +1510,31 @@
         <member name="T:HZY.Models.Enums.EWxBotType">
             <summary>
             聊天机器人类型 枚举
+            </summary>
+        </member>
+        <member name="P:HZY.Models.VO.MessageVO.IsAnalyze">
+            <summary>
+            是否需要解析
+            </summary>
+        </member>
+        <member name="P:HZY.Models.VO.MessageVO.Result">
+            <summary>
+            结果
+            </summary>
+        </member>
+        <member name="P:HZY.Models.VO.MessageVO.AnalyzeExpression">
+            <summary>
+            解析表达式
+            </summary>
+        </member>
+        <member name="P:HZY.Models.VO.MessageVO.MessageType">
+            <summary>
+            消息类型
+            </summary>
+        </member>
+        <member name="P:HZY.Models.VO.MessageVO.ClosingRemarks">
+            <summary>
+             结尾备注 => 备注: 结尾备注
             </summary>
         </member>
         <member name="T:HZY.Models.VO.TianXing.TianXingResponse`1">

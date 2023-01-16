@@ -962,12 +962,23 @@
              <param name="uniqueid">用户唯一身份ID，方便上下文关联</param>
             <returns></returns>
         </member>
-        <member name="M:HZY.Services.Admin.ContentSendService.GetSendContentAsync(System.String,System.ValueTuple{HZY.Models.Enums.ETimedTaskSendType,System.String,System.String})">
+        <member name="M:HZY.Services.Admin.ContentSendService.GetSendContentAsync(System.String,System.String,HZY.Models.Entities.WxTimedTask)">
             <summary>
-            获取发送内容
+            获取定时任务发送内容
             </summary>
             <param name="tianXingApiKey">天行key</param>
-            <param name="sendObj">发送内容参数</param>
+            <param name="userContent">用户发送的内容</param>
+            <param name="timedTask">定时任务实体</param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:HZY.Services.Admin.ContentSendService.GetSendContentAsync(System.String,System.String,HZY.Models.Entities.WxKeywordReply)">
+            <summary>
+            获取关键字发送内容
+            </summary>
+            <param name="tianXingApiKey">天行key</param>
+            <param name="userContent">用户发送的内容</param>
+            <param name="keywordReply">关键字实体</param>
             <returns></returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>

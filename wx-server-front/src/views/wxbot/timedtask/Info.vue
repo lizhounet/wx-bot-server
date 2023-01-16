@@ -50,6 +50,14 @@
               </a-select>
             </a-form-item>
           </a-col>
+          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <a-form-item label="消息类型">
+              <a-radio-group v-model:value="state.vm.form.messageType" name="messageType">
+                <a-radio :value="1">文本</a-radio>
+                <a-radio :value="2">图片</a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-col>
           <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-show="state.vm.form.sendType == 1">
             <a-form-item label="发送内容(发送类型为文本时生效)">
               <a-textarea
@@ -125,11 +133,11 @@ const methods = {
     });
   },
   saveForm() {
-    console.log(state.vm.form.sendType);
     if (!state.vm.receivingObjects || !state.vm.receivingObjects.length > 0)
       return tools.message("接收对象必填!", "警告");
     if (!state.vm.form.sendTime) return tools.message("发送时间必填!", "警告");
     if (!state.vm.form.sendType) return tools.message("发送类型必填!", "警告");
+    if (!state.vm.form.messageType) return tools.message("发送类型必填!", "警告");
     state.vm.form.applicationToken = appStore.getApplicationToken();
     state.vm.form.receivingObjectWxId = state.vm.receivingObjects
       .map((r) => r.value)

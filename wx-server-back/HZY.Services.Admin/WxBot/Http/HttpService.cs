@@ -25,8 +25,10 @@ namespace HZY.Services.Admin.WxBot.Http
             _logger = logger;
             _client = client;
         }
-        public async Task<string> GetAsync(string url)
+        public async Task<string> GetAsync(string url, string content)
         {
+            if (!url.Contains('?')) url += "?";
+            url += $"content={content}";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage response = await _client.SendAsync(request);
             var result = await response.Content.ReadAsStringAsync();

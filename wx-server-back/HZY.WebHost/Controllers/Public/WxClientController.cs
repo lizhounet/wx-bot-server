@@ -5,6 +5,7 @@ using HZY.Models.DTO;
 using HZY.Models.DTO.Framework;
 using HZY.Models.DTO.WxBot;
 using HZY.Models.Entities;
+using HZY.Models.VO;
 using HZY.Services.Admin;
 using HZY.Services.Admin.Framework;
 using HZY.Services.Admin.WxBot.Http;
@@ -110,7 +111,7 @@ public class WxClientController : ControllerBase
     /// <param name="keyword">关键词</param>
     /// <returns></returns>
     [HttpGet("keyword-reply/{applicationToken}")]
-    public async Task<string> KeywordReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword)
+    public async Task<MessageVO> KeywordReplyAsync([FromRoute] string applicationToken, [FromQuery] string keyword)
     {
         return await this._wxKeywordReplyService.KeywordReply(applicationToken, keyword);
     }
@@ -132,9 +133,8 @@ public class WxClientController : ControllerBase
     /// <param name="taskId">定时任务id</param>
     /// <returns></returns>
     [HttpGet("timed/send-content/{applicationToken}")]
-    public async Task<string> GetTaskSendContentAsync([FromRoute] string applicationToken, [FromQuery] Guid taskId)
+    public async Task<MessageVO> GetTaskSendContentAsync([FromRoute] string applicationToken, [FromQuery] Guid taskId)
     {
         return await this._wxTimedTaskService.GetTaskSendContentAsync(applicationToken, taskId);
     }
-
 }

@@ -54,6 +54,13 @@ namespace HZY.Models.Entities
         ///  结尾备注 => 备注: 结尾备注
         /// </summary>
         public String ClosingRemarks { get; set; }
-
+        /// <summary>
+        /// http内容解析表达式
+        /// </summary>
+        public string AnalyzeExpression { set; get; }
+        /// <summary>
+        /// 消息类型
+        /// </summary>
+        public EMessageType MessageType { set; get; }
     }
 }

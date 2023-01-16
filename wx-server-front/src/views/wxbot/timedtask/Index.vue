@@ -72,10 +72,10 @@
           <vxe-column field="receivingObjectName" title="接收对象" show-overflow ></vxe-column>
           <vxe-column field="sendTypeText" title="发送类型" width="80">
           </vxe-column>
+          <vxe-column field="messageTypeText" title="消息类型" show-overflow></vxe-column>
           <vxe-column field="sendContent" title="发送内容" show-overflow min-width="220"></vxe-column>
           <vxe-column field="sendTime" title="发送时间(cron表达式)" show-overflow ></vxe-column>
           <vxe-column field="closingRemarks" title="结尾备注" show-overflow></vxe-column>
-          <vxe-column field="creationTime" title="创建时间"></vxe-column>
           <vxe-column field="id" title="操作" v-if="(power.update || power.delete)">
             <template #default="{ row }">
               <template v-if="power.update">

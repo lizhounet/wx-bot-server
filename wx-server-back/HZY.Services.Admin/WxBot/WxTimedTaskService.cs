@@ -7,6 +7,7 @@ using HZY.EFCore.Repositories.Admin.Core;
 using HZY.Infrastructure.ApiResultManage;
 using Quartz;
 using HZY.Models.BO;
+using HZY.Models.VO;
 
 namespace HZY.Services.Admin
 {
@@ -54,6 +55,7 @@ namespace HZY.Services.Admin
                         w.ReceivingObjectName,
                         w.SendType,
                         SendTypeText = w.SendType.ToDescriptionOrString(),
+                        messageTypeText = w.MessageType.ToDescriptionOrString(),
                         w.SendContent,
                         w.SendTime,
                         w.ClosingRemarks,
@@ -117,13 +119,11 @@ namespace HZY.Services.Admin
         /// <param name="applicationToken">应用token</param>
         /// <param name="taskId">定时任务id</param>
         /// <returns></returns>
-        public async Task<string> GetTaskSendContentAsync(string applicationToken, Guid taskId)
+        public async Task<MessageVO> GetTaskSendContentAsync(string applicationToken, Guid taskId)
         {
             WxTimedTask wxTimedTask = await this._defaultRepository.FindByIdAsync(taskId);
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
-            string content = await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (wxTimedTask.SendType, wxTimedTask.SendContent, wxTimedTask.HttpSendUrl));
-            if (string.IsNullOrEmpty(wxTimedTask.ClosingRemarks)) return content;
-            return $"{content}\n\n————————{wxTimedTask.ClosingRemarks}";
+            return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, "", wxTimedTask);
         }
 
 

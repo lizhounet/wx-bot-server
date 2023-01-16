@@ -33,13 +33,6 @@ namespace HZY.Models.Entities
         /// </summary>
         public String HttpSendUrl { get; set; }
 
-
-        /// <summary>
-        ///  生效类型 => 备注: 生效类型
-        /// </summary>
-        public String TakeEffectType { get; set; }
-
-
         /// <summary>
         ///  关键词 => 备注: 关键词
         /// </summary>
@@ -51,6 +44,14 @@ namespace HZY.Models.Entities
         /// </summary>
         public EMatchType MatchType { get; set; } = EMatchType.MOHU;
 
+        /// <summary>
+        /// http内容解析表达式
+        /// </summary>
+        public string AnalyzeExpression { set; get; }
+        /// <summary>
+        /// 消息类型
+        /// </summary>
+        public EMessageType MessageType { set; get; }
 
     }
 }

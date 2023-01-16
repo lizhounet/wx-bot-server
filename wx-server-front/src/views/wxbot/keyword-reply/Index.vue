@@ -67,7 +67,7 @@
         <!-- 动态列 -->
         <vxe-column field="keyWord" title="关键词" show-overflow></vxe-column>
         <vxe-column field="matchTypeText" title="匹配类型(模糊匹配,精确匹配)" show-overflow></vxe-column>
-        <vxe-column field="takeEffectType" title="生效类型" show-overflow></vxe-column>
+        <vxe-column field="messageTypeText" title="消息类型" show-overflow></vxe-column>
         <vxe-column field="sendTypeText" title="发送类型" show-overflow></vxe-column>
         <vxe-column field="sendContent" title="发送内容" show-overflow></vxe-column>
 

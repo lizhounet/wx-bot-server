@@ -20,6 +20,7 @@ using HZY.EFCore.Repositories.Admin.Core;
 using HZY.Services.Admin.WxBot.Http;
 using HZY.Models.Enums;
 using HZY.Models.BO;
+using HZY.Models.VO;
 
 namespace HZY.Services.Admin
 {
@@ -64,7 +65,7 @@ namespace HZY.Services.Admin
                         w.SendType,
                         SendTypeText = w.SendType.ToDescriptionOrString(),
                         w.SendContent,
-                        w.TakeEffectType,
+                        messageTypeText = w.MessageType.ToDescriptionOrString(),
                         w.KeyWord,
                         w.MatchType,
                         MatchTypeText = w.MatchType.ToDescriptionOrString(),
@@ -131,7 +132,7 @@ namespace HZY.Services.Admin
         /// <param name="applicationToken">applicationToken</param>
         /// <param name="keyword">关键字</param>
         /// <returns></returns>
-        public async Task<string> KeywordReply(string applicationToken, string keyword)
+        public async Task<MessageVO> KeywordReply(string applicationToken, string keyword)
         {
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
             List<WxKeywordReply> keywordReplys = this._defaultRepository.Select.Where(w => w.ApplicationToken == applicationToken)
@@ -143,12 +144,12 @@ namespace HZY.Services.Admin
                 && w.KeyWord.Split(",").Contains(keyword));
                 if (jqReply != null)
                 {
-                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (jqReply.SendType, jqReply.SendContent, jqReply.HttpSendUrl));
+                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, keyword, jqReply);
                 }
                 else
                 {
                     WxKeywordReply mhReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.MOHU);
-                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, (mhReply.SendType, mhReply.SendContent, mhReply.HttpSendUrl));
+                    return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, keyword, mhReply);
                 }
             }
             return null;
