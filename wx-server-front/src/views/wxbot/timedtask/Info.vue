@@ -4,7 +4,7 @@
     :title="state.vm.id ? '编辑' : '新建'"
     centered
     @ok="state.visible = false"
-    :width="600"
+    :width="1000"
   >
     <template #footer>
       <a-button
@@ -67,12 +67,33 @@
               />
             </a-form-item>
           </a-col>
-           <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"  v-show="state.vm.form.sendType == 6">
+          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-show="state.vm.form.sendType == 6">
             <a-form-item label="http请求url(只支持GET请求)" name="httpSendUrl">
-              <a-input
-                v-model:value="state.vm.form.httpSendUrl"
-                placeholder="请输入 http请求url"
-              />
+              <pre>
+说明:
+  会以url参数自动传递接受到的消息内容,参数名为:content
+  举例:配置请求路径为 https://www.baidu.com
+  则接口端收到的地址是 https://www.baidu.com?content=发送的消息内容
+</pre>
+              <a-input v-model:value="state.vm.form.httpSendUrl" placeholder="请输入 http请求url" />
+
+            </a-form-item>
+          </a-col>
+          <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-show="state.vm.form.sendType == 6">
+            <a-form-item label="取值表达式脚本" name="analyzeExpression">
+              <pre>
+说明:
+ 使用art-template引擎渲染解析;语法和js大同小异;语法参考:https://aui.github.io/art-template/zh-cn/docs/syntax.html
+ 在脚本中使用变量 R 就是http请求返回的json对象
+示例:
+ 取对象属性： {'name':'张三'} 可以使用如下表达式取name：R.name
+ 取对象数组：{'data':[{'name':'测试'}]} 可以使用如下表达式取name：R.data[0].name
+ 循环生成模板： {'data':[{'name':'测试1'},{'name':'测试2'}]} 
+<p></p>
+</pre>
+              <a-textarea v-model:value="state.vm.form.analyzeExpression" placeholder="请输入 取值表达式脚本(不填则发送http请求原始响应内容)"
+                :rows="8" />
+
             </a-form-item>
           </a-col>
           <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
