@@ -50,9 +50,10 @@
             <a-form-item label="http请求url(只支持GET请求)" name="httpSendUrl">
               <pre>
 说明:
-  会以url参数自动传递接受到的消息内容,参数名为:content
-  举例:配置请求路径为 https://www.baidu.com
-  则接口端收到的地址是 https://www.baidu.com?content=发送的消息内容
+  会以url参数自动传递接受到的消息内容,使用表达式(${content})获取消息内容,消息内容包含?会自动分割取第二个
+  举例:例如发送给机器人 查快递?12421412421412
+  配置地址url https://www.baidu.com?key=${content}
+  最后请求的地址是 https://www.baidu.com?key=12421412421412
 </pre>
               <a-input v-model:value="state.vm.form.httpSendUrl" placeholder="请输入 http请求url" />
 
@@ -109,10 +110,10 @@ const methods = {
     });
   },
   saveForm() {
-    state.saveLoading = true;
     if (!state.vm.form.keyWord) return tools.message("关键词必填!", "警告");
     if (!state.vm.form.messageType) return tools.message("消息类型必填!", "警告");
     state.vm.form.applicationToken = appStore.getApplicationToken();
+    state.saveLoading = true;
     service.saveForm(state.vm.form).then((res) => {
       state.saveLoading = false;
       if (res.code != 1) return;

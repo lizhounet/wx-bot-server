@@ -134,14 +134,20 @@ namespace HZY.Services.Admin
         /// <returns></returns>
         public async Task<MessageVO> KeywordReply(string applicationToken, string keyword)
         {
+            string querykey = keyword;
+            string[] contentArr = querykey.Split("?");
+            if (contentArr.Length > 1)
+            {
+                querykey = contentArr[0];
+            }
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
             List<WxKeywordReply> keywordReplys = this._defaultRepository.Select.Where(w => w.ApplicationToken == applicationToken)
-                .Where(w => w.KeyWord.Contains(keyword)).ToList();
+                .Where(w => w.KeyWord.Contains(querykey)).ToList();
             if (keywordReplys != null && keywordReplys.Count > 0)
             {
                 //精确匹配优先级高于模糊匹配
                 WxKeywordReply jqReply = keywordReplys.FirstOrDefault(w => w.MatchType == EMatchType.JINGQUE
-                && w.KeyWord.Split(",").Contains(keyword));
+                && w.KeyWord.Split(",").Contains(querykey));
                 if (jqReply != null)
                 {
                     return await _contentSendService.GetSendContentAsync(wxBotConfig.TianXingApiKey, keyword, jqReply);

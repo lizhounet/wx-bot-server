@@ -27,13 +27,19 @@ namespace HZY.Services.Admin.WxBot.Http
         }
         public async Task<string> GetAsync(string url, string content)
         {
-            if (!url.Contains('?'))
+            if (!string.IsNullOrEmpty(content))
             {
-                url += $"?content={content}";
+                string[] contentArr = content.Split("?");
+                if (contentArr.Length > 1)
+                {
+                    content = contentArr[1];
+                }
             }
-            else {
-                url += $"&content={content}";
+            if (url.Contains("${content}"))
+            {
+                url = url.Replace("${content}", content);
             }
+
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage response = await _client.SendAsync(request);
             var result = await response.Content.ReadAsStringAsync();
