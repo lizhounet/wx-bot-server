@@ -19,6 +19,8 @@ using HZY.Services.Admin.WxBot.Http;
 using Quartz;
 using HZY.Infrastructure.ApiResultManage;
 using HZY.Models.BO;
+using HZY.Models.VO;
+using HZY.Models.Enums;
 
 namespace HZY.Services.Admin
 {
@@ -134,7 +136,7 @@ namespace HZY.Services.Admin
         /// <param name="applicationToken">应用token</param>
         /// <param name="everyDayId">每日说id</param>
         /// <returns></returns>
-        public async Task<string> GetSayEveryDayTextAsync(string applicationToken, Guid everyDayId)
+        public async Task<MessageVO> GetSayEveryDayTextAsync(string applicationToken, Guid everyDayId)
         {
             //获取机器人
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
@@ -170,7 +172,13 @@ namespace HZY.Services.Admin
                $"\n\n💑情话对你说:" +
                $"\n{loveWords}" +
                $"\n————————{sayEveryDay.ClosingRemarks}";
-            return result;
+            return new MessageVO
+            {
+                Result = result,
+                IsAnalyze = false,
+                MessageType = EMessageType.TEXT,
+                ClosingRemarks = sayEveryDay.ClosingRemarks
+            };
         }
     }
 }
