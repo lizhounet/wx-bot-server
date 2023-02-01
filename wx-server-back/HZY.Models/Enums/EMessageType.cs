@@ -13,8 +13,8 @@ namespace HZY.Models.Enums
     public enum EMessageType
     {
         [Description("文本")]
-        IMAGE = 1,
+        IMAGE = 2,
         [Description("图片")]
-        TEXT = 2
+        TEXT = 1
     }
 }
