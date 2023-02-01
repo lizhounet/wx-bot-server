@@ -100,7 +100,7 @@ public class WxClientController : ControllerBase
     /// <param name="everyDayId">每日说id</param>
     /// <returns></returns>
     [HttpGet("say-every-day/{applicationToken}")]
-    public async Task<string> GetSayEveryDayTextAsync([FromRoute] string applicationToken, [FromQuery] Guid everyDayId)
+    public async Task<MessageVO> GetSayEveryDayTextAsync([FromRoute] string applicationToken, [FromQuery] Guid everyDayId)
     {
         return await this._wxSayEveryDayService.GetSayEveryDayTextAsync(applicationToken, everyDayId);
     }
