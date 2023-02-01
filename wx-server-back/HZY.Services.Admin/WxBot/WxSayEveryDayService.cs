@@ -32,7 +32,7 @@ namespace HZY.Services.Admin
         private readonly TianXingService _tianXingService;
         private readonly IAdminRepository<WxBotConfig> _wxBotConfigRepository;
         private readonly AccountInfo _accountInfo;
-        public WxSayEveryDayService(IAdminRepository<WxSayEveryDay> defaultRepository, 
+        public WxSayEveryDayService(IAdminRepository<WxSayEveryDay> defaultRepository,
             TianXingService tianXingService,
             IAdminRepository<WxBotConfig> wxBotConfigRepository,
             IAccountDomainService accountService)
@@ -138,10 +138,16 @@ namespace HZY.Services.Admin
         /// <returns></returns>
         public async Task<MessageVO> GetSayEveryDayTextAsync(string applicationToken, Guid everyDayId)
         {
+            var message = new MessageVO
+            {
+                Result = "",
+                IsAnalyze = false,
+                MessageType = EMessageType.TEXT
+            };
             //获取机器人
             WxBotConfig wxBotConfig = await _wxBotConfigRepository.FindAsync(w => w.ApplicationToken == applicationToken);
             WxSayEveryDay sayEveryDay = await this._defaultRepository.FindByIdAsync(everyDayId);
-            if (sayEveryDay == null) return "";
+            if (sayEveryDay == null) return message;
             //获取天气
             string weather = await _tianXingService.GetWeatherAsync(wxBotConfig.TianXingApiKey, sayEveryDay.City);
             //获取每日一句
@@ -160,7 +166,7 @@ namespace HZY.Services.Admin
             //计算生日还有多少天
             DateTime birthdayDate = sayEveryDay.BirthdayDate?.Date ?? DateTime.Now;
             int birthdays = (birthdayDate - DateTime.Now.Date).Days;
-            string result = $"😘{DateTime.Now:yyyy-MM-dd HH:mm} {Tools.GetWeekByDate(DateTime.Now)}\n" +
+            message.Result = $"😘{DateTime.Now:yyyy-MM-dd HH:mm} {Tools.GetWeekByDate(DateTime.Now)}\n" +
                $"\n🤗元气满满的一天开始啦,要开心噢^_^" +
                $"\n👫宝贝,今天是我们相恋的第{days}天" +
                $"\n👫距离你的生日还有{birthdays}天" +
@@ -172,13 +178,7 @@ namespace HZY.Services.Admin
                $"\n\n💑情话对你说:" +
                $"\n{loveWords}" +
                $"\n————————{sayEveryDay.ClosingRemarks}";
-            return new MessageVO
-            {
-                Result = result,
-                IsAnalyze = false,
-                MessageType = EMessageType.TEXT,
-                ClosingRemarks = sayEveryDay.ClosingRemarks
-            };
+            return message;
         }
     }
 }
